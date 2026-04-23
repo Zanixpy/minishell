@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_cmds.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 21:42:38 by omawele           #+#    #+#             */
-/*   Updated: 2026/02/26 22:55:26 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/23 15:16:55 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 # include "utils.h"
 # include "error.h"
+# include <limits.h>
+# include <linux/limits.h>
 
-
-int cd(char *path);
+int builtin_cd(t_cmd *cmd);
 
 #endif
