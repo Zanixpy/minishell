@@ -1,26 +1,17 @@
-#include "minishell.h"
-#include <stdio.h>
-#include <unistd.h>
+#include "../../include/minishell.h"
 
 int main(void)
 {
-    t_cmd cmd;
-    char *args[] = {"cd", "/", NULL};
+	t_cmd	cmd;
 
-    cmd.args = args;
-    cmd.cmd = "cd";
+	cmd.cmd = "pwd";
+	cmd.args = NULL;
+	cmd.path = NULL;
+	cmd.current_dir = NULL;
+	cmd.next = NULL;
+	cmd.fdin = -2;
+	cmd.fdout = -2;
 
-    char before[1024];
-    char after[1024];
-
-    getcwd(before, 1024);
-    printf("BEFORE: %s\n", before);
-
-    int ret = builtin_cd(&cmd);
-
-    getcwd(after, 1024);
-    printf("RETURN: %d\n", ret);
-    printf("AFTER: %s\n", after);
-
-    return 0;
+	builtin_pwd(&cmd);
+	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/24 18:19:20 by cakibris          #+#    #+#             */
+/*   Updated: 2026/04/24 18:19:21 by cakibris         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 static int update_oldpwd(char *old_pwd)
@@ -35,7 +47,7 @@ static int handle_home_path(char **path, char *old_pwd)
         free(old_pwd);
         return (1);
     }
-    *path = strdup(*path); // important: duplicate!
+    *path = strdup(*path); 
     return (0);
 }
 
@@ -57,22 +69,23 @@ int builtin_cd(t_cmd *cmd)
     char    *path;
     char    *old_pwd;
     char    cwd[PATH_MAX];
-
+// get current directory first
     if (getcwd(cwd, PATH_MAX) == NULL)
     {
         perror("cd");
         return (1);
     }
-
+// save old pwd
     old_pwd = strdup(cwd);
     if (!old_pwd)
         return (1);
-
+// if no arg go home
     if (!cmd->args || !cmd->args[1])
     {
         if (handle_home_path(&path, old_pwd) != 0)
             return (1);
     }
+// else use given path
     else
         path = strdup(cmd->args[1]);
 
