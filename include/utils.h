@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 02:55:21 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 22:29:07 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/24 18:58:04 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,14 @@ typedef struct s_cmd
 } t_cmd;
 
 
-int is_only_space(char *str);
+int ft_isspace(char *str);
 void	free_char_tab(char ***tab);
 void	free_char_tab_n(char ***tab, int n);
-int isbuilt_in_cmd(char *str);
-int istoken(char *str);
+int is_built_in_cmd(char *str);
+char	*search_path_cmd(char **path, char *cmd);
+char *is_token(char *str);
+int ft_strcmp(const char *s1, const char *s2);
+int is_quoted(char *s);
 
 
 

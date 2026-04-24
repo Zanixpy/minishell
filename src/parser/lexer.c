@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 16:14:59 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/24 18:58:20 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ int tokenization(char ***tokens, char *prompt, size_t nb_words)
     return (0); 
 }
 
-
-char **tokenizer(char *prompt)
+char **lexer(char *prompt)
 {
     char **tokens;
     size_t  nb_words;

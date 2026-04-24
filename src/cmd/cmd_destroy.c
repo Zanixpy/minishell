@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 18:39:59 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/21 12:26:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void cmd_destroy(t_cmd **cmd)
 
 void cmd_destroy_data(t_cmd *cmd)
 {
-    cmd->cmd = NULL;
+    if (cmd->cmd)
+        free(cmd->cmd);
     if (cmd->args)
         free_char_tab(&cmd->args);
     if (cmd->path)

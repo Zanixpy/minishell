@@ -1,9 +1,0 @@
-total 36
-drwxr--r-- 8 root root  256 Mar 28 00:08 .
-drwxr-xr-x 9 root root  288 Mar 27 23:38 ..
--rwxr-xr-x 1 root root 8968 Mar 27 00:15 a.out
--rwxr-xr-x 1 root root 8944 Mar  4 11:54 cool
--rw-r--r-- 1 root root   39 Mar 27 23:36 note
--rw-r--r-- 1 root root    0 Mar 28 00:08 sortie
--rw-r--r-- 1 root root 1191 Mar 27 00:15 try.c
--rw-r--r-- 1 root root   39 Mar 27 23:38 yh
