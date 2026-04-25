@@ -6,12 +6,13 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:14 by cakibris          #+#    #+#             */
-/*   Updated: 2026/04/24 18:13:00 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/04/25 23:04:10 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+//cmd is going to change with shell
 int	builtin_pwd(t_cmd *cmd)
 {
 	char	*cwd;

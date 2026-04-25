@@ -1,17 +1,15 @@
 #include "../../include/minishell.h"
 
+#include <stdio.h>
+
 int main(void)
 {
-	t_cmd	cmd;
+	extern char **environ;
+	int i = 0;
 
-	cmd.cmd = "pwd";
-	cmd.args = NULL;
-	cmd.path = NULL;
-	cmd.current_dir = NULL;
-	cmd.next = NULL;
-	cmd.fdin = -2;
-	cmd.fdout = -2;
-
-	builtin_pwd(&cmd);
-	return (0);
+	while (environ[i])
+	{
+		printf("%s\n", environ[i]);
+		i++;
+	}
 }

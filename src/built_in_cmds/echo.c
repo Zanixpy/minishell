@@ -6,12 +6,13 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:54:49 by cakibris          #+#    #+#             */
-/*   Updated: 2026/04/24 18:14:50 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/04/25 23:03:46 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+//cmd is going to change with shell
 // checks if argument is -n, -nn, -nnn
 static int	is_n_flag(char *arg)
 {
