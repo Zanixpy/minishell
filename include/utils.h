@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 02:55:21 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/24 18:58:04 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 14:02:46 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,27 @@ typedef struct s_cmd
 } t_cmd;
 
 
-int ft_isspace(char *str);
-void	free_char_tab(char ***tab);
-void	free_char_tab_n(char ***tab, int n);
+
+/* bool_utils.c */
+int is_space(char *str);
 int is_built_in_cmd(char *str);
-char	*search_path_cmd(char **path, char *cmd);
-char *is_token(char *str);
-int ft_strcmp(const char *s1, const char *s2);
 int is_quoted(char *s);
+int is_redirection(char *s);
+char *is_token(char *str);
+
+/* utils.c */
+char *extract_in_quote(char *s);
+int ft_strcmp(const char *s1, const char *s2);
+int check_quote_count(char *s);
+size_t tab_size(char **tab);
+
+/* memory_utils.c */
+void	free_char_tab_n(char ***tab, int n);
+void	free_char_tab(char ***tab);
+
+/* parser_utils.c */
+char	*search_path_cmd(char **path, char *cmd);
+
 
 
 

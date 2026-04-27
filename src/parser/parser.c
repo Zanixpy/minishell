@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/24 15:52:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 13:58:47 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int parser(char *prompt, t_cmd *cmd, char *env)
     return (0);
 }
 
-int init_args;
+int init_args(t_cmd *cmd, char **tokens, int pos)
+{
+	return (0);	
+}
 
 int init_cmd_path(t_cmd *cmd, char *token, char **envp)
 {
@@ -51,9 +54,10 @@ int init_cmd_path(t_cmd *cmd, char *token, char **envp)
 }
 
 
-int init_redirection;
-
-
+int init_redirection(t_cmd *cmd, char **tokens, int pos)
+{
+	return (0);	
+}
 
 int operator_precedence(t_cmd *cmd, char **tokens, char **envp)
 {
@@ -65,15 +69,20 @@ int operator_precedence(t_cmd *cmd, char **tokens, char **envp)
 	i = 0;
 	while (tokens[i]) 
 	{
-		token = is_token(tokens[i]);
-		if (ft_strcmp(token, "PIPE"))
-		{
-		}
-		if (i == 0 || (i > 0 &&  ))
+		if (i == 0 || !ft_strcmp(tokens[i - 1], "|"))
 		{
 			if (init_cmd_path(tmp, tokens[i], envp))
-				return (1);
-			// is_pipe = 0;
+				return 1;
+		}
+		else if (!ft_strcmp(tokens[i], "|"))
+		{
+			tmp->next = cmd_init();
+			if (!tmp->next)
+				return 1;
+			tmp = tmp->next;
+		}
+		else if (is_redirection(tokens[i]))
+		{
 		}
 	}
 	return (0);
