@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:23:05 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 23:31:08 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define QUOTE 39
 # define DQUOTE '"'
 # define NONE "NONE"
-
+# define PATH_MAX 4096
 
 typedef struct s_cmd
 {
@@ -59,6 +59,7 @@ void cmd_reset(t_cmd *cmd);
 void cmd_destroy_data(t_cmd *cmd);
 void cmd_destroy_node(t_cmd *cmd);
 void cmd_destroy(t_cmd **cmd);
+int	builtin_pwd(t_cmd *cmd);
 
 /*====================================
  ERROR FOLDER 
@@ -68,7 +69,11 @@ void cmd_destroy(t_cmd **cmd);
 /*====================================
  BUILT IN CMD FOLDER 
 =====================================*/
-
+int	builtin_exit(t_cmd *cmd);
+int builtin_cd(t_cmd *cmd);
+int	builtin_echo(t_cmd *cmd);
+int	builtin_env(void);
+int	builtin_unset(t_cmd *cmd);
 
 /*====================================
  EXPANDER FOLDER 

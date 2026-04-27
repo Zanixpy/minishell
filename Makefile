@@ -9,6 +9,11 @@ SRCS =  src/main.c \
 		src/utils/memory_utils.c \
 		src/utils/utils.c \
 		src/unit_tests/unit_test_lexer.c \
+		src/built_in_cmds/cd.c \
+		src/built_in_cmds/echo.c \
+		src/built_in_cmds/env.c \
+		src/built_in_cmds/pwd.c \
+		src/built_in_cmds/unset.c \
 
 LIBFT_DIR = external/libft
 LIBFT = $(LIBFT_DIR)/libft.a
