@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:23:05 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 22:36:42 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,20 @@ void cmd_destroy(t_cmd **cmd);
  BUILT IN CMD FOLDER 
 =====================================*/
 
+/* cd.c */
+int builtin_cd(t_cmd *cmd);
+
+/* echo.c */
+int	builtin_echo(t_cmd *cmd);
+
+/* env.c */
+int	builtin_env(void);
+
+/* pwd.c */
+int	builtin_pwd(t_cmd *cmd);
+
+/* unset.c */
+int	builtin_unset(t_cmd *cmd);
 
 /*====================================
  EXPANDER FOLDER 
@@ -79,13 +93,23 @@ void cmd_destroy(t_cmd **cmd);
  LEXER FOLDER 
 =====================================*/
 
+/* lexer.c */
 char **lexer(char *prompt);
 
 /*====================================
  PARSER FOLDER 
 =====================================*/
 
+/* parser.c */
 int parser(char *prompt, t_cmd *cmd, char *env);
+
+/* parser_set_cmd.c */
+int set_cmd_and_path(t_cmd *cmd, char *token, char **envp);
+int set_cmd_next(t_cmd **cmd);
+int set_cmd_redirections(t_cmd *cmd, char **tokens, int pos);
+int set_cmd_args(t_cmd *cmd, char *token);
+
+/* parser_utils.c */
 char	*search_path_cmd(char **path, char *cmd);
 
 /*====================================
@@ -103,11 +127,13 @@ char *is_token(char *str);
 char *extract_in_quote(char *s);
 int ft_strcmp(const char *s1, const char *s2);
 int check_quote_count(char *s);
-size_t tab_size(char **tab);
+size_t array_size(char **tab);
 
 /* memory_utils.c */
 void	free_char_tab_n(char ***tab, int n);
 void	free_char_tab(char ***tab);
+char **create_tab(char *str);
+char **add_element_in_array(char **tab, char *str);
 
 /* parser_utils.c */
 char	*search_path_cmd(char **path, char *cmd);

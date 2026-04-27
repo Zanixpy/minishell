@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 13:59:56 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 22:26:18 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int get_prompt_line(t_cmd *cmd)
         return 1;
     return (0);
 }
-
 
 /* MAIN : This is the beginning of the program where we'll launch the shell with the infinite loop*/
 

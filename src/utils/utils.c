@@ -6,13 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:23:59 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 22:25:49 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -73,7 +71,6 @@ int check_quote_count(char *s)
 	return (check_quote / DQUOTE);
 }
 
-
 char *clean_str(char *s)
 {
     char *tmp;
@@ -88,7 +85,7 @@ char *clean_str(char *s)
 	return (tmp);    
 }
 
-size_t tab_size(char **tab)
+size_t array_size(char **tab)
 {
 	int count;
 

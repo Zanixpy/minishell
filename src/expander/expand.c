@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:23:46 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 22:43:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int is_var(char *s)
     if (isquoted == QUOTE || isquoted == 0 || s[1] != DOLLAR)
         return (0);    
     i = 2;
+    if (s[i] == '/')
+        return (0);
     while (s[i])
     {
         if(!ft_isprint(s[i]))
