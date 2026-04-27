@@ -6,12 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 14:05:56 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:23:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/utils.h"
-#include <stddef.h>
+#include "../../include/minishell.h"
+
 
 
 int ft_strcmp(const char *s1, const char *s2)

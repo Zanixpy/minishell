@@ -6,11 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 14:21:50 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:23:46 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
+#include "../../include/minishell.h"
 
 static char *extract_var(char *s)
 {

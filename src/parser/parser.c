@@ -6,12 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 13:58:47 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:23 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
-#include <string.h>
+#include "../../include/minishell.h"
+
 
 // extern char *env;
 int parser(char *prompt, t_cmd *cmd, char *env)
@@ -54,8 +54,17 @@ int init_cmd_path(t_cmd *cmd, char *token, char **envp)
 }
 
 
-int init_redirection(t_cmd *cmd, char **tokens, int pos)
+int init_redirection(t_cmd *cmd, char **tokens, int pos, int result)
 {
+	int fd;
+	
+	if (result == GREAT)
+	else if (result == LESS)
+	else if (result == GREAT * 2)
+	else if (result == LESS * 2)
+	
+	
+	
 	return (0);	
 }
 
@@ -69,7 +78,7 @@ int operator_precedence(t_cmd *cmd, char **tokens, char **envp)
 	i = 0;
 	while (tokens[i]) 
 	{
-		if (i == 0 || !ft_strcmp(tokens[i - 1], "|"))
+		if (i == 0 || (i > 0 && !ft_strcmp(tokens[i - 1], "|")))
 		{
 			if (init_cmd_path(tmp, tokens[i], envp))
 				return 1;
@@ -78,12 +87,16 @@ int operator_precedence(t_cmd *cmd, char **tokens, char **envp)
 		{
 			tmp->next = cmd_init();
 			if (!tmp->next)
-				return 1;
+				return (1);
 			tmp = tmp->next;
 		}
 		else if (is_redirection(tokens[i]))
 		{
+			if (init_redirection(tmp, tokens, i, is_redirection(tokens[i])))
+				return (1);
+			i++;
 		}
+		i++;
 	}
 	return (0);
 }

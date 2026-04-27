@@ -6,11 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 13:59:30 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:18 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/utils.h"
+#include "../../include/minishell.h"
+
 
 int is_space(char *str)
 {
@@ -54,11 +55,15 @@ int is_redirection(char *s)
 	length = ft_strlen(s);
 	if (length == 1)
 	{
-		if (*s == GREAT || *s == LESS)
-			return (1);
+        if (*s == GREAT)
+			return (GREAT);
+        else if (*s == LESS)
+            return (LESS);
 	}
-	if (!ft_strcmp(s, GREATGREAT) || !ft_strcmp(s, LESSLESS))
-		return (1);
+    if (!ft_strcmp(s, GREATGREAT))
+		return (GREAT * 2);
+    else if (!ft_strcmp(s, LESSLESS))
+		return (LESS * 2); 
 	return (0);
 }
 

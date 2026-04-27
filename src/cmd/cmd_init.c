@@ -6,12 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 16:44:40 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 18:40:03 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:41 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/cmd.h"
-#include <string.h>
+#include "../../include/minishell.h"
+
 
 t_cmd *cmd_init(void)
 {

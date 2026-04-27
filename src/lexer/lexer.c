@@ -6,11 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/24 18:58:20 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
+#include "../../include/minishell.h"
+
 
 size_t count_words(char *str)
 {

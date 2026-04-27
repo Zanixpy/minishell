@@ -6,13 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:21:03 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/21 11:36:21 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/utils.h"
+#include "../../include/minishell.h"
 
-#include <stddef.h>
 
 void	free_char_tab_n(char ***tab, int n)
 {
