@@ -6,48 +6,96 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 22:28:44 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:23:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/utils.h"
+#include "../../include/minishell.h"
 
-int is_only_space(char *str)
+
+
+int ft_strcmp(const char *s1, const char *s2)
 {
-    if (*str)
-        return (1);
-    while (*str) 
-    {
-        if (*str != SPACE)
-            return (0);
-        str++;
-    }
-    return (1);
+	int n;
+
+	n = 0;
+	while (s1[n] || s2[n]) 
+	{
+		if (s1[n] != s2[n])
+			return 1;
+		n++;
+	}
+	return 0;
 }
 
-int isbuilt_in_cmd(char *str)
+char *extract_in_quote(char *s)
 {
-	if (!ft_strncmp("cd", str, 2) || !ft_strncmp("echo", str, 4) ||
-		!ft_strncmp("env", str, 3) || !ft_strncmp("exit", str, 4) ||
-		!ft_strncmp("export", str, 6) || !ft_strncmp("pwd", str, 3) ||
-		!ft_strncmp("unset", str, 5))
-		return (0);
-	return (1);
-}
-
-int istoken(char *str)
-{
+	char *tmp;
+	int len;
 	int i;
-	int  size;
+
+	len = ft_strlen(s) - 2;
+	tmp = ft_calloc(len + 1, sizeof(char));
+	if (!tmp)
+		return (NULL);
+	i = 0;
+	while (i < len) 
+	{
+		tmp[i] = s[i + 1];
+		i++;
+	}
+	return (tmp);	
+}
+
+int check_quote_count(char *s)
+{
+	char quote;
+	int check_quote;
+	int i;
 
 	i = 0;
-	size = ft_strlen(str);
-	if (size == 1)
+	check_quote = 0;
+	quote = 0;
+	while (s[i]) 
 	{
-		if (*str == GREAT || *str == LESS || *str == PIPE || *str == DOLLAR)
-			return (1);
+		quote = s[i];
+		if ((s[i] == QUOTE || s[i] == DQUOTE) && check_quote % quote == 0)
+		{
+			if (check_quote > 0)
+				check_quote -= s[i];
+			else
+				check_quote += s[i];
+		}
+		i++;
 	}
-	if (!ft_strncmp(str, GREATGREAT, size) || !ft_strncmp(str, LESSLESS, size))
-		return (1);
-	return (0);
+	if (check_quote % QUOTE == 0)
+		return (check_quote / QUOTE);
+	return (check_quote / DQUOTE);
 }
+
+
+char *clean_str(char *s)
+{
+    char *tmp;
+
+	tmp = NULL;
+	if (is_quoted(s))
+		tmp = extract_in_quote(s);
+	else
+	 	tmp = ft_strdup(s);
+	if (!tmp)
+		return (NULL);
+	return (tmp);    
+}
+
+size_t tab_size(char **tab)
+{
+	int count;
+
+	count = 0;
+	while (tab[count])
+		count++;
+	return (count);	
+}
+
+

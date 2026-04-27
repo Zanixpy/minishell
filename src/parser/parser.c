@@ -6,12 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 22:55:45 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:23 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
-#include <string.h>
+#include "../../include/minishell.h"
+
 
 // extern char *env;
 int parser(char *prompt, t_cmd *cmd, char *env)
@@ -19,7 +19,7 @@ int parser(char *prompt, t_cmd *cmd, char *env)
     char **tokens;
     char **envp;
     
-    tokens = tokenizer(prompt);
+    tokens = lexer(prompt);
     if (!tokens)
         return (2);
     envp = ft_split(env, ':');
@@ -28,47 +28,75 @@ int parser(char *prompt, t_cmd *cmd, char *env)
     return (0);
 }
 
-char	*search_path_cmd(char **path, char *cmd)
+int init_args(t_cmd *cmd, char **tokens, int pos)
 {
-	int		i;
-	char	*final;
-	char	*tmp;
+	return (0);	
+}
 
-	if (isbuilt_in_cmd(cmd))
-		return (NONE);
-	i = 0;
-	final = NULL;
-    tmp = ft_strjoin("/", cmd);
-    if (!tmp)
-        return (NULL);
-	while (path[i])
+int init_cmd_path(t_cmd *cmd, char *token, char **envp)
+{
+	cmd->cmd = ft_strdup(token);
+	if (!cmd->cmd)
+		return (1);
+	if (is_built_in_cmd(token))
 	{
-		final = ft_strjoin(tmp, cmd);
-		if (!final)
-			return (free(tmp), NULL);
-		if (access(final, F_OK) == 0)
-			break ;
-		i++;
-		free(final);
-		final = NONE;
+		cmd->path = ft_strdup("BIC");
+		if (!cmd->path)
+			return (free(cmd->cmd), 1);		
 	}
-	return (free(cmd), final);
+	else
+	{
+		cmd->path = search_path_cmd(envp, token);
+		if (!cmd->path)
+			return (free(cmd->cmd), 1);
+	}
+	return (0);
+}
+
+
+int init_redirection(t_cmd *cmd, char **tokens, int pos, int result)
+{
+	int fd;
+	
+	if (result == GREAT)
+	else if (result == LESS)
+	else if (result == GREAT * 2)
+	else if (result == LESS * 2)
+	
+	
+	
+	return (0);	
 }
 
 int operator_precedence(t_cmd *cmd, char **tokens, char **envp)
 {
+	t_cmd *tmp;
+	char *token;
 	int i;
-	int j;
 
+	tmp = cmd;
 	i = 0;
-	cmd->cmd = tokens[i];
-	cmd->path = search_path_cmd(envp, tokens[i]);
-	if (!cmd->path)
-		return (1);
 	while (tokens[i]) 
 	{
-
-	
+		if (i == 0 || (i > 0 && !ft_strcmp(tokens[i - 1], "|")))
+		{
+			if (init_cmd_path(tmp, tokens[i], envp))
+				return 1;
+		}
+		else if (!ft_strcmp(tokens[i], "|"))
+		{
+			tmp->next = cmd_init();
+			if (!tmp->next)
+				return (1);
+			tmp = tmp->next;
+		}
+		else if (is_redirection(tokens[i]))
+		{
+			if (init_redirection(tmp, tokens, i, is_redirection(tokens[i])))
+				return (1);
+			i++;
+		}
+		i++;
 	}
 	return (0);
 }

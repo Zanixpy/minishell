@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/03/30 16:14:59 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 17:24:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/parser.h"
+#include "../../include/minishell.h"
+
 
 size_t count_words(char *str)
 {
@@ -82,8 +83,7 @@ int tokenization(char ***tokens, char *prompt, size_t nb_words)
     return (0); 
 }
 
-
-char **tokenizer(char *prompt)
+char **lexer(char *prompt)
 {
     char **tokens;
     size_t  nb_words;

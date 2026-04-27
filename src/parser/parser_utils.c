@@ -1,39 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memory_utils.c                                     :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/26 15:21:03 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:24:10 by omawele          ###   ########.fr       */
+/*   Created: 2026/04/21 12:15:07 by omawele           #+#    #+#             */
+/*   Updated: 2026/04/27 17:24:26 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-void	free_char_tab_n(char ***tab, int n)
+
+char	*search_path_cmd(char **path, char *cmd)
 {
-	while (n >= 0)
+	int		i;
+	char	*final;
+	char	*tmp;
+
+	i = 0;
+	final = NULL;
+    tmp = ft_strjoin("/", cmd);
+    if (!tmp)
+        return (NULL);
+	while (path[i])
 	{
-		free((*tab)[n]);
-		n--;
+		final = ft_strjoin(tmp, cmd);
+		if (!final)
+			return (free(tmp), NULL);
+		if (access(final, F_OK) == 0)
+			break ;
+		i++;
+		free(final);
+		final = NONE;
 	}
-	free(*tab);
+	return (free(cmd), final);
 }
-
-void	free_char_tab(char ***tab)
-{
-	int n;
-
-	n = 0;
-	while ((*tab)[n])
-	{
-		free((*tab)[n]);
-		n++;
-	}
-	free(*tab);
-}
-
-
