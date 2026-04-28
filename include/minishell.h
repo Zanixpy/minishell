@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 22:36:42 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 20:19:29 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int	builtin_unset(t_cmd *cmd);
  EXPANDER FOLDER 
 =====================================*/
 
+/* expand.c */
+char *expand_var(char *s);
 
 /*====================================
  LEXER FOLDER 
@@ -118,10 +120,12 @@ char	*search_path_cmd(char **path, char *cmd);
 
 /* bool_utils.c */
 int is_space(char *str);
-int is_built_in_cmd(char *str);
+int is_bic(char *str);
 int is_quoted(char *s);
 int is_redirection(char *s);
 char *is_token(char *str);
+int is_var(char *s);
+int is_special_token(int c);
 
 /* utils.c */
 char *extract_in_quote(char *s);
@@ -134,6 +138,7 @@ void	free_char_tab_n(char ***tab, int n);
 void	free_char_tab(char ***tab);
 char **create_tab(char *str);
 char **add_element_in_array(char **tab, char *str);
+void free_str(char **s);
 
 /* parser_utils.c */
 char	*search_path_cmd(char **path, char *cmd);

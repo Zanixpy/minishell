@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 22:36:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 17:01:02 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int convert_token_in_cmd_var(t_cmd **cmd, char **tokens, char **envp, int *pos)
 	return (0);
 }
 
-int tokens_analysis(t_cmd *cmd, char **tokens, char **envp)
+static int tokens_analysis(t_cmd *cmd, char **tokens, char **envp)
 {
 	t_cmd *tmp;
 	char *token;
@@ -67,6 +67,8 @@ int parser(char *prompt, t_cmd *cmd, char *env)
     envp = ft_split(env, ':');
     if (!envp)
         return (2);
+	if (tokens_analysis(cmd, tokens, envp))
+		return (2);
     return (0);
 }
 

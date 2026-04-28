@@ -6,12 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 12:15:07 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:24:26 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 14:51:22 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 
 char	*search_path_cmd(char **path, char *cmd)

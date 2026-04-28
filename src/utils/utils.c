@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 22:25:49 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 20:20:40 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int ft_strcmp(const char *s1, const char *s2)
 	while (s1[n] || s2[n]) 
 	{
 		if (s1[n] != s2[n])
-			return 1;
+			return (1);
 		n++;
 	}
-	return 0;
+	return (0);
 }
 
 char *extract_in_quote(char *s)
@@ -74,15 +74,18 @@ int check_quote_count(char *s)
 char *clean_str(char *s)
 {
     char *tmp;
-
-	tmp = NULL;
-	if (is_quoted(s))
+	
+	if (is_var(s))
+		tmp = expand_var(s);
+	else if (is_quoted(s))
 		tmp = extract_in_quote(s);
+	else if (check_quote_count(s))
+		tmp = 
 	else
 	 	tmp = ft_strdup(s);
 	if (!tmp)
 		return (NULL);
-	return (tmp);    
+	return (tmp);
 }
 
 size_t array_size(char **tab)

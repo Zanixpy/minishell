@@ -6,66 +6,119 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 22:43:58 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 20:16:29 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char *extract_var(char *s)
+static char *convert_var(char *s, int *pos)
 {
-	char *tmp;
-	int len;
-	int i;
+    int sub_len;
+    char *env;
+    char *tmp;
 
-	len = strlen(s) - 3;
-	tmp = calloc(len + 1, sizeof(char));
-	if (!tmp)
-		return (NULL);
-	i = 0;
-	while (i < len) 
-	{
-		tmp[i] = s[i + 2];
-		i++;
-	}
-	return (tmp);	
+    sub_len = 0;
+    if (ft_isdigit(s[*pos]) || is_special_token(s[*pos]))
+        tmp = ft_substr(s, *pos, 1);
+    else 
+    {
+        while (ft_isalnum(s[*pos + sub_len]) || s[*pos + sub_len] == '_')
+            sub_len++;
+        tmp = ft_substr(s, 1, sub_len);
+    }
+    if (!tmp)
+        return (NULL);
+    env = getenv(tmp);
+    free(tmp);
+    if (!env)
+        tmp = ft_calloc(1, sizeof(char));
+    else
+        tmp = ft_strdup(env);
+    if (!tmp)
+        return (NULL);
+    *pos += sub_len;
+    return (tmp);
+}
+
+static int adjust_buffer(char **buffer, int *pos)
+{
+    int i;
+    char *tmp_buf;
+    char *tmp;
+
+    i = *pos;
+    tmp = convert_var(*buffer, pos);
+    if (!tmp)
+    {
+        free_str(buffer);
+        *buffer = NULL;
+        return (1);   
+    }
+    if (i == 0)
+        *buffer = ft_strjoin("", tmp);
+    else
+    {
+        tmp_buf = *buffer;
+        *buffer = ft_strjoin(tmp_buf, tmp);
+        free(tmp_buf);    
+    }
+    free(tmp);
+    if (!(*buffer))
+        return (1);
+    return (0);
 }
 
 char *expand_var(char *s)
 {
-    char *env;
-    char *tmp;
-    char *final;
-
-    tmp = extract_var(s);
-    if (!tmp)
-        return NULL;
-    env = getenv(tmp);
-    free(tmp);
-    tmp = NULL;
-
-    return (tmp);
-}
-
-int is_var(char *s)
-{
+    char *buffer;
     int i;
-    int isquoted;
-    
-    isquoted = is_quoted(s);
-    if (isquoted == QUOTE || isquoted == 0 || s[1] != DOLLAR)
-        return (0);    
-    i = 2;
-    if (s[i] == '/')
-        return (0);
-    while (s[i])
+
+    s = extract_in_quote(s);
+    if (!s)
+        return (NULL);
+    i = 0;
+    while (s[i]) 
     {
-        if(!ft_isprint(s[i]))
-            return (0);
+        if (s[i] == DOLLAR)
+        {
+            i++;
+            if (adjust_buffer(&buffer, &i))
+                return (free(s), NULL);
+        }
         i++;
     }
-    return (1);
+    free(s);
+    return (buffer);
 }
 
+/*
+Caractères spéciaux qu'on peut pas expand :
+/
+\
+'
+|
+(
+)
+<
+[
+]
+;
+=
+:
+{
+}
+~
+,
+.
+*/
 
+/*
+Caractères spéciaux qu'on peut expand seulement eux et pas la suite:
+?
+-
+@
+!
+*
+*/
 

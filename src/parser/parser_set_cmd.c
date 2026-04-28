@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 22:42:44 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 15:47:41 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int set_cmd_and_path(t_cmd *cmd, char *token, char **envp)
 	cmd->cmd = ft_strdup(token);
 	if (!cmd->cmd)
 		return (1);
-	if (is_built_in_cmd(token))
+	if (is_bic(token))
 	{
 		cmd->path = ft_strdup("BIC");
 		if (!cmd->path)
