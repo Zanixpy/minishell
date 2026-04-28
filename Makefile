@@ -2,13 +2,17 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS =  src/main.c \
-		src/parser/lexer.c \
+		src/parser/parser.c \
+		src/parser/parser_utils.c \
+		src/parser/parser_set_cmd.c \
+		src/lexer/lexer.c \
 		src/cmd/cmd_destroy.c \
 		src/cmd/cmd_init.c \
-		src/cmd/cmd_exec.c \
 		src/utils/memory_utils.c \
 		src/utils/utils.c \
-		src/unit_tests/unit_test_lexer.c \
+		src/utils/bool_utils.c \
+		src/expander/expand.c
+
 
 LIBFT_DIR = external/libft
 LIBFT = $(LIBFT_DIR)/libft.a

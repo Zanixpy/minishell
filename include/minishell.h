@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 20:19:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 21:19:56 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ typedef struct s_cmd
 } t_cmd;
 
 
+/* main.c */
+
+void print_cmd(t_cmd *cmd);
 
 /*====================================
  CMD FOLDER 
@@ -132,6 +135,8 @@ char *extract_in_quote(char *s);
 int ft_strcmp(const char *s1, const char *s2);
 int check_quote_count(char *s);
 size_t array_size(char **tab);
+char *extract_str_in_unclosed_quotes(char *s);
+char *clean_str(char *s);
 
 /* memory_utils.c */
 void	free_char_tab_n(char ***tab, int n);

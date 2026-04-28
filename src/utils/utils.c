@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 20:20:40 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 21:03:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,35 @@ char *extract_in_quote(char *s)
 	return (tmp);	
 }
 
+char *extract_str_in_unclosed_quotes(char *s)
+{
+	char *tmp;
+	int len;
+	int i;
+
+	i = -1;
+	len = 0;
+	while (s[++i]) 
+	{
+		if (s[i] != QUOTE || s[i] != DQUOTE)
+			len++;
+	}
+	tmp = ft_calloc(len + 1, sizeof(char));
+	if (!tmp)
+		return (NULL);
+	i = -1;
+	len = 0;
+	while (s[++i]) 
+	{
+		if (s[i] != QUOTE || s[i] != DQUOTE)
+		{
+			tmp[len] = s[i];
+			len++;
+		}
+	}
+	return (tmp);
+}
+
 int check_quote_count(char *s)
 {
 	char quote;
@@ -80,7 +109,7 @@ char *clean_str(char *s)
 	else if (is_quoted(s))
 		tmp = extract_in_quote(s);
 	else if (check_quote_count(s))
-		tmp = 
+		tmp = extract_str_in_unclosed_quotes(s);
 	else
 	 	tmp = ft_strdup(s);
 	if (!tmp)

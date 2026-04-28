@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 12:15:07 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 14:51:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 21:49:38 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ char	*search_path_cmd(char **path, char *cmd)
 	final = NULL;
     tmp = ft_strjoin("/", cmd);
     if (!tmp)
+	{
         return (NULL);
+	}
 	while (path[i])
 	{
-		final = ft_strjoin(tmp, cmd);
+		final = ft_strjoin(path[i], tmp);
 		if (!final)
 			return (free(tmp), NULL);
 		if (access(final, F_OK) == 0)
@@ -35,5 +37,5 @@ char	*search_path_cmd(char **path, char *cmd)
 		free(final);
 		final = NONE;
 	}
-	return (free(cmd), final);
+	return (free(tmp), final);
 }

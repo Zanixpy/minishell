@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 20:04:36 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/28 21:39:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int is_quoted(char *s)
 	char quote;
 	
 	i = 0;
+    quote = 0;
 	if (s[i] == QUOTE || s[i] == DQUOTE)
 		quote = s[i++];
 	while (s[i] && s[i++] != quote);
