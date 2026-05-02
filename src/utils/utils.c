@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 21:03:24 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/29 11:06:28 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,54 +24,6 @@ int ft_strcmp(const char *s1, const char *s2)
 		n++;
 	}
 	return (0);
-}
-
-char *extract_in_quote(char *s)
-{
-	char *tmp;
-	int len;
-	int i;
-
-	len = ft_strlen(s) - 2;
-	tmp = ft_calloc(len + 1, sizeof(char));
-	if (!tmp)
-		return (NULL);
-	i = 0;
-	while (i < len) 
-	{
-		tmp[i] = s[i + 1];
-		i++;
-	}
-	return (tmp);	
-}
-
-char *extract_str_in_unclosed_quotes(char *s)
-{
-	char *tmp;
-	int len;
-	int i;
-
-	i = -1;
-	len = 0;
-	while (s[++i]) 
-	{
-		if (s[i] != QUOTE || s[i] != DQUOTE)
-			len++;
-	}
-	tmp = ft_calloc(len + 1, sizeof(char));
-	if (!tmp)
-		return (NULL);
-	i = -1;
-	len = 0;
-	while (s[++i]) 
-	{
-		if (s[i] != QUOTE || s[i] != DQUOTE)
-		{
-			tmp[len] = s[i];
-			len++;
-		}
-	}
-	return (tmp);
 }
 
 int check_quote_count(char *s)
@@ -98,23 +50,6 @@ int check_quote_count(char *s)
 	if (check_quote % QUOTE == 0)
 		return (check_quote / QUOTE);
 	return (check_quote / DQUOTE);
-}
-
-char *clean_str(char *s)
-{
-    char *tmp;
-	
-	if (is_var(s))
-		tmp = expand_var(s);
-	else if (is_quoted(s))
-		tmp = extract_in_quote(s);
-	else if (check_quote_count(s))
-		tmp = extract_str_in_unclosed_quotes(s);
-	else
-	 	tmp = ft_strdup(s);
-	if (!tmp)
-		return (NULL);
-	return (tmp);
 }
 
 size_t array_size(char **tab)

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 21:19:56 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/30 12:07:54 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,15 @@ int is_redirection(char *s);
 char *is_token(char *str);
 int is_var(char *s);
 int is_special_token(int c);
+int is_there_quote(char *s);
 
 /* utils.c */
-char *extract_in_quote(char *s);
 int ft_strcmp(const char *s1, const char *s2);
 int check_quote_count(char *s);
 size_t array_size(char **tab);
-char *extract_str_in_unclosed_quotes(char *s);
+
+/* extract_utils.c */
+char *extract_str(char *s);
 char *clean_str(char *s);
 
 /* memory_utils.c */
@@ -145,8 +147,7 @@ char **create_tab(char *str);
 char **add_element_in_array(char **tab, char *str);
 void free_str(char **s);
 
-/* parser_utils.c */
-char	*search_path_cmd(char **path, char *cmd);
+
 
 
 

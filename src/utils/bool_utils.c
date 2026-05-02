@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 21:39:58 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/30 12:01:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,10 @@ int is_var(char *s)
     isquoted = is_quoted(s);
     if (isquoted == QUOTE || isquoted == 0)
         return (0);
+    printf("HERE IN IS_VAR\n");
     i = 1;
     is_dollar = 0;
-    while (s[i] != DOLLAR)
+    while (s[i] && s[i] != DOLLAR)
     {
         is_dollar = 1;
         i++;
@@ -112,6 +113,17 @@ int is_var(char *s)
     if (is_dollar && (ft_isalnum(s[i]) || s[i] == '_'))
         return (1);
     return (0);
+}
+
+int is_there_quote(char *s)
+{
+	while (*s) 
+	{
+		if (*s == QUOTE || *s == DQUOTE)
+			return (1);
+		s++;
+	}
+	return (0);
 }
 
 int is_special_token(int c)

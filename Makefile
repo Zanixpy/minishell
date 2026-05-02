@@ -11,6 +11,7 @@ SRCS =  src/main.c \
 		src/utils/memory_utils.c \
 		src/utils/utils.c \
 		src/utils/bool_utils.c \
+		src/utils/extract_utils.c \
 		src/expander/expand.c
 
 

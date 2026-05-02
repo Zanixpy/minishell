@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 20:16:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/30 12:08:05 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char *expand_var(char *s)
     char *buffer;
     int i;
 
-    s = extract_in_quote(s);
+    s = extract_str(s);
     if (!s)
         return (NULL);
     i = 0;
