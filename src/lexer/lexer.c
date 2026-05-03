@@ -6,14 +6,14 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:24:32 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/27 19:37:09 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-size_t count_words(char *str)
+static size_t count_words(char *str)
 {
     size_t count;
     size_t i;
@@ -39,7 +39,7 @@ size_t count_words(char *str)
     return (count); 
 }
 
-int malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
+static int malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
 {
     size_t length;
     size_t o;
@@ -63,7 +63,7 @@ int malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
     return (0);
 }
 
-int tokenization(char ***tokens, char *prompt, size_t nb_words)
+static int tokenization(char ***tokens, char *prompt, size_t nb_words)
 {
     size_t i;
     size_t j;

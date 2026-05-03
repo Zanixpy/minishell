@@ -6,13 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:23:59 by omawele          ###   ########.fr       */
+/*   Updated: 2026/04/29 11:06:28 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -22,29 +20,10 @@ int ft_strcmp(const char *s1, const char *s2)
 	while (s1[n] || s2[n]) 
 	{
 		if (s1[n] != s2[n])
-			return 1;
+			return (1);
 		n++;
 	}
-	return 0;
-}
-
-char *extract_in_quote(char *s)
-{
-	char *tmp;
-	int len;
-	int i;
-
-	len = ft_strlen(s) - 2;
-	tmp = ft_calloc(len + 1, sizeof(char));
-	if (!tmp)
-		return (NULL);
-	i = 0;
-	while (i < len) 
-	{
-		tmp[i] = s[i + 1];
-		i++;
-	}
-	return (tmp);	
+	return (0);
 }
 
 int check_quote_count(char *s)
@@ -73,22 +52,7 @@ int check_quote_count(char *s)
 	return (check_quote / DQUOTE);
 }
 
-
-char *clean_str(char *s)
-{
-    char *tmp;
-
-	tmp = NULL;
-	if (is_quoted(s))
-		tmp = extract_in_quote(s);
-	else
-	 	tmp = ft_strdup(s);
-	if (!tmp)
-		return (NULL);
-	return (tmp);    
-}
-
-size_t tab_size(char **tab)
+size_t array_size(char **tab)
 {
 	int count;
 
