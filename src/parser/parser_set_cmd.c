@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 22:29:53 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/04 12:21:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,22 @@ int set_cmd_and_path(t_cmd *cmd, char *token, char **envp)
 
 int set_cmd_redirections(t_cmd *cmd, char **tokens, int pos)
 {
-	// int fd;
-    (void)cmd;
+	int fd;
     int result;
 
     result = is_redirection(tokens[pos]);
+    if (!tokens[pos + 1])
+        return (1);
 	if (result == GREAT)
-        return 0;
+        cmd->fdout = open(tokens[pos + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (result == LESS)
-        return 0;
+        cmd->fdin = open(tokens[pos + 1], O_RDONLY);
 	else if (result == GREAT * 2)
-        return 0;
+        cmd->fdout = open(tokens[pos + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else if (result == LESS * 2)
-        return 0;
+        return (0);
+    if (cmd->fdin == -1 || cmd->fdout == -1)
+        return (1);
 	return (0);	
 }
 

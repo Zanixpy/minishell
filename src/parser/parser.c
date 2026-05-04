@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 22:23:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/04 09:42:16 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@ int convert_token_in_cmd_var(t_cmd **cmd, char **tokens, char **envp, int *pos)
 {
 	if (*pos == 0 || (*pos != 0 && !ft_strcmp(tokens[*pos - 1], "|")))
 	{
-		printf("HERE : %s\n", tokens[*pos]);
 		if (set_cmd_and_path(*cmd, tokens[*pos], envp))
 			return (1);
 	}
 	else if (!ft_strcmp(tokens[*pos], "|"))
 	{
-		printf("HERE IN PIPE : %s\n", tokens[*pos]);
 		if (set_cmd_next(cmd))
 			return (1);
 		(*cmd) = (*cmd)->next;
