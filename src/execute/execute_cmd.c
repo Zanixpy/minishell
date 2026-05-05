@@ -66,36 +66,31 @@ int	handle_heredoc(char *delim, t_shell *shell, int quoted)
 	return (fds[0]);
 }
 
-int	setup_heredoc(t_command *cmd, t_shell *shell)
+int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd->heredoc_delim)
 		return (0);
-	cmd->input_fd = handle_heredoc(cmd->heredoc_delim, shell,
-			cmd->heredoc_quoted);
-	if (cmd->input_fd == -1)
+	cmd->fdin = handle_heredoc(cmd->heredoc_delim, shell, cmd->heredoc_quoted);
+	if (cmd->fdin == -1)
 		return (1);
 	return (0);
 }
 
-int	execute_builtin(t_command *cmd, t_shell *shell)
+int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
-	t_cmd	blt;
-
-	ft_bzero(&blt, sizeof(t_cmd));
-	blt.args = cmd->args;
 	(void)shell;
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (builtin_echo(&blt));
+		return (builtin_echo(cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (builtin_pwd(&blt));
+		return (builtin_pwd(cmd));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (builtin_env());
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (builtin_cd(&blt));
+		return (builtin_cd(cmd));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (builtin_exit(&blt));
+		return (builtin_exit(cmd));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (builtin_unset(&blt));
+		return (builtin_unset(cmd));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
 		return (1);
 	return (1);

@@ -12,14 +12,14 @@
 
 #include "../../include/minishell.h"
 
-static int	apply_infile(t_command *cmd)
+static int	apply_infile(t_cmd *cmd)
 {
 	int	fd;
 
-	if (cmd->input_fd != -1)
+	if (cmd->fdin >= 0)
 	{
-		dup2(cmd->input_fd, STDIN_FILENO);
-		close(cmd->input_fd);
+		dup2(cmd->fdin, STDIN_FILENO);
+		close(cmd->fdin);
 	}
 	if (!cmd->infile)
 		return (0);
@@ -34,15 +34,15 @@ static int	apply_infile(t_command *cmd)
 	return (0);
 }
 
-static int	apply_outfile(t_command *cmd)
+static int	apply_outfile(t_cmd *cmd)
 {
 	int	flags;
 	int	fd;
 
-	if (cmd->output_fd != -1)
+	if (cmd->fdout >= 0)
 	{
-		dup2(cmd->output_fd, STDOUT_FILENO);
-		close(cmd->output_fd);
+		dup2(cmd->fdout, STDOUT_FILENO);
+		close(cmd->fdout);
 	}
 	if (!cmd->outfile)
 		return (0);
@@ -74,7 +74,7 @@ void	reset_redirections(int stdin_backup, int stdout_backup)
 	}
 }
 
-int	execute_single_command(t_command *cmd, t_shell *shell)
+int	execute_single_command(t_cmd *cmd, t_shell *shell)
 {
 	int	stdin_backup;
 	int	stdout_backup;

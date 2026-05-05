@@ -63,7 +63,7 @@ char	*find_executable(char *cmd, char **envp)
 	return (full_path);
 }
 
-int	execute_external(t_command *cmd, t_shell *shell)
+int	execute_external(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	char	*path;

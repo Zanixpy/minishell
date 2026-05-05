@@ -1,33 +1,36 @@
 #include "../../include/minishell.h"
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_shell shell;
-	t_command cmd;
-	char *args[] = {"ls", "-l", NULL};
-
+	t_shell	shell;
+	t_cmd	cmd;
+	//char	*args[] = {"ls", "-l", NULL};
+	//char *args[] = {"ls", NULL};
+	//char *args[] = {"ls", "-a", NULL};
+	//char *args[] = {"/bin/ls", "-l", NULL};
+	//char *args[] = {"./minishell", NULL};
+	//char *args[] = {"notacommand", NULL};
+	//char *args[] = {"pwd", NULL};
+	char *args[] = {"echo", "hello", "world", NULL};
+	
 	(void)argc;
 	(void)argv;
-
-	// fake shell
 	shell.env = envp;
 	shell.exit_status = 0;
 	shell.pwd = NULL;
 	shell.oldpwd = NULL;
-
-	// fake command
 	cmd.args = args;
+	cmd.cmd = NULL;
+	cmd.path = NULL;
+	cmd.current_dir = NULL;
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.heredoc_delim = NULL;
-	cmd.input_fd = -1;
-	cmd.output_fd = -1;
+	cmd.fdin = -1;
+	cmd.fdout = -1;
 	cmd.append = 0;
+	cmd.heredoc_quoted = 0;
 	cmd.next = NULL;
-
 	execute_single_command(&cmd, &shell);
 	return (0);
 }

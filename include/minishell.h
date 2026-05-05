@@ -39,14 +39,19 @@
 
 typedef struct s_cmd
 {
-    char    *cmd;          
-    char    *path;          // Le chemin vers l'exécutable (/bin/ls)
-    char    **args;         // Le tableau d'arguments
-    char    *current_dir;   // Ton PWD au moment du lancement
-    int     fdin;           // Pour les redirections < | <<
-    int     fdout;          // Pour les redirections > | >>
-    struct s_cmd *next;     // Si tu as des pipes
-} t_cmd;
+	char			*cmd;
+	char			*path;
+	char			**args;
+	char			*current_dir;
+	char			*infile;
+	char			*outfile;
+	char			*heredoc_delim;
+	int				append;
+	int				heredoc_quoted;
+	int				fdin;
+	int				fdout;
+	struct s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_shell
 {
@@ -55,21 +60,6 @@ typedef struct s_shell
 	char	*pwd;
 	char	*oldpwd;
 }	t_shell;
-
-typedef struct s_command
-{
-	char	**args;          // ["ls", "-l"]
-	char	*infile;         // "< file"
-	char	*outfile;        // "> file"
-	int		append;          // ">>"
-	char	*heredoc_delim; // "<< EOF"
-	int		heredoc_quoted;
-
-	int		input_fd;
-	int		output_fd;
-
-	struct s_command *next;  // for pipes
-}	t_command;
 
 /* main.c */
 
@@ -87,7 +77,6 @@ void cmd_reset(t_cmd *cmd);
 void cmd_destroy_data(t_cmd *cmd);
 void cmd_destroy_node(t_cmd *cmd);
 void cmd_destroy(t_cmd **cmd);
-int	builtin_pwd(t_cmd *cmd);
 
 /*====================================
  ERROR FOLDER 
@@ -123,18 +112,18 @@ int	builtin_exit(t_cmd *cmd);
 
 /* execute.c */
 void	reset_redirections(int stdin_backup, int stdout_backup);
-int		execute_single_command(t_command *cmd, t_shell *shell);
+int		execute_single_command(t_cmd *cmd, t_shell *shell);
 
 /* execute_cmd.c */
 int		is_builtin(char *name);
 char	*get_env_value(char *var, char **env);
 int		handle_heredoc(char *delim, t_shell *shell, int quoted);
-int		setup_heredoc(t_command *cmd, t_shell *shell);
-int		execute_builtin(t_command *cmd, t_shell *shell);
+int		setup_heredoc(t_cmd *cmd, t_shell *shell);
+int		execute_builtin(t_cmd *cmd, t_shell *shell);
 
 /* execute_external.c */
 char	*find_executable(char *cmd, char **envp);
-int		execute_external(t_command *cmd, t_shell *shell);
+int		execute_external(t_cmd *cmd, t_shell *shell);
 
 /* execution_utils.c */
 char	*handle_direct_path(char *cmd);
