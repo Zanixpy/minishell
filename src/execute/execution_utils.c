@@ -67,3 +67,33 @@ void	cleanup_paths(char **paths)
 	}
 	free(paths);
 }
+
+char	**dup_env(char **envp)
+{
+	int		len;
+	int		i;
+	char	**copy;
+
+	if (!envp)
+		return (NULL);
+	len = 0;
+	while (envp[len])
+		len++;
+	copy = malloc(sizeof(char *) * (len + 1));
+	if (!copy)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		copy[i] = ft_strdup(envp[i]);
+		if (!copy[i])
+		{
+			copy[i] = NULL;
+			cleanup_paths(copy);
+			return (NULL);
+		}
+		i++;
+	}
+	copy[len] = NULL;
+	return (copy);
+}

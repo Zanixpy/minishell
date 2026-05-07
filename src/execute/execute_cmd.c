@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/04 00:51:17 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/07 17:19:39 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,19 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 
 int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
-	(void)shell;
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (builtin_echo(cmd));
+		return (builtin_echo(cmd, shell));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (builtin_pwd(cmd));
+		return (builtin_pwd(cmd, shell));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
-		return (builtin_env());
+		return (builtin_env(shell));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (builtin_cd(cmd));
+		return (builtin_cd(cmd, shell));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (builtin_exit(cmd));
+		return (builtin_exit(cmd, shell));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (builtin_unset(cmd));
+		return (builtin_unset(cmd, shell));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
-		return (1);
+		return (builtin_export(cmd, shell));
 	return (1);
 }

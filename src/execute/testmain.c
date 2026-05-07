@@ -11,11 +11,11 @@ int	main(int argc, char **argv, char **envp)
 	//char *args[] = {"./minishell", NULL};
 	//char *args[] = {"notacommand", NULL};
 	//char *args[] = {"pwd", NULL};
-	char *args[] = {"echo", "hello", "world", NULL};
+	char *args[] = {"echo", "hello", NULL};	
 	
 	(void)argc;
 	(void)argv;
-	shell.env = envp;
+	shell.env = dup_env(envp);
 	shell.exit_status = 0;
 	shell.pwd = NULL;
 	shell.oldpwd = NULL;
@@ -24,7 +24,7 @@ int	main(int argc, char **argv, char **envp)
 	cmd.path = NULL;
 	cmd.current_dir = NULL;
 	cmd.infile = NULL;
-	cmd.outfile = NULL;
+	cmd.outfile = "out.txt";
 	cmd.heredoc_delim = NULL;
 	cmd.fdin = -1;
 	cmd.fdout = -1;

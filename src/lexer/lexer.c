@@ -6,11 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 19:37:09 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/04 09:37:43 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdlib.h>
 
 
 static size_t count_words(char *str)
@@ -83,18 +84,44 @@ static int tokenization(char ***tokens, char *prompt, size_t nb_words)
     return (0); 
 }
 
+static char **strtrim_tokens(char **tokens)
+{
+    char **temp;
+    int length;
+    int i;
+
+    length = array_size(tokens);
+    temp = ft_calloc(length + 1, sizeof(char *));
+    if (!temp)
+        return (NULL);
+    i = 0;
+    while (i < length) 
+    {
+        temp[i] = ft_strtrim(tokens[i], " ");
+        if (!temp[i])
+            free_char_tab_n(&temp, i);
+        i++;
+    }
+    return (temp);
+}
+
 char **lexer(char *prompt)
 {
+    char **temp;
     char **tokens;
     size_t  nb_words;
   
-    tokens = NULL;
+    temp = NULL;
     nb_words = count_words(prompt);
-    tokens = ft_calloc(nb_words + 1, sizeof(char *));
+    temp = ft_calloc(nb_words + 1, sizeof(char *));
+    if (!temp)
+        return (NULL);
+    if (tokenization(&temp, prompt, nb_words))
+        return (NULL);
+    tokens = strtrim_tokens(temp);
     if (!tokens)
-        return (NULL);
-    if (tokenization(&tokens, prompt, nb_words))
-        return (NULL);
+        return (free_char_tab(&temp), NULL);
+    free_char_tab(&temp);
     return (tokens);    
 }
 

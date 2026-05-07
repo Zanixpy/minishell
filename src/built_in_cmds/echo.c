@@ -6,14 +6,12 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:54:49 by cakibris          #+#    #+#             */
-/*   Updated: 2026/04/25 23:03:46 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/07 00:00:00 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//cmd is going to change with shell
-// checks if argument is -n, -nn, -nnn
 static int	is_n_flag(char *arg)
 {
 	int	i;
@@ -23,19 +21,17 @@ static int	is_n_flag(char *arg)
 	i = 2;
 	while (arg[i] && arg[i] == 'n')
 		i++;
-	if (arg[i] == '\0')
-		return (1);
-	return (0);
+	return (arg[i] == '\0');
 }
 
-int	builtin_echo(t_cmd *cmd)
+int	builtin_echo(t_cmd *cmd, t_shell *shell)
 {
 	int	i;
 	int	newline;
 
+	(void)shell;
 	if (!cmd || !cmd->args)
 		return (1);
-// skip "echo" and default print newline
 	i = 1;
 	newline = 1;
 	while (cmd->args[i] && is_n_flag(cmd->args[i]))
@@ -45,12 +41,12 @@ int	builtin_echo(t_cmd *cmd)
 	}
 	while (cmd->args[i])
 	{
-		printf("%s", cmd->args[i]);
+		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
 		if (cmd->args[i + 1])
-			printf(" ");
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (newline)
-		printf("\n");
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);
 }

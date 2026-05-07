@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/07 15:40:32 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/07 17:15:59 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,25 @@ void cmd_destroy(t_cmd **cmd);
 =====================================*/
 
 /* cd.c */
-int builtin_cd(t_cmd *cmd);
+int	builtin_cd(t_cmd *cmd, t_shell *shell);
 
 /* echo.c */
-int	builtin_echo(t_cmd *cmd);
+int	builtin_echo(t_cmd *cmd, t_shell *shell);
 
 /* env.c */
-int	builtin_env(void);
+int	builtin_env(t_shell *shell);
+
+/* export.c */
+int	builtin_export(t_cmd *cmd, t_shell *shell);
 
 /* pwd.c */
-int	builtin_pwd(t_cmd *cmd);
+int	builtin_pwd(t_cmd *cmd, t_shell *shell);
 
 /* unset.c */
-int	builtin_unset(t_cmd *cmd);
+int	builtin_unset(t_cmd *cmd, t_shell *shell);
 
 /* exit.c */
-int	builtin_exit(t_cmd *cmd);
+int	builtin_exit(t_cmd *cmd, t_shell *shell);
 
 
 /*====================================
@@ -134,6 +137,10 @@ char	*handle_direct_path(char *cmd);
 char	*join_path_cmd(char *path, char *cmd);
 char	*check_path(char *path, char *cmd);
 void	cleanup_paths(char **paths);
+char	**dup_env(char **envp);
+
+/* exec.c */
+int	execute_commands(t_cmd *commands, t_shell *shell);
 
 /*====================================
  EXPANDER FOLDER 
