@@ -88,3 +88,24 @@ int	execute_external(t_cmd *cmd, t_shell *shell)
 	free(path);
 	return (wait_for_child(pid));
 }
+
+int	pipe_wait(pid_t last_pid, int n)
+{
+	int		status;
+	pid_t	pid;
+	int		ret;
+
+	ret = 1;
+	while (n-- > 0)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == last_pid)
+		{
+			if (WIFEXITED(status))
+				ret = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				ret = 128 + WTERMSIG(status);
+		}
+	}
+	return (ret);
+}
