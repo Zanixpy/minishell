@@ -6,13 +6,12 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 18:19:20 by cakibris          #+#    #+#             */
-/*   Updated: 2026/04/25 23:03:57 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/04/27 23:30:55 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//cmd is going to change with shell
 static int update_oldpwd(char *old_pwd)
 {
     if (setenv("OLDPWD", old_pwd, 1) != 0)
@@ -70,7 +69,6 @@ int builtin_cd(t_cmd *cmd)
     char    *path;
     char    *old_pwd;
     char    cwd[PATH_MAX];
-// get current directory first
     if (getcwd(cwd, PATH_MAX) == NULL)
     {
         perror("cd");
