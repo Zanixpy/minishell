@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/04 09:55:50 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/04 17:32:17 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +124,12 @@ char	*search_path_cmd(char **path, char *cmd);
 /* bool_utils.c */
 int is_space(char *str);
 int is_bic(char *str);
-int is_quoted(char *s);
 int is_redirection(char *s);
 char *is_token(char *str);
 int is_var(char *s);
 int is_special_token(int c);
 int is_there_quote(char *s);
+int is_closed_quoted(char *s);
 
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
@@ -137,7 +137,6 @@ int check_quote_count(char *s);
 size_t array_size(char **tab);
 
 /* extract_utils.c */
-char *extract_str(char *s);
 char *clean_str(char *s);
 
 /* memory_utils.c */

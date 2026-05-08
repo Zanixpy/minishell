@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/04 09:37:43 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/07 15:19:27 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int tokenization(char ***tokens, char *prompt, size_t nb_words)
     return (0); 
 }
 
-static char **strtrim_tokens(char **tokens)
+static char **clean_tokens(char **tokens)
 {
     char **temp;
     int length;
@@ -99,7 +99,7 @@ static char **strtrim_tokens(char **tokens)
     {
         temp[i] = ft_strtrim(tokens[i], " ");
         if (!temp[i])
-            free_char_tab_n(&temp, i);
+            free_char_tab_n(&temp, i - 1);
         i++;
     }
     return (temp);
@@ -118,7 +118,7 @@ char **lexer(char *prompt)
         return (NULL);
     if (tokenization(&temp, prompt, nb_words))
         return (NULL);
-    tokens = strtrim_tokens(temp);
+    tokens = clean_tokens(temp);
     if (!tokens)
         return (free_char_tab(&temp), NULL);
     free_char_tab(&temp);
