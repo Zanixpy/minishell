@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 16:44:40 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/27 17:24:41 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/08 19:45:56 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,4 @@ void cmd_reset(t_cmd *cmd)
     cmd->args = NULL;
     cmd->path = NULL;
     cmd->current_dir = NULL;
-    cmd->fdin = -2;
-    cmd->fdout = -2;
 }

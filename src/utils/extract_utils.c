@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 12:04:19 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/08 14:45:43 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,28 @@ static char *strremove_quotes(char *s)
     return (s);
 }
 
+static char* strremove_closed_quotes(char *s)
+{
+    char *tmp;
+    int length;
+    
+    length = ft_strlen(s);
+    tmp = ft_substr(s, 1, length - 2);
+    if (!tmp)
+        return (NULL);
+    return (tmp);
+}
+
+
+
 
 char *clean_str(char *s)
 {
     char *tmp;
     
-    if (ft_strchr(s, QUOTE) || ft_strchr(s, DQUOTE))
+    if (is_quoted(s))
+        tmp = strremove_closed_quotes(s);
+    else if (ft_strchr(s, QUOTE) || ft_strchr(s, DQUOTE))
         tmp = strremove_quotes(s);
     else
         tmp = ft_strdup(s);

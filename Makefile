@@ -12,7 +12,8 @@ SRCS =  src/main.c \
 		src/utils/utils.c \
 		src/utils/bool_utils.c \
 		src/utils/extract_utils.c \
-		src/expander/expand.c
+		src/utils/fd_utils.c \
+		src/expander/expand.c \
 
 
 LIBFT_DIR = external/libft

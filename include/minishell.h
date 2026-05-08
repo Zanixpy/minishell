@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 12:11:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/08 19:16:43 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <string.h>
 # include "../external/libft/libft.h"
 
 # define GREAT '>'
@@ -33,18 +36,29 @@
 # define DQUOTE '"'
 # define NONE "NONE"
 
-
 typedef struct s_cmd
 {
-    char    *cmd;          
-    char    *path;          // Le chemin vers l'exécutable (/bin/ls)
-    char    **args;         // Le tableau d'arguments
-    char    *current_dir;   // Ton PWD au moment du lancement
-    int     fdin;           // Pour les redirections < | <<
-    int     fdout;          // Pour les redirections > | >>
-    struct s_cmd *next;     // Si tu as des pipes
-} t_cmd;
+	char			*cmd;
+	char			*path;
+	char			**args;
+	char			*current_dir;
+	char			*infile;
+	char			*outfile;
+	char			*heredoc_delim;
+	int				append;
+	int				heredoc_quoted;
+	int				fdin;
+	int				fdout;
+	struct s_cmd	*next;
+}	t_cmd;
 
+typedef struct s_shell
+{
+	char	**env;
+	int		exit_status;
+	char	*pwd;
+	char	*oldpwd;
+}	t_shell;
 
 /* main.c */
 
@@ -87,6 +101,35 @@ int	builtin_pwd(t_cmd *cmd);
 /* unset.c */
 int	builtin_unset(t_cmd *cmd);
 
+/* exit.c */
+int	builtin_exit(t_cmd *cmd);
+
+
+/*====================================
+ EXECUTE FOLDER
+=====================================*/
+
+/* execute.c */
+void	reset_redirections(int stdin_backup, int stdout_backup);
+int		execute_single_command(t_cmd *cmd, t_shell *shell);
+
+/* execute_cmd.c */
+int		is_builtin(char *name);
+char	*get_env_value(char *var, char **env);
+int		handle_heredoc(char *delim, t_shell *shell, int quoted);
+int		setup_heredoc(t_cmd *cmd, t_shell *shell);
+int		execute_builtin(t_cmd *cmd, t_shell *shell);
+
+/* execute_external.c */
+char	*find_executable(char *cmd, char **envp);
+int		execute_external(t_cmd *cmd, t_shell *shell);
+
+/* execution_utils.c */
+char	*handle_direct_path(char *cmd);
+char	*join_path_cmd(char *path, char *cmd);
+char	*check_path(char *path, char *cmd);
+void	cleanup_paths(char **paths);
+
 /*====================================
  EXPANDER FOLDER 
 =====================================*/
@@ -111,7 +154,7 @@ int parser(char *prompt, t_cmd *cmd, char *env);
 /* parser_set_cmd.c */
 int set_cmd_and_path(t_cmd *cmd, char *token, char **envp);
 int set_cmd_next(t_cmd **cmd);
-int set_cmd_redirections(t_cmd *cmd, char **tokens, int pos);
+int set_cmd_redirections(t_cmd *cmd, char **tokens, int *pos);
 int set_cmd_args(t_cmd *cmd, char *token);
 
 /* parser_utils.c */
@@ -124,16 +167,14 @@ char	*search_path_cmd(char **path, char *cmd);
 /* bool_utils.c */
 int is_space(char *str);
 int is_bic(char *str);
+int is_quoted(char *s);
 int is_redirection(char *s);
 char *is_token(char *str);
-int is_var(char *s);
+// int is_var(char *s);
 int is_special_token(int c);
-int is_there_quote(char *s);
-int is_closed_quoted(char *s);
 
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
-int check_quote_count(char *s);
 size_t array_size(char **tab);
 
 /* extract_utils.c */
@@ -147,8 +188,7 @@ char **add_element_in_array(char **tab, char *str);
 void free_str(char **s);
 
 /* fd_utils.c */
-
-
+void close_fds(int fd1, int fd2);
 
 
 

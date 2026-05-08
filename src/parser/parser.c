@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/04 09:42:16 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/08 19:17:01 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ int convert_token_in_cmd_var(t_cmd **cmd, char **tokens, char **envp, int *pos)
 	}
 	else if (is_redirection(tokens[*pos]))
 	{
-		if (set_cmd_redirections(*cmd, tokens, *pos))
+		if (set_cmd_redirections(*cmd, tokens, pos))
 			return (1);
-		*pos += 1;
 	}
 	else if (*pos != 0)
 	{
