@@ -11,7 +11,7 @@ int	main(int argc, char **argv, char **envp)
 	//char *args[] = {"./minishell", NULL};
 	//char *args[] = {"notacommand", NULL};
 	//char *args[] = {"pwd", NULL};
-	char *args[] = {"echo", "hello", NULL};	
+	char *args[] = {"cd", "..", NULL};	
 	
 	(void)argc;
 	(void)argv;
@@ -24,7 +24,7 @@ int	main(int argc, char **argv, char **envp)
 	cmd.path = NULL;
 	cmd.current_dir = NULL;
 	cmd.infile = NULL;
-	cmd.outfile = "out.txt";
+	cmd.outfile = NULL;
 	cmd.heredoc_delim = NULL;
 	cmd.fdin = -1;
 	cmd.fdout = -1;

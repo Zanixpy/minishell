@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/07 17:15:59 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/10 17:41:46 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void cmd_destroy(t_cmd **cmd);
 
 /* cd.c */
 int	builtin_cd(t_cmd *cmd, t_shell *shell);
-
+int	set_env_var(char *key, char *value, t_shell *shell);
 /* echo.c */
 int	builtin_echo(t_cmd *cmd, t_shell *shell);
 
