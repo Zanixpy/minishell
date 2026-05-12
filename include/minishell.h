@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 19:16:43 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/12 18:34:38 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define QUOTE 39
 # define DQUOTE '"'
 # define NONE "NONE"
+# define ERRMALLOC 15
 
 typedef struct s_cmd
 {
@@ -46,7 +47,6 @@ typedef struct s_cmd
 	char			*outfile;
 	char			*heredoc_delim;
 	int				append;
-	int				heredoc_quoted;
 	int				fdin;
 	int				fdout;
 	struct s_cmd	*next;
@@ -160,6 +160,10 @@ int set_cmd_args(t_cmd *cmd, char *token);
 /* parser_utils.c */
 char	*search_path_cmd(char **path, char *cmd);
 
+/* parser_set_cmd_utils.c */
+int set_cmd_output(t_cmd *cmd, char *file, int result);
+int set_cmd_heredoc(t_cmd *cmd, char *delim);
+int set_cmd_input(t_cmd *cmd, char *file);
 /*====================================
  UTILS FOLDER 
 =====================================*/

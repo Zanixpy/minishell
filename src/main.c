@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 19:52:16 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/12 18:18:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ void print_cmd(t_cmd *cmd)
         if (cmd->outfile)
             printf("outfile : %s\n", cmd->outfile);
         if (cmd->infile)
-            printf("outfile : %s\n", cmd->infile);
+            printf("infile : %s\n", cmd->infile);
         if (cmd->heredoc_delim)
             printf("heredoc_delim : %s\n", cmd->heredoc_delim);
+        printf("append : %d\n", cmd->append);
         printf("fdin : %d\n", cmd->fdin);
         printf("fdout : %d\n", cmd->fdout);
         printf("========================================\n");

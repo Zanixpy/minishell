@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 20:39:33 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/12 18:03:05 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,23 @@ int set_cmd_redirections(t_cmd *cmd, char **tokens, int *pos)
 
     result = is_redirection(tokens[*pos]);
     if (!tokens[*pos + 1])
-        return (1);
+        return (2);
     *pos += 1;
 	if (result == GREAT || result == GREAT * 2)
     {
-        cmd->outfile = tokens[*pos];
-
+        if (set_cmd_output(cmd, tokens[*pos], result) == ERRMALLOC)
+            return (ERRMALLOC);
     }
 	if (result == LESS)
     {
-        cmd->infile = ft_strdup(tokens[*pos]);
-        if (cmd->fdin)
-            close(cmd->fdin);
-        cmd->fdin = open(tokens[*pos], O_RDONLY);
+        if (set_cmd_input(cmd, tokens[*pos]) == ERRMALLOC)
+            return (ERRMALLOC);
     }
 	else if (result == LESS * 2)
     {
-        cmd->heredoc_quoted = 1;
-        cmd->heredoc_delim = tokens[*pos];       
+        if (set_cmd_heredoc(cmd, tokens[*pos]) == ERRMALLOC)
+            return (ERRMALLOC);        
     }
-    if (cmd->fdin == -1 || cmd ->fdout == -1)
-    return (close_fds(cmd->fdin, cmd->fdout), 1);
 	return (0);	
 }
 
