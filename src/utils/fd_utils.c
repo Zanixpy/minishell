@@ -6,9 +6,17 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 22:26:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/04 09:56:17 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/08 15:32:14 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+
+void close_fds(int fd1, int fd2)
+{
+    if (fd1 > 2)
+        close(fd1);
+    if (fd2 > 2)
+        close(fd2);
+}

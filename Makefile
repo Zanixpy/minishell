@@ -5,6 +5,7 @@ SRCS =  src/main.c \
 		src/parser/parser.c \
 		src/parser/parser_utils.c \
 		src/parser/parser_set_cmd.c \
+		src/parser/parser_set_cmd_utils.c \
 		src/lexer/lexer.c \
 		src/cmd/cmd_destroy.c \
 		src/cmd/cmd_init.c \
@@ -12,9 +13,23 @@ SRCS =  src/main.c \
 		src/utils/utils.c \
 		src/utils/bool_utils.c \
 		src/utils/extract_utils.c \
-		src/expander/expand.c
-
-
+		src/utils/fd_utils.c \
+		src/expander/expand.c \
+		src/execute/execute.c \
+		src/execute/execution_utils.c \
+		src/execute/exec.c \
+		src/execute/execute_pipe.c \
+		src/execute/execute_external.c \
+		src/execute/execute_cmd.c \
+		src/built_in_cmds/cd.c \
+		src/built_in_cmds/echo.c \
+		src/built_in_cmds/env.c \
+		src/built_in_cmds/exit.c \
+		src/built_in_cmds/export.c \
+		src/built_in_cmds/pwd.c \
+		src/built_in_cmds/unset.c \
+		src/built_in_cmds/built_in_utils.c \
+		
 LIBFT_DIR = external/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 HEADERS = include

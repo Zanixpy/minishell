@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/10 17:41:46 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/13 10:44:10 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <limits.h>
 # include "../external/libft/libft.h"
 
 # define GREAT '>'
@@ -35,7 +36,10 @@
 # define QUOTE 39
 # define DQUOTE '"'
 # define NONE "NONE"
-# define PATH_MAX 4096
+# define ERRMALLOC 15
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 typedef struct s_cmd
 {
@@ -47,7 +51,6 @@ typedef struct s_cmd
 	char			*outfile;
 	char			*heredoc_delim;
 	int				append;
-	int				heredoc_quoted;
 	int				fdin;
 	int				fdout;
 	struct s_cmd	*next;
@@ -166,12 +169,16 @@ int parser(char *prompt, t_cmd *cmd, char *env);
 /* parser_set_cmd.c */
 int set_cmd_and_path(t_cmd *cmd, char *token, char **envp);
 int set_cmd_next(t_cmd **cmd);
-int set_cmd_redirections(t_cmd *cmd, char **tokens, int pos);
+int set_cmd_redirections(t_cmd *cmd, char **tokens, int *pos);
 int set_cmd_args(t_cmd *cmd, char *token);
 
 /* parser_utils.c */
 char	*search_path_cmd(char **path, char *cmd);
 
+/* parser_set_cmd_utils.c */
+int set_cmd_output(t_cmd *cmd, char *file, int result);
+int set_cmd_heredoc(t_cmd *cmd, char *delim);
+int set_cmd_input(t_cmd *cmd, char *file);
 /*====================================
  UTILS FOLDER 
 =====================================*/
@@ -182,17 +189,14 @@ int is_bic(char *str);
 int is_quoted(char *s);
 int is_redirection(char *s);
 char *is_token(char *str);
-int is_var(char *s);
+// int is_var(char *s);
 int is_special_token(int c);
-int is_there_quote(char *s);
 
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
-int check_quote_count(char *s);
 size_t array_size(char **tab);
 
 /* extract_utils.c */
-char *extract_str(char *s);
 char *clean_str(char *s);
 
 /* memory_utils.c */
@@ -202,6 +206,8 @@ char **create_tab(char *str);
 char **add_element_in_array(char **tab, char *str);
 void free_str(char **s);
 
+/* fd_utils.c */
+void close_fds(int fd1, int fd2);
 
 
 

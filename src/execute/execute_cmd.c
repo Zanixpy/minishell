@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/07 17:19:39 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/13 10:40:27 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd->heredoc_delim)
 		return (0);
-	cmd->fdin = handle_heredoc(cmd->heredoc_delim, shell, cmd->heredoc_quoted);
+	cmd->fdin = handle_heredoc(cmd->heredoc_delim, shell, 0);
 	if (cmd->fdin == -1)
 		return (1);
 	return (0);
