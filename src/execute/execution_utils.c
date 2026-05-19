@@ -6,12 +6,17 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:07 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:56:38 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:27:02 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* handle_direct_path:
+*	Checks if a command is given as a direct path.
+*	Returns a duplicated executable path if accessible,
+*	otherwise returns NULL.
+*/
 char	*handle_direct_path(char *cmd)
 {
 	if (!cmd || !cmd[0])
@@ -25,6 +30,10 @@ char	*handle_direct_path(char *cmd)
 	return (NULL);
 }
 
+/* join_path_cmd:
+*	Joins a PATH directory and command name into a full path.
+*	Returns the created path string or NULL on allocation failure.
+*/
 char	*join_path_cmd(char *path, char *cmd)
 {
 	char	*temp;
@@ -40,6 +49,11 @@ char	*join_path_cmd(char *path, char *cmd)
 	return (full_path);
 }
 
+/* check_path:
+*	Creates and checks a full executable path for a command.
+*	Returns the valid executable path if accessible,
+*	otherwise returns NULL.
+*/
 char	*check_path(char *path, char *cmd)
 {
 	char	*full_path;
@@ -53,6 +67,9 @@ char	*check_path(char *path, char *cmd)
 	return (NULL);
 }
 
+/* cleanup_paths:
+*	Frees a NULL-terminated array of strings.
+*/
 void	cleanup_paths(char **paths)
 {
 	int	i;
@@ -68,6 +85,10 @@ void	cleanup_paths(char **paths)
 	free(paths);
 }
 
+/* dup_env:
+*	Creates a duplicated copy of the environment array.
+*	Returns the copied environment or NULL on allocation failure.
+*/
 char	**dup_env(char **envp)
 {
 	int		len;

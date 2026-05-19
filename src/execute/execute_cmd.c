@@ -6,12 +6,16 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/13 10:40:27 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:22:07 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* is_builtin:
+*	Checks if a command is a minishell builtin command.
+*	Returns 1 if the command is builtin, otherwise 0.
+*/
 int	is_builtin(char *name)
 {
 	if (!name || !*name)
@@ -27,6 +31,11 @@ int	is_builtin(char *name)
 	return (0);
 }
 
+/* get_env_value:
+*	Searches for an environment variable in the env array.
+*	Returns a duplicated copy of the variable value if found,
+*	otherwise returns NULL.
+*/
 char	*get_env_value(char *var, char **env)
 {
 	int	i;
@@ -45,6 +54,12 @@ char	*get_env_value(char *var, char **env)
 	return (NULL);
 }
 
+/* handle_heredoc:
+*	Reads user input until the delimiter is reached.
+*	Stores the heredoc content in a pipe and returns the read end
+*	of the pipe.
+*	Returns -1 if pipe creation fails.
+*/
 int	handle_heredoc(char *delim, t_shell *shell, int quoted)
 {
 	int		fds[2];
@@ -66,6 +81,11 @@ int	handle_heredoc(char *delim, t_shell *shell, int quoted)
 	return (fds[0]);
 }
 
+/* setup_heredoc:
+*	Creates and prepares the heredoc input for a command.
+*	Sets cmd->fdin to the heredoc file descriptor.
+*	Returns 0 on success and 1 on error.
+*/
 int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd->heredoc_delim)
@@ -76,6 +96,10 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 	return (0);
 }
 
+/* execute_builtin:
+*	Executes the corresponding builtin command function.
+*	Returns the exit status of the executed builtin command.
+*/
 int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)

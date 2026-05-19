@@ -6,12 +6,17 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:56:28 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:25:49 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* set_outfile_fd:
+*	Opens the outfile and redirects it to standard output.
+*	Handles both truncate and append modes.
+*	Exits the process if the file cannot be opened.
+*/
 static void	set_outfile_fd(t_cmd *cmd)
 {
 	int	flags;
@@ -30,6 +35,11 @@ static void	set_outfile_fd(t_cmd *cmd)
 	close(fd);
 }
 
+/* child_fds:
+*	Sets up input and output file descriptors for a child process.
+*	Applies pipe connections, heredoc input, and file redirections
+*	before command execution.
+*/
 static void	child_fds(t_cmd *cmd, int infd, int outfd)
 {
 	int	fd;
@@ -55,6 +65,12 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
 		set_outfile_fd(cmd);
 }
 
+/* child_run:
+*	Executes a command inside a child process.
+*	Sets up file descriptors, executes builtin commands directly,
+*	or runs external commands using execve.
+*	Exits with the appropriate status code on failure.
+*/
 static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 {
 	char	*path;
@@ -75,6 +91,12 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 	exit(126);
 }
 
+/* pipe_iter:
+*	Creates a pipe and forks a child process for one command
+*	in the pipeline.
+*	Updates the previous pipe read end for the next command.
+*	Returns the child process pid or -1 on error.
+*/
 static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell)
 {
 	int		pfd[2];
@@ -101,6 +123,12 @@ static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell)
 	return (pid);
 }
 
+/* execute_pipe:
+*	Executes multiple commands connected by pipes.
+*	Creates child processes for each command and waits for all
+*	processes to finish execution.
+*	Returns the exit status of the last command in the pipeline.
+*/
 int	execute_pipe(t_cmd *cmds, t_shell *shell)
 {
 	t_cmd	*cur;
