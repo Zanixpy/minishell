@@ -6,13 +6,13 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/11 16:10:26 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:28:42 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int convert_token_in_cmd_var(t_cmd **cmd, char **tokens, char **envp, int *pos)
+static int convert_token_in_cmd_var(t_cmd **cmd, char **tokens, char **envp, int *pos)
 {
 	if (*pos == 0 || (*pos != 0 && !ft_strcmp(tokens[*pos - 1], "|")))
 	{

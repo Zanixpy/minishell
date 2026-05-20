@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:03:05 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/19 10:34:21 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int set_cmd_args(t_cmd *cmd, char *token)
  
 int set_cmd_and_path(t_cmd *cmd, char *token, char **envp)
 {
-	cmd->cmd = clean_str(token);
+	cmd->cmd = clean_str(token, 0);
 	if (!cmd->cmd)
 		return (1);
 	if (is_bic(token))

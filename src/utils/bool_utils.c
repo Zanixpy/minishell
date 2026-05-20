@@ -6,12 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 14:45:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:26:22 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 int is_space(char *str)
 {
@@ -53,52 +52,28 @@ int is_redirection(char *s)
 	return (0);
 }
 
-char *is_token(char *str)
-{
-	int  size;
-
-	size = ft_strlen(str);
-	if (size == 1)
-	{
-		if (*str == GREAT)
-			return ("GREAT");
-		else if (*str == LESS)
-			return ("LESS");
-		else if (*str == PIPE)
-			return ("PIPE");
-		else if (*str == DOLLAR)
-			return ("DOLLAR");
-	}
-	if (!ft_strncmp(str, GREATGREAT, size)) 
-		return ("GREATGREAT");
-	else if  (!ft_strncmp(str, LESSLESS, size))
-		return ("LESSLESS");
-	return (NULL);
-}
-
-// int is_var(char *s)
+// char *is_token(char *str)
 // {
-//     int i;
-//     int isquoted;
-//     int is_dollar;
-    
-//     if (isquoted == QUOTE || isquoted == 0)
-//         return (0);
-//     printf("HERE IN IS_VAR\n");
-//     i = 1;
-//     is_dollar = 0;
-//     while (s[i] && s[i] != DOLLAR)
-//     {
-//         is_dollar = 1;
-//         i++;
-//     }
-//     if (is_dollar && (s[i] == '?' || s[i] == '-' || s[i] == '@' || s[i] == '!' || s[i] == '*'))
-//         return (1);
-//     if (is_dollar && (ft_isalnum(s[i]) || s[i] == '_'))
-//         return (1);
-//     return (0);
-// }
+// 	int  size;
 
+// 	size = ft_strlen(str);
+// 	if (size == 1)
+// 	{
+// 		if (*str == GREAT)
+// 			return ("GREAT");
+// 		else if (*str == LESS)
+// 			return ("LESS");
+// 		else if (*str == PIPE)
+// 			return ("PIPE");
+// 		else if (*str == DOLLAR)
+// 			return ("DOLLAR");
+// 	}
+// 	if (!ft_strncmp(str, GREATGREAT, size)) 
+// 		return ("GREATGREAT");
+// 	else if  (!ft_strncmp(str, LESSLESS, size))
+// 		return ("LESSLESS");
+// 	return (NULL);
+// }
 
 int is_quoted(char *s)
 {
@@ -117,9 +92,9 @@ int is_quoted(char *s)
     return (0);   
 }
 
-int is_special_token(int c)
+int is_special_char(int c)
 {
-    if (c == '?' || c == '-' || c == '@' || c == '!' || c == '*' )
+    if (c == '?' || c == '-' || c == '@' || c == '!' || c == '*' || c == DOLLAR) 
         return (1);
     return (0);
 }

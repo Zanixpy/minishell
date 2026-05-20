@@ -6,27 +6,42 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/04 17:32:02 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:52:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char *convert_var(char *s, int *pos)
-{
-    int sub_len;
-    char *env;
-    char *tmp;
 
+static char *build_var(char *s, int *pos)
+{
+    char *tmp;
+    int sub_len;
+    
     sub_len = 0;
-    if (ft_isdigit(s[*pos]) || is_special_token(s[*pos]))
-        tmp = ft_substr(s, *pos, 1);
+    if (ft_isdigit(s[*pos]) || is_special_char(s[*pos]))
+    {
+        sub_len++;        
+        tmp = ft_substr(s, *pos, sub_len);
+    }
     else 
     {
         while (ft_isalnum(s[*pos + sub_len]) || s[*pos + sub_len] == '_')
             sub_len++;
-        tmp = ft_substr(s, 1, sub_len);
+        tmp = ft_substr(s, *pos, sub_len);
     }
+    if (!tmp)
+        return (NULL);
+    *pos += sub_len;    
+    return (tmp);
+}
+
+static char *convert_var(char *s, int *pos)
+{
+    char *env;
+    char *tmp;
+
+    tmp = build_var(s, pos);
     if (!tmp)
         return (NULL);
     env = getenv(tmp);
@@ -37,60 +52,86 @@ static char *convert_var(char *s, int *pos)
         tmp = ft_strdup(env);
     if (!tmp)
         return (NULL);
-    *pos += sub_len;
     return (tmp);
 }
 
-static int adjust_buffer(char **buffer, int *pos)
-{
-    int i;
-    char *tmp_buf;
-    char *tmp;
 
-    i = *pos;
-    tmp = convert_var(*buffer, pos);
+static char *rebuild_str(char **s, int start_var, int end_var, char *var)
+{
+    char *tmp;
+    int length;
+    int i;
+    int j;
+
+    length =  ft_strlen(*s) - (end_var - start_var) + ft_strlen(var);
+    tmp = ft_calloc(length + 1, sizeof(char));
     if (!tmp)
+        return (free_str(s), NULL);
+    i = 0;
+    j = 0;
+    while (i < length) 
     {
-        free_str(buffer);
-        *buffer = NULL;
-        return (1);   
+        if (j == start_var)
+        {
+            fill_var_in_str(&tmp, &i, var);
+            j = end_var;
+        }
+        else
+        {
+            tmp[i] = (*s)[j++];
+            i++;
+        }
     }
-    if (i == 0)
-        *buffer = ft_strjoin("", tmp);
-    else
-    {
-        tmp_buf = *buffer;
-        *buffer = ft_strjoin(tmp_buf, tmp);
-        free(tmp_buf);    
-    }
-    free(tmp);
-    if (!(*buffer))
-        return (1);
-    return (0);
+    return (tmp);
 }
 
-char *expand_var(char *s)
+static void format_string(char **s, int *i)
 {
-    char *buffer;
+    char *var;
+    char *tmp;
+    int  end_var;
+
+    end_var = *i + 1;
+    var = convert_var(*s, &end_var);
+    if (!var)
+       return (free_str(s));
+    tmp = rebuild_str(s, *i, end_var, var);
+    free(var);
+    if (!tmp)
+        return (free_str(s));
+    free(*s);
+    *s = tmp;
+}
+
+char *expand_str(char *s)
+{
     int i;
 
-    s = clean_str(s);
+    s = strdup(s);
     if (!s)
         return (NULL);
     i = 0;
     while (s[i]) 
     {
-        if (s[i] == DOLLAR)
+        if (s[i] == QUOTE)
         {
             i++;
-            if (adjust_buffer(&buffer, &i))
-                return (free(s), NULL);
+            if (ft_strchr((s + i), QUOTE))
+                while (s[i] && s[i++] != QUOTE);
         }
-        i++;
+        else if (s[i] == DOLLAR)
+        {      
+            format_string(&s, &i);
+            if (!s)
+                return (NULL);
+        }
+        else
+            i++;
     }
-    free(s);
-    return (buffer);
+    return (s);
 }
+
+
 
 /*
 Caractères spéciaux qu'on peut pas expand :

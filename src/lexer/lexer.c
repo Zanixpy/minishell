@@ -6,13 +6,11 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/07 15:19:27 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:21:22 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdlib.h>
-
 
 static size_t count_words(char *str)
 {

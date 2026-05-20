@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/08 14:45:43 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:51:37 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static void rebuild_str(char **s, int start_quote, int end_quote)
     int i;
     int j;
 
-    length = strlen(*s) - 2;
-    tmp = calloc(length + 1, sizeof(char));
+    length = ft_strlen(*s) - 2;
+    tmp = ft_calloc(length + 1, sizeof(char));
     if (!tmp)
     {
         free(*s);
@@ -47,7 +47,7 @@ static char *strremove_quotes(char *s)
     int i;
     int j;
 
-    s = strdup(s);
+    s = ft_strdup(s);
     if (!s)
         return (NULL);
     i = -1;
@@ -74,7 +74,7 @@ static char* strremove_closed_quotes(char *s)
 {
     char *tmp;
     int length;
-    
+
     length = ft_strlen(s);
     tmp = ft_substr(s, 1, length - 2);
     if (!tmp)
@@ -82,19 +82,36 @@ static char* strremove_closed_quotes(char *s)
     return (tmp);
 }
 
+void fill_var_in_str(char **tmp, int *i, char *var)
+{    
+    if (*var == 0)
+        return ;
+    while (*var) 
+    {
+        (*tmp)[*i] = *var;
+        *i += 1;
+        var++;
+    }
+}
 
-
-
-char *clean_str(char *s)
+char *clean_str(char *s, int is_delim)
 {
     char *tmp;
+    char *temp_str;
     
-    if (is_quoted(s))
-        tmp = strremove_closed_quotes(s);
-    else if (ft_strchr(s, QUOTE) || ft_strchr(s, DQUOTE))
-        tmp = strremove_quotes(s);
+    if (is_delim)
+        temp_str = ft_strdup(s);
     else
-        tmp = ft_strdup(s);
+        temp_str = expand_str(s);
+    if (!temp_str)
+        return (NULL);
+    if (is_quoted(temp_str))
+        tmp = strremove_closed_quotes(temp_str);
+    else if (ft_strchr(temp_str, QUOTE) || ft_strchr(temp_str, DQUOTE))
+        tmp = strremove_quotes(temp_str);
+    else
+        tmp = ft_strdup(temp_str);
+    free(temp_str);
     if (!tmp)
         return (NULL);
     return (tmp);        

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:34:38 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:29:44 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	cleanup_paths(char **paths);
 =====================================*/
 
 /* expand.c */
-char *expand_var(char *s);
+char *expand_str(char *s);
 
 /*====================================
  LEXER FOLDER 
@@ -157,13 +157,11 @@ int set_cmd_next(t_cmd **cmd);
 int set_cmd_redirections(t_cmd *cmd, char **tokens, int *pos);
 int set_cmd_args(t_cmd *cmd, char *token);
 
-/* parser_utils.c */
-char	*search_path_cmd(char **path, char *cmd);
-
 /* parser_set_cmd_utils.c */
 int set_cmd_output(t_cmd *cmd, char *file, int result);
 int set_cmd_heredoc(t_cmd *cmd, char *delim);
 int set_cmd_input(t_cmd *cmd, char *file);
+char	*search_path_cmd(char **path, char *cmd);
 /*====================================
  UTILS FOLDER 
 =====================================*/
@@ -173,16 +171,16 @@ int is_space(char *str);
 int is_bic(char *str);
 int is_quoted(char *s);
 int is_redirection(char *s);
-char *is_token(char *str);
-// int is_var(char *s);
-int is_special_token(int c);
+// char *is_token(char *str);
+int is_special_char(int c);
 
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
 size_t array_size(char **tab);
 
 /* extract_utils.c */
-char *clean_str(char *s);
+char *clean_str(char *s, int is_delim);
+void fill_var_in_str(char **tmp, int *i, char *var);
 
 /* memory_utils.c */
 void	free_char_tab_n(char ***tab, int n);
@@ -193,8 +191,6 @@ void free_str(char **s);
 
 /* fd_utils.c */
 void close_fds(int fd1, int fd2);
-
-
 
 
 #endif

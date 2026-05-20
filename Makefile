@@ -3,7 +3,6 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS =  src/main.c \
 		src/parser/parser.c \
-		src/parser/parser_utils.c \
 		src/parser/parser_set_cmd.c \
 		src/parser/parser_set_cmd_utils.c \
 		src/lexer/lexer.c \

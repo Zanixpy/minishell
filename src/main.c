@@ -6,14 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:18:24 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:28:12 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 char *env;
 

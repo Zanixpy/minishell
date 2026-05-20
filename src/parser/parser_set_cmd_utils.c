@@ -6,15 +6,42 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:51:12 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:20:07 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+
+char	*search_path_cmd(char **path, char *cmd)
+{
+	int		i;
+	char	*final;
+	char	*tmp;
+
+    tmp = ft_strjoin("/", cmd);
+	if (!tmp)
+		return (NULL);
+	final = NULL;
+	i = -1;
+	while (path[++i])
+	{
+		final = ft_strjoin(path[i], tmp);
+		if (!final)
+			return (free(tmp), NULL);
+		if (access(final, F_OK) == 0)
+			break ;
+		free(final);
+		final = ft_strdup(NONE);
+		if (!final)
+			return (free(tmp), NULL);			
+	}
+	return (free(tmp), final);
+}
+
 int set_cmd_output(t_cmd *cmd, char *file, int result)
 {
-    cmd->outfile = clean_str(file);
+    cmd->outfile = clean_str(file, 0);
     if (!cmd->outfile)
         return (ERRMALLOC);
     if (result == GREAT)
@@ -34,7 +61,7 @@ int set_cmd_output(t_cmd *cmd, char *file, int result)
 
 int set_cmd_input(t_cmd *cmd, char *file)
 {
-    cmd->infile = clean_str(file);
+    cmd->infile = clean_str(file, 0);
     if (!cmd->infile)
         return (ERRMALLOC);
     if (cmd->fdin)
@@ -45,7 +72,7 @@ int set_cmd_input(t_cmd *cmd, char *file)
 
 int set_cmd_heredoc(t_cmd *cmd, char *delim)
 {
-    cmd->heredoc_delim = clean_str(delim);
+    cmd->heredoc_delim = clean_str(delim, 1);
     if (!cmd->heredoc_delim)
         return (ERRMALLOC);
     return (0);  

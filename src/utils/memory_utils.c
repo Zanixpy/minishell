@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:21:03 by omawele           #+#    #+#             */
-/*   Updated: 2026/04/28 21:33:10 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:04:52 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	free_char_tab(char ***tab)
 void free_str(char **s)
 {
 	if (*s)
+	{
 		free(*s);
+		*s = NULL;
+	}
 }
 
 char **create_tab(char *str)
