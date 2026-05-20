@@ -6,12 +6,18 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/04 00:51:11 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:17:39 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* apply_infile:
+*	Applies the input redirection for a command.
+*	Uses fdin if it already exists, otherwise opens the infile
+*	and redirects it to standard input.
+*	Returns 0 on success and 1 on error.
+*/
 static int	apply_infile(t_cmd *cmd)
 {
 	int	fd;
@@ -34,6 +40,12 @@ static int	apply_infile(t_cmd *cmd)
 	return (0);
 }
 
+/* apply_outfile:
+*	Applies the output redirection for a command.
+*	Uses fdout if it already exists, otherwise opens the outfile
+*	in truncate or append mode and redirects it to standard output.
+*	Returns 0 on success and 1 on error.
+*/
 static int	apply_outfile(t_cmd *cmd)
 {
 	int	flags;
@@ -60,6 +72,10 @@ static int	apply_outfile(t_cmd *cmd)
 	return (0);
 }
 
+/* reset_redirections:
+*	Restores the original standard input and output file descriptors.
+*	Closes the backup descriptors after restoring them.
+*/
 void	reset_redirections(int stdin_backup, int stdout_backup)
 {
 	if (stdin_backup != -1)
@@ -74,6 +90,14 @@ void	reset_redirections(int stdin_backup, int stdout_backup)
 	}
 }
 
+/* execute_single_command:
+*	Executes a single command without creating a pipeline.
+*	Sets up heredoc and file redirections before execution.
+*	Executes builtins in the main process and external commands
+*	in a child process.
+*	Restores the original standard input and output afterward.
+*	Returns the command exit status.
+*/
 int	execute_single_command(t_cmd *cmd, t_shell *shell)
 {
 	int	stdin_backup;

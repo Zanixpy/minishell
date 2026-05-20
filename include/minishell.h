@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:29:44 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:41:45 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <limits.h>
 # include "../external/libft/libft.h"
 
 # define GREAT '>'
@@ -36,6 +37,9 @@
 # define DQUOTE '"'
 # define NONE "NONE"
 # define ERRMALLOC 15
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 typedef struct s_cmd
 {
@@ -87,22 +91,25 @@ void cmd_destroy(t_cmd **cmd);
 =====================================*/
 
 /* cd.c */
-int builtin_cd(t_cmd *cmd);
-
+int	builtin_cd(t_cmd *cmd, t_shell *shell);
+int	set_env_var(char *key, char *value, t_shell *shell);
 /* echo.c */
-int	builtin_echo(t_cmd *cmd);
+int	builtin_echo(t_cmd *cmd, t_shell *shell);
 
 /* env.c */
-int	builtin_env(void);
+int	builtin_env(t_shell *shell);
+
+/* export.c */
+int	builtin_export(t_cmd *cmd, t_shell *shell);
 
 /* pwd.c */
-int	builtin_pwd(t_cmd *cmd);
+int	builtin_pwd(t_cmd *cmd, t_shell *shell);
 
 /* unset.c */
-int	builtin_unset(t_cmd *cmd);
+int	builtin_unset(t_cmd *cmd, t_shell *shell);
 
 /* exit.c */
-int	builtin_exit(t_cmd *cmd);
+int	builtin_exit(t_cmd *cmd, t_shell *shell);
 
 
 /*====================================
@@ -123,12 +130,20 @@ int		execute_builtin(t_cmd *cmd, t_shell *shell);
 /* execute_external.c */
 char	*find_executable(char *cmd, char **envp);
 int		execute_external(t_cmd *cmd, t_shell *shell);
+int		pipe_wait(pid_t last_pid, int n);
+
+/* execute_pipe.c */
+int		execute_pipe(t_cmd *cmds, t_shell *shell);
 
 /* execution_utils.c */
 char	*handle_direct_path(char *cmd);
 char	*join_path_cmd(char *path, char *cmd);
 char	*check_path(char *path, char *cmd);
 void	cleanup_paths(char **paths);
+char	**dup_env(char **envp);
+
+/* exec.c */
+int	execute_commands(t_cmd *commands, t_shell *shell);
 
 /*====================================
  EXPANDER FOLDER 

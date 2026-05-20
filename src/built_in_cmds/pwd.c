@@ -6,26 +6,25 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:14 by cakibris          #+#    #+#             */
-/*   Updated: 2026/04/25 23:04:10 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/10 17:56:06 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//cmd is going to change with shell
-int	builtin_pwd(t_cmd *cmd)
+int	builtin_pwd(t_cmd *cmd, t_shell *shell)
 {
 	char	*cwd;
 
 	(void)cmd;
-// get current working directory
+	(void)shell;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
 		perror("pwd");
 		return (1);
 	}
-	printf("%s\n", cwd);
+	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
 	return (0);
 }

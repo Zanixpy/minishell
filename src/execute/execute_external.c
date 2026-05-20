@@ -6,12 +6,17 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/04 00:51:14 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:20:05 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* wait_for_child:
+*	Waits for a child process to finish execution.
+*	Returns the child's exit status or the signal-based exit code
+*	if the process was terminated by a signal.
+*/
 static int	wait_for_child(pid_t pid)
 {
 	int	status;
@@ -24,6 +29,10 @@ static int	wait_for_child(pid_t pid)
 	return (1);
 }
 
+/* search_in_paths:
+*	Searches for an executable command in the given PATH directories.
+*	Returns the full executable path if found, otherwise NULL.
+*/
 static char	*search_in_paths(char *cmd, char **paths)
 {
 	char	*full_path;
@@ -40,6 +49,12 @@ static char	*search_in_paths(char *cmd, char **paths)
 	return (NULL);
 }
 
+/* find_executable:
+*	Finds the full path of a command executable.
+*	Handles direct paths and searches through PATH environment
+*	directories when needed.
+*	Returns the executable path or NULL if not found.
+*/
 char	*find_executable(char *cmd, char **envp)
 {
 	char	*path_env;
@@ -63,6 +78,11 @@ char	*find_executable(char *cmd, char **envp)
 	return (full_path);
 }
 
+/* execute_external:
+*	Executes an external command using fork and execve.
+*	Searches for the executable path before execution.
+*	Returns the command exit status or an error code if execution fails.
+*/
 int	execute_external(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
@@ -87,4 +107,29 @@ int	execute_external(t_cmd *cmd, t_shell *shell)
 	}
 	free(path);
 	return (wait_for_child(pid));
+}
+
+/* pipe_wait:
+*	Waits for all child processes created in a pipeline.
+*	Returns the exit status of the last command in the pipeline.
+*/
+int	pipe_wait(pid_t last_pid, int n)
+{
+	int		status;
+	pid_t	pid;
+	int		ret;
+
+	ret = 1;
+	while (n-- > 0)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == last_pid)
+		{
+			if (WIFEXITED(status))
+				ret = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				ret = 128 + WTERMSIG(status);
+		}
+	}
+	return (ret);
 }

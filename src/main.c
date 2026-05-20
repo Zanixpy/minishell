@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:28:12 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 12:45:21 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void print_cmd(t_cmd *cmd)
     }
 }
 
-int get_prompt_line(t_cmd *cmd)
+int get_prompt_line(t_cmd *cmd, t_shell *shell)
 {
     char *prompt;
     
@@ -72,6 +72,7 @@ int get_prompt_line(t_cmd *cmd)
     if (parser(prompt, cmd, env))
         return (free(prompt), 1);
     print_cmd(cmd);
+    shell->exit_status = execute_commands(cmd, shell);
     free(prompt);
     return (0);
 }
@@ -79,16 +80,25 @@ int get_prompt_line(t_cmd *cmd)
 
 /* MAIN : This is the beginning of the program where we'll launch the shell with the infinite loop*/
 
-int main(void)
+int main(int ac, char **av, char**envp)
 {
     t_cmd *cmd;
+    t_shell shell;
 
+    (void)ac;
+    (void)av;
+    
+    shell.env = dup_env(envp);
+    shell.exit_status = 0;
+    shell.pwd = NULL;
+    shell.oldpwd = NULL;
+    
     cmd = cmd_init();
     if (!cmd)
         return (1);
     while (1) 
     {
-        if (get_prompt_line(cmd))
+        if (get_prompt_line(cmd, &shell))
             break;
         cmd_reset(cmd);
     }
