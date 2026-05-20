@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_init.c                                         :+:      :+:    :+:   */
+/*   shell_cmd_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 16:44:40 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:16:13 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 16:00:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
+#include <stdlib.h>
 
 t_cmd *cmd_init(void)
 {
@@ -34,6 +34,31 @@ t_cmd *cmd_init(void)
     return (cmd);
 }
 
+t_shell *shell_init(char **envp)
+{
+    t_shell *shell;
+    char *pwd;
+
+    
+    shell = malloc(sizeof(t_shell));
+    if (!shell)
+        return (NULL);
+    shell->exit_status = 0;
+    shell->env = dup_env(envp);
+    if (!shell->env)
+        return (free(shell), NULL);
+    pwd = NULL;
+    shell->oldpwd = NULL;
+    if (!getcwd(pwd, 100))
+    {
+        free_char_tab(&shell->env);
+        free(shell);
+        return (NULL);     
+    }
+    shell->pwd = pwd; 
+    return (shell);
+}
+
 void cmd_reset(t_cmd *cmd)
 {
     cmd_destroy_data(cmd);
@@ -50,3 +75,5 @@ void cmd_reset(t_cmd *cmd)
     cmd->fdin = -2;
     cmd->fdout = -2;
 }
+
+

@@ -6,10 +6,9 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:45:21 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 16:07:15 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/minishell.h"
 
@@ -83,25 +82,23 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
 int main(int ac, char **av, char**envp)
 {
     t_cmd *cmd;
-    t_shell shell;
+    t_shell *shell;
 
     (void)ac;
     (void)av;
-    
-    shell.env = dup_env(envp);
-    shell.exit_status = 0;
-    shell.pwd = NULL;
-    shell.oldpwd = NULL;
-    
     cmd = cmd_init();
     if (!cmd)
         return (1);
+    shell = shell_init(envp);
+    if (!shell)
+        return (cmd_destroy(&cmd), 1);
     while (1) 
     {
-        if (get_prompt_line(cmd, &shell))
+        if (get_prompt_line(cmd, shell))
             break;
         cmd_reset(cmd);
     }
     cmd_destroy(&cmd);
+    shell_destroy(&shell);
     return (0);  
 }

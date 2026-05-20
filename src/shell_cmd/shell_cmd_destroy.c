@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_destroy.c                                      :+:      :+:    :+:   */
+/*   shell_cmd_destroy.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/12 18:23:46 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 15:58:49 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,22 @@ void cmd_destroy_data(t_cmd *cmd)
         close(cmd->fdout);
     if (cmd->append > 2)
         close(cmd->append);
+}
+
+void shell_destroy(t_shell **shell)
+{
+    shell_destroy_data(*shell);
+    free(*shell);
+}
+
+void shell_destroy_data(t_shell *shell)
+{
+    if (shell->env)
+        free_char_tab(&shell->env);
+    if (shell->pwd)
+        free(shell->pwd);
+    if (shell->oldpwd)
+        free(shell->oldpwd);
 }
 
 void cmd_destroy_node(t_cmd *cmd)

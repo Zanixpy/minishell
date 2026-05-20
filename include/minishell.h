@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:41:45 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/20 15:58:57 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,20 @@ typedef struct s_shell
 void print_cmd(t_cmd *cmd);
 
 /*====================================
- CMD FOLDER 
+ SHELL_CMD FOLDER 
 =====================================*/
 
-/* cmd_init.c */
+/* shell_cmd_init.c */
 t_cmd *cmd_init(void);
 void cmd_reset(t_cmd *cmd);
+t_shell *shell_init(char **envp);
 
-/* cmd_destroy.c */
+/* shell_cmd_destroy.c */
 void cmd_destroy_data(t_cmd *cmd);
 void cmd_destroy_node(t_cmd *cmd);
 void cmd_destroy(t_cmd **cmd);
+void shell_destroy_data(t_shell *shell);
+void shell_destroy(t_shell **shell);
 
 /*====================================
  ERROR FOLDER 
