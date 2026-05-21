@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:42:48 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 10:51:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ static char* strremove_closed_quotes(char *s)
     int length;
 
     length = ft_strlen(s);
-    tmp = ft_substr(s, 1, length - 2);
+    if (length - 2 == 0)
+        tmp = ft_calloc(1, sizeof(char));
+    else        
+        tmp = ft_substr(s, 1, length - 2);
     if (!tmp)
         return (NULL);
     return (tmp);
@@ -105,6 +108,8 @@ char *clean_str(char *s, int is_delim)
         temp_str = expand_str(s);
     if (!temp_str)
         return (NULL);
+    if (*temp_str == '\0')
+        return (temp_str);
     if (is_quoted(temp_str))
         tmp = strremove_closed_quotes(temp_str);
     else if (ft_strchr(temp_str, QUOTE) || ft_strchr(temp_str, DQUOTE))

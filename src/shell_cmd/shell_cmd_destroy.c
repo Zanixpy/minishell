@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 15:58:49 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 12:15:29 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,16 @@ void cmd_destroy(t_cmd **cmd)
 
 void cmd_destroy_data(t_cmd *cmd)
 {
-    if (cmd->cmd)
-        free(cmd->cmd);
-    if (cmd->args)
-        free_char_tab(&cmd->args);
-    if (cmd->path)
-        free(cmd->path);
-    if (cmd->current_dir)
-        free(cmd->current_dir);
-    if (cmd->outfile)
-        free(cmd->outfile);
-    if (cmd->infile)
-        free(cmd->infile);
-    if (cmd->heredoc_delim)
-        free(cmd->heredoc_delim);
-    if (cmd->fdin > 2)
-        close(cmd->fdin);
-    if (cmd->fdout > 2)
-        close(cmd->fdout);
-    if (cmd->append > 2)
-        close(cmd->append);
+    free_str(&cmd->cmd);
+    free_char_tab(&cmd->args);
+    free_str(&cmd->path);
+    free_str(&cmd->current_dir);
+    free_str(&cmd->outfile);
+    free_str(&cmd->infile);
+    free_str(&cmd->heredoc_delim);
+    close_fd(cmd->fdin);
+    close_fd(cmd->fdout);
+    close_fd(cmd->append);
 }
 
 void shell_destroy(t_shell **shell)

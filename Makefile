@@ -6,8 +6,8 @@ SRCS =  src/main.c \
 		src/parser/parser_set_cmd.c \
 		src/parser/parser_set_cmd_utils.c \
 		src/lexer/lexer.c \
-		src/cmd/cmd_destroy.c \
-		src/cmd/cmd_init.c \
+		src/shell_cmd/shell_cmd_destroy.c \
+		src/shell_cmd/shell_cmd_init.c \
 		src/utils/memory_utils.c \
 		src/utils/utils.c \
 		src/utils/bool_utils.c \

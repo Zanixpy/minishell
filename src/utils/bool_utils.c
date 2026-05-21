@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:26:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 09:53:22 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ int is_space(char *str)
 
 int is_bic(char *str)
 {
-	if (!ft_strncmp("cd", str, 2) || !ft_strncmp("echo", str, 4) ||
-		!ft_strncmp("env", str, 3) || !ft_strncmp("exit", str, 4) ||
-		!ft_strncmp("export", str, 6) || !ft_strncmp("pwd", str, 3) ||
-		!ft_strncmp("unset", str, 5))
+	if (!ft_strcmp("cd", str) || !ft_strcmp("echo", str) ||
+		!ft_strcmp("env", str) || !ft_strcmp("exit", str) ||
+		!ft_strcmp("export", str) || !ft_strcmp("pwd", str) ||
+		!ft_strcmp("unset", str))
 		return (1);
 	return (0);
 }

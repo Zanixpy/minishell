@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 15:58:57 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 12:14:47 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define DQUOTE '"'
 # define NONE "NONE"
 # define ERRMALLOC 15
+# define EMPTYSTR 98
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
 # endif
@@ -208,7 +209,7 @@ char **add_element_in_array(char **tab, char *str);
 void free_str(char **s);
 
 /* fd_utils.c */
-void close_fds(int fd1, int fd2);
+void close_fd(int fd);
 
 
 #endif

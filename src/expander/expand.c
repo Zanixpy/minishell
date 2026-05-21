@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 11:52:10 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 09:22:38 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char *expand_str(char *s)
             if (ft_strchr((s + i), QUOTE))
                 while (s[i] && s[i++] != QUOTE);
         }
-        else if (s[i] == DOLLAR)
+        else if (s[i] == DOLLAR && s[i + 1] && s[i + 1] != DQUOTE)
         {      
             format_string(&s, &i);
             if (!s)

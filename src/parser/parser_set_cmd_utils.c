@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:20:07 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/21 16:26:46 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*search_path_cmd(char **path, char *cmd)
 		if (access(final, F_OK) == 0)
 			break ;
 		free(final);
-		final = ft_strdup(NONE);
+		final = ft_strdup(cmd);
 		if (!final)
 			return (free(tmp), NULL);			
 	}
@@ -41,19 +41,20 @@ char	*search_path_cmd(char **path, char *cmd)
 
 int set_cmd_output(t_cmd *cmd, char *file, int result)
 {
+    free_str(&cmd->outfile);
     cmd->outfile = clean_str(file, 0);
     if (!cmd->outfile)
         return (ERRMALLOC);
+    else if (*cmd->outfile == '\0')
+        return (EMPTYSTR);
     if (result == GREAT)
     {
-        if (cmd->fdout)
-            close(cmd->fdout);
+        close_fd(cmd->fdout);
         cmd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);      
     }
     else
     {
-        if (cmd->append)
-            close(cmd->append);
+        close_fd(cmd->append);
         cmd->append = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644); 
     }
     return (0);  
@@ -61,11 +62,13 @@ int set_cmd_output(t_cmd *cmd, char *file, int result)
 
 int set_cmd_input(t_cmd *cmd, char *file)
 {
+    free_str(&cmd->infile);
     cmd->infile = clean_str(file, 0);
     if (!cmd->infile)
         return (ERRMALLOC);
-    if (cmd->fdin)
-        close(cmd->fdin);
+    else if (*cmd->infile == '\0')
+        return (free(cmd->infile), EMPTYSTR);
+    close_fd(cmd->fdin);
     cmd->fdin = open(cmd->infile, O_RDONLY);     
     return (0); 
 }
