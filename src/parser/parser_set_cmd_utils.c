@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/21 16:26:46 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/22 10:44:43 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,20 @@ char	*search_path_cmd(char **path, char *cmd)
 	return (free(tmp), final);
 }
 
-int set_cmd_output(t_cmd *cmd, char *file, int result)
+char **get_path_split(void)
+{
+    char *path_env;
+
+    path_env = getenv("PATH");
+    if (!path_env)
+        return (NULL);
+    return (ft_split(path_env, ':')); 
+}
+
+int set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result)
 {
     free_str(&cmd->outfile);
-    cmd->outfile = clean_str(file, 0);
+    cmd->outfile = clean_str(file, 0, shell->exit_status);
     if (!cmd->outfile)
         return (ERRMALLOC);
     else if (*cmd->outfile == '\0')
@@ -60,10 +70,10 @@ int set_cmd_output(t_cmd *cmd, char *file, int result)
     return (0);  
 }
 
-int set_cmd_input(t_cmd *cmd, char *file)
+int set_cmd_input(t_cmd *cmd, t_shell *shell, char *file)
 {
     free_str(&cmd->infile);
-    cmd->infile = clean_str(file, 0);
+    cmd->infile = clean_str(file, 0, shell->exit_status);
     if (!cmd->infile)
         return (ERRMALLOC);
     else if (*cmd->infile == '\0')
@@ -75,7 +85,21 @@ int set_cmd_input(t_cmd *cmd, char *file)
 
 int set_cmd_heredoc(t_cmd *cmd, char *delim)
 {
-    cmd->heredoc_delim = clean_str(delim, 1);
+    char **tmp;
+    char *clean_delim;
+
+    clean_delim = clean_str(delim, 1, 0);
+    if (!clean_delim)
+        return (ERRMALLOC);
+    if (!cmd->heredoc_delim)
+        cmd->heredoc_delim = create_tab(clean_delim);
+    else
+    {
+        tmp = cmd->heredoc_delim;
+        cmd->heredoc_delim = add_element_in_array(tmp, clean_delim);
+        free_char_tab(&tmp);   
+    }
+    free(clean_delim);        
     if (!cmd->heredoc_delim)
         return (ERRMALLOC);
     return (0);  

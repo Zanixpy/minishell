@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/21 12:14:47 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/25 10:47:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define DQUOTE '"'
 # define NONE "NONE"
 # define ERRMALLOC 15
+# define ERRSYNTAX 2
 # define EMPTYSTR 98
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
@@ -50,7 +51,7 @@ typedef struct s_cmd
 	char			*current_dir;
 	char			*infile;
 	char			*outfile;
-	char			*heredoc_delim;
+	char			**heredoc_delim;
 	int				append;
 	int				fdin;
 	int				fdout;
@@ -127,7 +128,7 @@ int		execute_single_command(t_cmd *cmd, t_shell *shell);
 /* execute_cmd.c */
 int		is_builtin(char *name);
 char	*get_env_value(char *var, char **env);
-int		handle_heredoc(char *delim, t_shell *shell, int quoted);
+int	handle_heredoc(char **delim, t_shell *shell, int quoted);
 int		setup_heredoc(t_cmd *cmd, t_shell *shell);
 int		execute_builtin(t_cmd *cmd, t_shell *shell);
 
@@ -154,7 +155,7 @@ int	execute_commands(t_cmd *commands, t_shell *shell);
 =====================================*/
 
 /* expand.c */
-char *expand_str(char *s);
+char *expand_str(char *s, int exit_status);
 
 /*====================================
  LEXER FOLDER 
@@ -163,24 +164,30 @@ char *expand_str(char *s);
 /* lexer.c */
 char **lexer(char *prompt);
 
+/* lexer_utils.c */
+char *clean_prompt(char *prompt);
+
+
 /*====================================
  PARSER FOLDER 
 =====================================*/
 
 /* parser.c */
-int parser(char *prompt, t_cmd *cmd, char *env);
+int parser(char *prompt, t_cmd *cmd, t_shell *shell);
 
 /* parser_set_cmd.c */
-int set_cmd_and_path(t_cmd *cmd, char *token, char **envp);
+int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token);
 int set_cmd_next(t_cmd **cmd);
-int set_cmd_redirections(t_cmd *cmd, char **tokens, int *pos);
-int set_cmd_args(t_cmd *cmd, char *token);
+int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos);
+int set_cmd_args(t_cmd *cmd, t_shell *shell, char *token);
 
 /* parser_set_cmd_utils.c */
-int set_cmd_output(t_cmd *cmd, char *file, int result);
+int set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result);
 int set_cmd_heredoc(t_cmd *cmd, char *delim);
-int set_cmd_input(t_cmd *cmd, char *file);
+int set_cmd_input(t_cmd *cmd, t_shell *shell, char *file);
 char	*search_path_cmd(char **path, char *cmd);
+char **get_path_split(void);
+
 /*====================================
  UTILS FOLDER 
 =====================================*/
@@ -190,7 +197,7 @@ int is_space(char *str);
 int is_bic(char *str);
 int is_quoted(char *s);
 int is_redirection(char *s);
-// char *is_token(char *str);
+int is_metachar(char *str);
 int is_special_char(int c);
 
 /* utils.c */
@@ -198,7 +205,7 @@ int ft_strcmp(const char *s1, const char *s2);
 size_t array_size(char **tab);
 
 /* extract_utils.c */
-char *clean_str(char *s, int is_delim);
+char *clean_str(char *s, int is_delim, int exit_status);
 void fill_var_in_str(char **tmp, int *i, char *var);
 
 /* memory_utils.c */

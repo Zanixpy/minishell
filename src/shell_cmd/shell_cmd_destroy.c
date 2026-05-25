@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/21 12:15:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/22 10:50:51 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void cmd_destroy_data(t_cmd *cmd)
     free_str(&cmd->current_dir);
     free_str(&cmd->outfile);
     free_str(&cmd->infile);
-    free_str(&cmd->heredoc_delim);
+    free_char_tab(&cmd->heredoc_delim);
     close_fd(cmd->fdin);
     close_fd(cmd->fdout);
     close_fd(cmd->append);

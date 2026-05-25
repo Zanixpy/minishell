@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 12:21:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/25 11:08:07 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
     if (prompt[*j] == QUOTE || prompt[*j] == DQUOTE)
     {
         is_quoted = prompt[(*j)];
-        while (prompt[*j + 1 + length] && prompt[*j + 1+ length++] != is_quoted);
+        while (prompt[*j + 1 + length] && prompt[*j + 1 + length++] != is_quoted);
     }
     while (prompt[*j + length] && prompt[*j + length++] != SPACE);
     (*tokens)[*i] = ft_calloc(length + 1, sizeof(char));
@@ -109,7 +109,6 @@ char **lexer(char *prompt)
     char **tokens;
     size_t  nb_words;
   
-    temp = NULL;
     nb_words = count_words(prompt);
     temp = ft_calloc(nb_words + 1, sizeof(char *));
     if (!temp)

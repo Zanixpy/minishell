@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/21 09:53:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/22 11:02:19 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,20 @@ int is_redirection(char *s)
 	return (0);
 }
 
-// char *is_token(char *str)
-// {
-// 	int  size;
+int is_metachar(char *str)
+{
+	int  size;
 
-// 	size = ft_strlen(str);
-// 	if (size == 1)
-// 	{
-// 		if (*str == GREAT)
-// 			return ("GREAT");
-// 		else if (*str == LESS)
-// 			return ("LESS");
-// 		else if (*str == PIPE)
-// 			return ("PIPE");
-// 		else if (*str == DOLLAR)
-// 			return ("DOLLAR");
-// 	}
-// 	if (!ft_strncmp(str, GREATGREAT, size)) 
-// 		return ("GREATGREAT");
-// 	else if  (!ft_strncmp(str, LESSLESS, size))
-// 		return ("LESSLESS");
-// 	return (NULL);
-// }
+	size = ft_strlen(str);
+	if (size == 1)
+	{
+		if (*str == GREAT || *str == LESS || *str == PIPE || *str == DOLLAR)
+			return (1);
+	}
+	if (!ft_strncmp(str, GREATGREAT, size) || !ft_strncmp(str, LESSLESS, size)) 
+		return (1);
+	return (0);
+}
 
 int is_quoted(char *s)
 {

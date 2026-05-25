@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/19 11:22:07 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/22 10:57:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_env_value(char *var, char **env)
 *	of the pipe.
 *	Returns -1 if pipe creation fails.
 */
-int	handle_heredoc(char *delim, t_shell *shell, int quoted)
+int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 {
 	int		fds[2];
 	char	*line;
@@ -70,7 +70,7 @@ int	handle_heredoc(char *delim, t_shell *shell, int quoted)
 	if (pipe(fds) == -1)
 		return (-1);
 	line = readline("> ");
-	while (line && ft_strcmp(line, delim) != 0)
+	while (line && ft_strcmp(line, *delim) != 0)
 	{
 		ft_putendl_fd(line, fds[1]);
 		free(line);

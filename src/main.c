@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/20 16:07:15 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/25 11:00:30 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 char *env;
 
-void print_tab(char **args)
+void print_tab(char **tab, char *which)
 {
     int i;
 
     i = 0;
-    while (args[i]) 
+    while (tab[i]) 
     {
-        printf("args[%d] : %s\n", i, args[i]);
+        printf("%s[%d] : %s\n", which, i, tab[i]);
         i++;
     }
-    if (!args[i])
-        printf("args[%d] : NULL\n", i);
+    if (!tab[i])
+        printf("%s[%d] : NULL\n", which, i);
 }
 
 void print_cmd(t_cmd *cmd)
@@ -38,7 +38,7 @@ void print_cmd(t_cmd *cmd)
         if (cmd->cmd)
             printf("cmd : %s\n", cmd->cmd);
         if (cmd->args)
-            print_tab(cmd->args);
+            print_tab(cmd->args, "args");
         if (cmd->path)
             printf("cmd path : %s\n", cmd->path);
         if (cmd->current_dir)
@@ -48,7 +48,7 @@ void print_cmd(t_cmd *cmd)
         if (cmd->infile)
             printf("infile : %s\n", cmd->infile);
         if (cmd->heredoc_delim)
-            printf("heredoc_delim : %s\n", cmd->heredoc_delim);
+            print_tab(cmd->heredoc_delim, "delim"),
         printf("append : %d\n", cmd->append);
         printf("fdin : %d\n", cmd->fdin);
         printf("fdout : %d\n", cmd->fdout);
@@ -61,18 +61,23 @@ void print_cmd(t_cmd *cmd)
 int get_prompt_line(t_cmd *cmd, t_shell *shell)
 {
     char *prompt;
+    char *tmp;
     
     prompt = readline("mshell-0.2# ");
     if (!prompt || is_space(prompt))
-        return (free(prompt), 0);
+        return (free_str(&prompt), 0);
     env = getenv("PATH");
     if (!env)
         return (free(prompt), 1);
-    if (parser(prompt, cmd, env))
-        return (free(prompt), 1);
-    print_cmd(cmd);
-    shell->exit_status = execute_commands(cmd, shell);
+    tmp = clean_prompt(prompt);
     free(prompt);
+    if (!tmp)
+        return (1); 
+    if (parser(tmp, cmd, shell))
+        return (free(tmp), 1);
+    free(tmp);
+    print_cmd(cmd);
+    // shell->exit_status = execute_commands(cmd, shell);
     return (0);
 }
 

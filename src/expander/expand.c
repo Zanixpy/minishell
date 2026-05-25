@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/21 09:22:38 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/22 09:28:49 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char *build_var(char *s, int *pos)
     return (tmp);
 }
 
-static char *convert_var(char *s, int *pos)
+static char *convert_var(char *s, int *pos, int exit_status)
 {
     char *env;
     char *tmp;
@@ -44,6 +44,14 @@ static char *convert_var(char *s, int *pos)
     tmp = build_var(s, pos);
     if (!tmp)
         return (NULL);
+    if (!ft_strcmp(tmp, "?"))
+    {
+        free(tmp);
+        tmp = ft_itoa(exit_status);
+        if (!tmp)
+            return (NULL);
+        return (tmp);
+    }
     env = getenv(tmp);
     free(tmp);
     if (!env)
@@ -85,14 +93,14 @@ static char *rebuild_str(char **s, int start_var, int end_var, char *var)
     return (tmp);
 }
 
-static void format_string(char **s, int *i)
+static void format_string(char **s, int *i, int exit_status)
 {
     char *var;
     char *tmp;
     int  end_var;
 
     end_var = *i + 1;
-    var = convert_var(*s, &end_var);
+    var = convert_var(*s, &end_var, exit_status);
     if (!var)
        return (free_str(s));
     tmp = rebuild_str(s, *i, end_var, var);
@@ -103,7 +111,7 @@ static void format_string(char **s, int *i)
     *s = tmp;
 }
 
-char *expand_str(char *s)
+char *expand_str(char *s, int exit_status)
 {
     int i;
 
@@ -121,7 +129,7 @@ char *expand_str(char *s)
         }
         else if (s[i] == DOLLAR && s[i + 1] && s[i + 1] != DQUOTE)
         {      
-            format_string(&s, &i);
+            format_string(&s, &i, exit_status);
             if (!s)
                 return (NULL);
         }
