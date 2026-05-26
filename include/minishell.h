@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/25 10:47:24 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:16:27 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,6 @@ void shell_destroy_data(t_shell *shell);
 void shell_destroy(t_shell **shell);
 
 /*====================================
- ERROR FOLDER 
-=====================================*/
-
-
-/*====================================
  BUILT IN CMD FOLDER 
 =====================================*/
 
@@ -167,6 +162,15 @@ char **lexer(char *prompt);
 /* lexer_utils.c */
 char *clean_prompt(char *prompt);
 
+/*====================================
+ ERROR FOLDER 
+=====================================*/
+
+/* parser_error.c */
+int perror_syntax(int code, t_shell *shell);
+int perror_redir_meta(char *token, t_shell *shell);
+int perror_redir_io(int code, t_cmd *cmd, t_shell *shell);
+
 
 /*====================================
  PARSER FOLDER 
@@ -177,13 +181,13 @@ int parser(char *prompt, t_cmd *cmd, t_shell *shell);
 
 /* parser_set_cmd.c */
 int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token);
-int set_cmd_next(t_cmd **cmd);
+int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token);
 int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos);
 int set_cmd_args(t_cmd *cmd, t_shell *shell, char *token);
 
 /* parser_set_cmd_utils.c */
 int set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result);
-int set_cmd_heredoc(t_cmd *cmd, char *delim);
+int set_cmd_heredoc(t_cmd *cmd, t_shell *shell, char *delim);
 int set_cmd_input(t_cmd *cmd, t_shell *shell, char *file);
 char	*search_path_cmd(char **path, char *cmd);
 char **get_path_split(void);
@@ -193,9 +197,7 @@ char **get_path_split(void);
 =====================================*/
 
 /* bool_utils.c */
-int is_space(char *str);
 int is_bic(char *str);
-int is_quoted(char *s);
 int is_redirection(char *s);
 int is_metachar(char *str);
 int is_special_char(int c);
@@ -203,6 +205,8 @@ int is_special_char(int c);
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
 size_t array_size(char **tab);
+int is_skip(char *prompt);
+int is_space(char *str);
 
 /* extract_utils.c */
 char *clean_str(char *s, int is_delim, int exit_status);

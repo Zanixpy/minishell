@@ -6,22 +6,12 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 11:02:19 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 12:21:42 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int is_space(char *str)
-{
-    while (*str) 
-    {
-        if (*str != SPACE && (*str < 9 ||*str > 13))
-            return (0);
-        str++;
-    }
-    return (1);
-}
 
 int is_bic(char *str)
 {
@@ -59,7 +49,7 @@ int is_metachar(char *str)
 	size = ft_strlen(str);
 	if (size == 1)
 	{
-		if (*str == GREAT || *str == LESS || *str == PIPE || *str == DOLLAR)
+		if (*str == GREAT || *str == LESS || *str == PIPE)
 			return (1);
 	}
 	if (!ft_strncmp(str, GREATGREAT, size) || !ft_strncmp(str, LESSLESS, size)) 
@@ -67,22 +57,6 @@ int is_metachar(char *str)
 	return (0);
 }
 
-int is_quoted(char *s)
-{
-    char quote;
-    int i;
-    
-    i = 0;
-    if (s[i] == QUOTE || s[i] == DQUOTE)
-        quote = s[i++];
-    else
-        return (0);
-    while (s[i] && s[i] != quote)
-        i++;
-    if (s[i] == quote && s[i + 1] == '\0')
-        return (1);
-    return (0);   
-}
 
 int is_special_char(int c)
 {
@@ -90,3 +64,4 @@ int is_special_char(int c)
         return (1);
     return (0);
 }
+

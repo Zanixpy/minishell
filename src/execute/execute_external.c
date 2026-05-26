@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/21 09:40:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 11:54:38 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell)
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 	{
+        ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
 		return (127);

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 10:03:42 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:32:54 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,23 @@ int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos)
 
     result = is_redirection(tokens[*pos]);
     if (!tokens[*pos + 1])
-        return (2);
+        return (perror_syntax(1, shell));
     *pos += 1;
 	if (result == GREAT || result == GREAT * 2)
         ret = set_cmd_output(cmd, shell, tokens[*pos], result);
 	if (result == LESS)
         ret = set_cmd_input(cmd, shell, tokens[*pos]);
 	else if (result == LESS * 2)
-        ret = set_cmd_heredoc(cmd, tokens[*pos]);
+        ret = set_cmd_heredoc(cmd, shell, tokens[*pos]);
 	return (ret);	
 }
 
-int set_cmd_next(t_cmd **cmd)
+int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token)
 {
+    if (!token || is_metachar(token))
+        return (perror_syntax(0, shell));
     (*cmd)->next = cmd_init();
     if (!(*cmd)->next)
-        return (1);
+        return (ERRMALLOC);
     return (0);
 }

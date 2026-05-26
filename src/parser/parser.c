@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 11:04:53 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:44:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 static int convert_token_in_cmd_var(t_cmd **cmd, t_shell *shell, char **tokens, int *pos)
 {
 	int ret;
-	
-	if ((*pos == 0 && !is_metachar(tokens[*pos]))
+
+	ret = 0;
+	if (!is_metachar(tokens[*pos]) && ((*pos == 0) 
 		|| (*pos != 0 && !ft_strcmp(tokens[*pos - 1], "|"))
-		|| ((*cmd)->cmd && (*cmd)->cmd[0] == '\0'))
+		|| ((*cmd)->cmd && (*cmd)->cmd[0] == '\0')))
 		ret = set_cmd_and_path(*cmd, shell, tokens[*pos]);
 	else if (!ft_strcmp(tokens[*pos], "|"))
 	{
-		ret = set_cmd_next(cmd);
+		ret = set_cmd_next(cmd, shell, tokens[*pos + 1]);
 		if (!ret)
 			(*cmd) = (*cmd)->next;
 	}
@@ -51,6 +52,8 @@ static int tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 	}
 	return (0);
 }
+
+
 
 int parser(char *prompt, t_cmd *cmd, t_shell *shell)
 {

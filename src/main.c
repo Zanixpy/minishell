@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/25 11:00:30 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 12:15:17 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,27 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
 {
     char *prompt;
     char *tmp;
+    int ret;
     
-    prompt = readline("mshell-0.2# ");
-    if (!prompt || is_space(prompt))
-        return (free_str(&prompt), 0);
+    prompt = readline("mcsh-0.5# ");
+    ret = is_skip(prompt);
+    if (ret == ERRMALLOC)
+        return (free_str(&prompt), ERRMALLOC);
+    else if (ret)
+        return (free_str(&prompt), 0);  
     env = getenv("PATH");
     if (!env)
-        return (free(prompt), 1);
+        return (free(prompt), ERRMALLOC);
     tmp = clean_prompt(prompt);
     free(prompt);
     if (!tmp)
-        return (1); 
-    if (parser(tmp, cmd, shell))
-        return (free(tmp), 1);
-    free(tmp);
+        return (ERRMALLOC); 
+    ret = parser(tmp, cmd, shell);
+    if (ret)
+        return (free(tmp), ret);
     print_cmd(cmd);
-    // shell->exit_status = execute_commands(cmd, shell);
-    return (0);
+    shell->exit_status = execute_commands(cmd, shell);
+    return (free(tmp), 0);
 }
 
 
@@ -88,6 +92,7 @@ int main(int ac, char **av, char**envp)
 {
     t_cmd *cmd;
     t_shell *shell;
+    int ret;
 
     (void)ac;
     (void)av;
@@ -99,8 +104,9 @@ int main(int ac, char **av, char**envp)
         return (cmd_destroy(&cmd), 1);
     while (1) 
     {
-        if (get_prompt_line(cmd, shell))
-            break;
+        ret = get_prompt_line(cmd, shell);
+        if (ret == ERRMALLOC)
+            return(cmd_destroy(&cmd), shell_destroy(&shell), 1);
         cmd_reset(cmd);
     }
     cmd_destroy(&cmd);

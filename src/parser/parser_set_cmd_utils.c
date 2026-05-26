@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 10:44:43 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:08:26 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ char **get_path_split(void)
 int set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result)
 {
     free_str(&cmd->outfile);
+    if (is_metachar(file))
+        return (perror_redir_meta(file,  shell));
     cmd->outfile = clean_str(file, 0, shell->exit_status);
     if (!cmd->outfile)
         return (ERRMALLOC);
-    else if (*cmd->outfile == '\0')
-        return (EMPTYSTR);
     if (result == GREAT)
     {
         close_fd(cmd->fdout);
@@ -67,27 +67,29 @@ int set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result)
         close_fd(cmd->append);
         cmd->append = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644); 
     }
-    return (0);  
+    return (perror_redir_io(0, cmd, shell));  
 }
 
 int set_cmd_input(t_cmd *cmd, t_shell *shell, char *file)
 {
     free_str(&cmd->infile);
+    if (is_metachar(file))
+        return (perror_redir_meta(file,  shell));
     cmd->infile = clean_str(file, 0, shell->exit_status);
     if (!cmd->infile)
         return (ERRMALLOC);
-    else if (*cmd->infile == '\0')
-        return (free(cmd->infile), EMPTYSTR);
     close_fd(cmd->fdin);
     cmd->fdin = open(cmd->infile, O_RDONLY);     
-    return (0); 
+    return (perror_redir_io(1, cmd, shell)); 
 }
 
-int set_cmd_heredoc(t_cmd *cmd, char *delim)
+int set_cmd_heredoc(t_cmd *cmd, t_shell *shell, char *delim)
 {
     char **tmp;
     char *clean_delim;
 
+    if (is_metachar(delim))
+        return (perror_redir_meta(delim,  shell));
     clean_delim = clean_str(delim, 1, 0);
     if (!clean_delim)
         return (ERRMALLOC);

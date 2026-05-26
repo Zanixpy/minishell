@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:23:21 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/25 18:43:45 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/26 15:44:35 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static char *add_char_in_str(char *s, int pos, char c)
     return (tmp);
 }
 
+// static int is_valid_meta()
+
 static int is_paste_word(char *s)
 {
     int i;
@@ -54,8 +56,9 @@ static int is_paste_word(char *s)
     {
         if (is_meta_or_char)
         {
-            if ((meta == PIPE && s[i] != PIPE)
-                || ((meta == GREAT || meta == LESS) && (s[i] != GREAT && s[i] != LESS)))
+            if ((meta == PIPE && i != 0)
+                || ((meta == GREAT && s[i] != GREAT) 
+            || (meta == LESS && s[i] != LESS)))
                 return (i);
         }
         else if (!is_meta_or_char && (s[i] == GREAT || s[i] == LESS || s[i] == PIPE))
