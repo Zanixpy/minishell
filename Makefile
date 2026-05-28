@@ -5,7 +5,7 @@ SRCS =  src/main.c \
 		src/parser/parser.c \
 		src/parser/parser_set_cmd.c \
 		src/parser/parser_set_cmd_utils.c \
-		src/error/parser_error.c \
+		src/parser/parser_error.c \
 		src/lexer/lexer.c \
 		src/lexer/lexer_utils.c \
 		src/shell_cmd/shell_cmd_destroy.c \

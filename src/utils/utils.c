@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 11:56:31 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 13:51:14 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,30 @@ size_t array_size(char **tab)
 	return (count);	
 }
 
-int is_skip(char *prompt)
+int is_skip(char *prompt, t_shell *shell)
 {
 	char *tmp;
 	
-	if (!prompt)
+	if (!prompt || !(*prompt))
 		return (1);
-	if (is_space(prompt))
+	else if (is_space(prompt))
+	{
+		shell->exit_status = 0;
 		return (1);
+	}
 	tmp = ft_strtrim(prompt, " ");
 	if (!tmp)
 		return (ERRMALLOC);
-	if (!ft_strcmp(tmp, "!") || !ft_strcmp(tmp, ":"))
-		return (1);
+	else if (!ft_strcmp(tmp, "!") || !ft_strcmp(tmp, ":"))
+	{
+		if (!ft_strcmp(tmp, "!"))
+			shell->exit_status = 1;
+		else
+			shell->exit_status = 0;
+		add_history(prompt);
+		return (free(tmp), 1);
+	}
+	free(tmp);
 	return (0);
 }
 

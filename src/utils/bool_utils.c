@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 12:21:42 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 13:29:13 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,26 @@ int is_special_char(int c)
     if (c == '?' || c == '-' || c == '@' || c == '!' || c == '*' || c == DOLLAR) 
         return (1);
     return (0);
+}
+
+int is_unclosed_quote(char *s)
+{
+	char quote;
+	
+	if (!s)
+		return (0);
+	while (*s) 
+	{
+		if (*s == QUOTE || *s == DQUOTE)
+		{
+			quote = *s;
+			s++;
+			s = ft_strchr(s, quote);
+			if (!s)
+				return (1);
+		}
+		s++;
+	}
+	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 15:44:24 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 13:31:36 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static int tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 	ret = 0;
 	while (tokens[i]) 
 	{
+		if (is_unclosed_quote(tokens[i]))
+			return (perror_syntax(2, shell));
 		ret = convert_token_in_cmd_var(&tmp, shell, tokens, &i);
 		if (ret)
 			return (ret);
@@ -52,8 +54,6 @@ static int tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 	}
 	return (0);
 }
-
-
 
 int parser(char *prompt, t_cmd *cmd, t_shell *shell)
 {

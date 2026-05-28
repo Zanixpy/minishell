@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:23:21 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 15:44:35 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/27 10:37:21 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,30 @@ static char *add_char_in_str(char *s, int pos, char c)
     return (tmp);
 }
 
-// static int is_valid_meta()
+static int is_valid_meta(char *s, int pos, char meta)
+{
+    if (meta == GREAT)
+    {
+        if (s[pos] != GREAT)
+            return (1);
+        if (pos >= 2)
+        {
+            if (s[pos - 2] == GREAT && s[pos - 1] == GREAT && s[pos] == GREAT)
+                return (1);        
+        }    
+    }
+    else if (meta == LESS)
+    {
+        if (s[pos] != LESS)
+            return (1);
+        if (pos >= 2)
+        {
+            if (s[pos - 2] == LESS && s[pos - 1] == LESS && s[pos] == LESS)
+            return (1);      
+        }
+    }
+    return (0);
+}
 
 static int is_paste_word(char *s)
 {
@@ -56,9 +79,7 @@ static int is_paste_word(char *s)
     {
         if (is_meta_or_char)
         {
-            if ((meta == PIPE && i != 0)
-                || ((meta == GREAT && s[i] != GREAT) 
-            || (meta == LESS && s[i] != LESS)))
+            if ((meta == PIPE && i != 0) || is_valid_meta(s, i, meta))
                 return (i);
         }
         else if (!is_meta_or_char && (s[i] == GREAT || s[i] == LESS || s[i] == PIPE))
@@ -81,9 +102,8 @@ static void rebuild_prompt(char **prompt, int *pos)
     if (!tmp)
         return;
     *prompt = tmp;
-    *pos = 0;
+    *pos += ret;
 }
-
 
 char *clean_prompt(char *prompt)
 {
@@ -99,17 +119,17 @@ char *clean_prompt(char *prompt)
         if (prompt[i] == QUOTE || prompt[i] == DQUOTE)
         {
             quote = prompt[i];
-            if (ft_strchr(prompt + i + 1, quote))
-            {
-                i++;
-                while (prompt[i] && prompt[i] != quote)
-                    i++;
-            }
+            if (ft_strchr(prompt + ++i, quote))
+                while (prompt[i] && prompt[i++] != quote);
         }
-        rebuild_prompt(&prompt, &i);
-        if (!prompt)
-            return (NULL);
-        i++; 
+        else if (is_paste_word(prompt + i))
+        {
+            rebuild_prompt(&prompt, &i);
+            if (!prompt)
+                return (NULL);
+        }
+        else
+            i++;    
     }
     return (prompt);
 }

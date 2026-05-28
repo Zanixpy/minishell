@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 15:16:27 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:17:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,12 @@
 # define LESS '<'
 # define LESSLESS "<<"
 # define PIPE '|'
-# define NEWLINE '\n'
 # define DOLLAR '$'
 # define SPACE ' '
 # define QUOTE 39
 # define DQUOTE '"'
-# define NONE "NONE"
 # define ERRMALLOC 15
 # define ERRSYNTAX 2
-# define EMPTYSTR 98
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
 # endif
@@ -205,8 +202,9 @@ int is_special_char(int c);
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
 size_t array_size(char **tab);
-int is_skip(char *prompt);
+int is_skip(char *prompt, t_shell *shell);
 int is_space(char *str);
+int is_unclosed_quote(char *s);
 
 /* extract_utils.c */
 char *clean_str(char *s, int is_delim, int exit_status);

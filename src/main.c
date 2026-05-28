@@ -6,13 +6,13 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/26 12:15:17 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:22:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char *env;
+// char *signals;
 
 void print_tab(char **tab, char *which)
 {
@@ -64,15 +64,13 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     char *tmp;
     int ret;
     
-    prompt = readline("mcsh-0.5# ");
-    ret = is_skip(prompt);
+    prompt = readline("mcsh-1.0# ");
+    ret = is_skip(prompt, shell);
     if (ret == ERRMALLOC)
         return (free_str(&prompt), ERRMALLOC);
     else if (ret)
         return (free_str(&prompt), 0);  
-    env = getenv("PATH");
-    if (!env)
-        return (free(prompt), ERRMALLOC);
+    add_history(prompt);
     tmp = clean_prompt(prompt);
     free(prompt);
     if (!tmp)
@@ -80,13 +78,10 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     ret = parser(tmp, cmd, shell);
     if (ret)
         return (free(tmp), ret);
-    print_cmd(cmd);
+    // print_cmd(cmd);
     shell->exit_status = execute_commands(cmd, shell);
     return (free(tmp), 0);
 }
-
-
-/* MAIN : This is the beginning of the program where we'll launch the shell with the infinite loop*/
 
 int main(int ac, char **av, char**envp)
 {

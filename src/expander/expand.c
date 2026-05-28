@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 09:28:49 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:20:13 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,35 +139,4 @@ char *expand_str(char *s, int exit_status)
     return (s);
 }
 
-
-
-/*
-Caractères spéciaux qu'on peut pas expand :
-/
-\
-'
-|
-(
-)
-<
-[
-]
-;
-=
-:
-{
-}
-~
-,
-.
-*/
-
-/*
-Caractères spéciaux qu'on peut expand seulement eux et pas la suite:
-?
--
-@
-!
-*
-*/
 
