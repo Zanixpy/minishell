@@ -89,33 +89,29 @@ int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 }
 
 /* setup_heredoc:
-*	Uses only the last delimiter in heredoc_delim (the one furthest
-*	right in the command, e.g. EOF2 in "<< EOF1 << EOF2").
-*	The parser appends delimiters in command order so the last element
-*	is always the one that should be active. Earlier delimiters are
-*	ignored — only one prompt sequence is shown and it stops as soon
-*	as the last delimiter is typed.
+*	Reads ALL heredoc delimiters in order (left to right), as bash does.
+*	Each heredoc is fully consumed; only the last one's fd becomes stdin.
+*	Earlier fds are closed after reading so memory is not leaked.
 *	Returns 0 on success and 1 on error.
 */
 int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
-	int	last;
+	int	i;
 
 	if (!cmd->heredoc_delim || !cmd->heredoc_delim[0])
 		return (0);
-	last = 0;
-	while (cmd->heredoc_delim[last + 1])
-		last++;
-	if (cmd->fdin >= 0)
+	i = 0;
+	while (cmd->heredoc_delim[i])
 	{
-		close(cmd->fdin);
-		cmd->fdin = -1;
+		fd = handle_heredoc(&cmd->heredoc_delim[i], shell, 0);
+		if (fd == -1)
+			return (1);
+		if (cmd->fdin >= 0)
+			close(cmd->fdin);
+		cmd->fdin = fd;
+		i++;
 	}
-	fd = handle_heredoc(&cmd->heredoc_delim[last], shell, 0);
-	if (fd == -1)
-		return (1);
-	cmd->fdin = fd;
 	return (0);
 }
 
