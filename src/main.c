@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 14:22:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 16:51:45 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,18 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     int ret;
     
     prompt = readline("mcsh-1.0# ");
+    if (!prompt)
+    {
+        ft_putendl_fd("exit", STDERR_FILENO);
+        ret = shell->exit_status;
+        shell_destroy_data(shell);
+        exit(ret);
+    }
     ret = is_skip(prompt, shell);
     if (ret == ERRMALLOC)
         return (free_str(&prompt), ERRMALLOC);
     else if (ret)
-        return (free_str(&prompt), 0);  
+        return (free_str(&prompt), 0);
     add_history(prompt);
     tmp = clean_prompt(prompt);
     free(prompt);

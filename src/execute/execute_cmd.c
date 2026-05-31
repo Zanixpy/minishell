@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/22 10:57:32 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 11:08:04 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ char	*get_env_value(char *var, char **env)
 }
 
 /* handle_heredoc:
-*	Reads user input until the delimiter is reached.
-*	Stores the heredoc content in a pipe and returns the read end
-*	of the pipe.
-*	Returns -1 if pipe creation fails.
+*	Reads user input until the delimiter is matched or EOF.
+*	Each non-delimiter line is written to the pipe write end.
+*	The pipe read end is returned and becomes the command's stdin.
+*	Returns -1 on pipe failure or if the delimiter is NULL/empty.
 */
 int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 {
@@ -67,32 +67,55 @@ int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 
 	(void)shell;
 	(void)quoted;
+	if (!delim || !*delim || !**delim)
+		return (-1);
 	if (pipe(fds) == -1)
 		return (-1);
-	line = readline("> ");
-	while (line && ft_strcmp(line, *delim) != 0)
+	while (1)
 	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (ft_strcmp(line, *delim) == 0)
+		{
+			free(line);
+			break ;
+		}
 		ft_putendl_fd(line, fds[1]);
 		free(line);
-		line = readline("> ");
 	}
-	free(line);
 	close(fds[1]);
 	return (fds[0]);
 }
 
 /* setup_heredoc:
-*	Creates and prepares the heredoc input for a command.
-*	Sets cmd->fdin to the heredoc file descriptor.
+*	Uses only the last delimiter in heredoc_delim (the one furthest
+*	right in the command, e.g. EOF2 in "<< EOF1 << EOF2").
+*	The parser appends delimiters in command order so the last element
+*	is always the one that should be active. Earlier delimiters are
+*	ignored — only one prompt sequence is shown and it stops as soon
+*	as the last delimiter is typed.
 *	Returns 0 on success and 1 on error.
 */
 int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
-	if (!cmd->heredoc_delim)
+	int	fd;
+	int	last;
+
+	if (!cmd->heredoc_delim || !cmd->heredoc_delim[0])
 		return (0);
-	cmd->fdin = handle_heredoc(cmd->heredoc_delim, shell, 0);
-	if (cmd->fdin == -1)
+	last = 0;
+	while (cmd->heredoc_delim[last + 1])
+		last++;
+	if (cmd->fdin >= 0)
+	{
+		close(cmd->fdin);
+		cmd->fdin = -1;
+	}
+	fd = handle_heredoc(&cmd->heredoc_delim[last], shell, 0);
+	if (fd == -1)
 		return (1);
+	cmd->fdin = fd;
 	return (0);
 }
 

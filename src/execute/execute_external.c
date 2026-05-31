@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/26 11:54:38 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 11:08:08 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,16 @@ char	*find_executable(char *cmd, char **envp)
 *	Searches for the executable path before execution.
 *	Returns the command exit status or an error code if execution fails.
 */
-int	execute_external(t_cmd *cmd, t_shell *shell)
+int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 {
-	pid_t	pid;
-	char	*path;
+	pid_t		pid;
+	char		*path;
+	struct stat	st;
 
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 	{
-        ft_putstr_fd("mcsh: ", STDERR_FILENO);
+		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
 		return (127);
@@ -101,8 +102,19 @@ int	execute_external(t_cmd *cmd, t_shell *shell)
 		return (free(path), 1);
 	if (pid == 0)
 	{
+		if (stdin_bk != -1)
+			close(stdin_bk);
+		if (stdout_bk != -1)
+			close(stdout_bk);
 		execve(path, cmd->args, shell->env);
-		perror(path);
+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(path, STDERR_FILENO);
+			ft_putendl_fd(": Is a directory", STDERR_FILENO);
+		}
+		else
+			perror(path);
 		free(path);
 		exit(126);
 	}

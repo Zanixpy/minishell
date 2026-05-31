@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:38 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:55:55 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/29 11:08:31 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,15 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (!cmd->args[1])
-		exit(shell->exit_status);
+	{
+		status = shell->exit_status;
+		shell_destroy_data(shell);
+		exit(status);
+	}
 	if (!is_numeric(cmd->args[1]))
 	{
 		ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
+		shell_destroy_data(shell);
 		exit(255);
 	}
 	if (cmd->args[2])
@@ -49,6 +54,7 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	status = ft_atoi(cmd->args[1]);
-	exit(status % 256);
+	status = ft_atoi(cmd->args[1]) % 256;
+	shell_destroy_data(shell);
+	exit(status);
 }

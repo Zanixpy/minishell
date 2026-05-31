@@ -6,26 +6,36 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/19 11:25:49 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/29 11:08:12 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* set_outfile_fd:
-*	Opens the outfile and redirects it to standard output.
-*	Handles both truncate and append modes.
-*	Exits the process if the file cannot be opened.
+*	Applies the output redirection for a child process.
+*	Prefers the pre-opened fd from the parser (cmd->append for >>,
+*	cmd->fdout for >). Falls back to opening cmd->outfile only when
+*	neither pre-opened fd is valid. Uses >= 0 so the -2 sentinel
+*	never triggers a dup2/close.
 */
 static void	set_outfile_fd(t_cmd *cmd)
 {
-	int	flags;
 	int	fd;
 
-	flags = O_WRONLY | O_CREAT | O_TRUNC;
-	if (cmd->append)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	fd = open(cmd->outfile, flags, 0644);
+	if (cmd->append >= 0)
+	{
+		dup2(cmd->append, STDOUT_FILENO);
+		close(cmd->append);
+		return ;
+	}
+	if (cmd->fdout >= 0)
+	{
+		dup2(cmd->fdout, STDOUT_FILENO);
+		close(cmd->fdout);
+		return ;
+	}
+	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror(cmd->outfile);
@@ -45,11 +55,21 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
 	int	fd;
 
 	if (infd >= 0)
-		(dup2(infd, STDIN_FILENO), close(infd));
+	{
+		dup2(infd, STDIN_FILENO);
+		close(infd);
+	}
 	if (outfd >= 0)
-		(dup2(outfd, STDOUT_FILENO), close(outfd));
+	{
+		dup2(outfd, STDOUT_FILENO);
+		close(outfd);
+	}
 	if (cmd->fdin >= 0)
-		(dup2(cmd->fdin, STDIN_FILENO), close(cmd->fdin));
+	{
+		dup2(cmd->fdin, STDIN_FILENO);
+		close(cmd->fdin);
+		cmd->fdin = -1;
+	}
 	if (cmd->infile)
 	{
 		fd = open(cmd->infile, O_RDONLY);
@@ -76,6 +96,8 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 	char	*path;
 
 	child_fds(cmd, infd, outfd);
+	if (!cmd->args || !cmd->args[0])
+		exit(0);
 	if (is_builtin(cmd->args[0]))
 		exit(execute_builtin(cmd, shell));
 	path = find_executable(cmd->args[0], shell->env);
@@ -83,11 +105,15 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 	{
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
 		exit(127);
 	}
 	execve(path, cmd->args, shell->env);
 	perror(path);
 	free(path);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	exit(126);
 }
 
@@ -110,11 +136,18 @@ static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell)
 	if (pid == -1)
 	{
 		if (pfd[0] >= 0)
-			(close(pfd[0]), close(pfd[1]));
+		{
+			close(pfd[0]);
+			close(pfd[1]);
+		}
 		return (-1);
 	}
 	if (pid == 0)
+	{
+		if (pfd[0] >= 0)
+			close(pfd[0]);
 		child_run(cmd, *prev_fd, pfd[1], shell);
+	}
 	if (pfd[1] >= 0)
 		close(pfd[1]);
 	if (*prev_fd >= 0)
