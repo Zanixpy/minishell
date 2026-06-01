@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 17:58:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 13:29:13 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 09:38:30 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int is_metachar(char *str)
 		return (1);
 	return (0);
 }
-
 
 int is_special_char(int c)
 {

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 13:31:36 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 10:50:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int convert_token_in_cmd_var(t_cmd **cmd, t_shell *shell, char **tokens, 
 		ret = set_cmd_and_path(*cmd, shell, tokens[*pos]);
 	else if (!ft_strcmp(tokens[*pos], "|"))
 	{
-		ret = set_cmd_next(cmd, shell, tokens[*pos + 1]);
+		ret = set_cmd_next(cmd, shell, tokens[*pos + 1], *pos);
 		if (!ret)
 			(*cmd) = (*cmd)->next;
 	}
@@ -46,7 +46,7 @@ static int tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 	while (tokens[i]) 
 	{
 		if (is_unclosed_quote(tokens[i]))
-			return (perror_syntax(2, shell));
+			return (perror_syntax(2, cmd, shell));
 		ret = convert_token_in_cmd_var(&tmp, shell, tokens, &i);
 		if (ret)
 			return (ret);

@@ -85,7 +85,7 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     ret = parser(tmp, cmd, shell);
     if (ret)
         return (free(tmp), ret);
-    // print_cmd(cmd);
+    print_cmd(cmd);
     shell->exit_status = execute_commands(cmd, shell);
     return (free(tmp), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 13:30:30 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 10:48:51 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos)
 
     result = is_redirection(tokens[*pos]);
     if (!tokens[*pos + 1])
-        return (perror_syntax(0, shell));
+        return (perror_syntax(0, cmd, shell));
     *pos += 1;
 	if (result == GREAT || result == GREAT * 2)
         ret = set_cmd_output(cmd, shell, tokens[*pos], result);
@@ -78,10 +78,10 @@ int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos)
 	return (ret);	
 }
 
-int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token)
+int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token, int pos)
 {
-    if (!token || is_metachar(token))
-        return (perror_syntax(1, shell));
+    if (!token || is_metachar(token) || pos == 0)
+        return (perror_syntax(1, *cmd, shell));
     (*cmd)->next = cmd_init();
     if (!(*cmd)->next)
         return (ERRMALLOC);
