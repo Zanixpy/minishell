@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 13:51:14 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 11:20:15 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,10 @@ int is_space(char *str)
     return (1);
 }
 
+int is_unexpand_char(char c)
+{
+	if (c == '+' || c == ',' || c == '=' || c == ':' || c == SPACE)
+		return (1);
+	return (0);
+}
 

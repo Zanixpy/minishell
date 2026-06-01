@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 11:08:44 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/01 13:40:28 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ char *clean_prompt(char *prompt);
 =====================================*/
 
 /* parser_error.c */
-int perror_syntax(int code, t_shell *shell);
+int perror_syntax(int code, t_cmd *cmd, t_shell *shell);
 int perror_redir_meta(char *token, t_shell *shell);
 int perror_redir_io(int code, t_cmd *cmd, t_shell *shell);
 
@@ -179,8 +179,8 @@ int parser(char *prompt, t_cmd *cmd, t_shell *shell);
 
 /* parser_set_cmd.c */
 int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token);
-int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token);
 int set_cmd_redirections(t_cmd *cmd, t_shell *shell, char **tokens, int *pos);
+int set_cmd_next(t_cmd **cmd, t_shell *shell, char *token, int pos);
 int set_cmd_args(t_cmd *cmd, t_shell *shell, char *token);
 
 /* parser_set_cmd_utils.c */
@@ -199,13 +199,14 @@ int is_bic(char *str);
 int is_redirection(char *s);
 int is_metachar(char *str);
 int is_special_char(int c);
+int is_unclosed_quote(char *s);
 
 /* utils.c */
 int ft_strcmp(const char *s1, const char *s2);
 size_t array_size(char **tab);
 int is_skip(char *prompt, t_shell *shell);
 int is_space(char *str);
-int is_unclosed_quote(char *s);
+int is_unexpand_char(char c);
 
 /* extract_utils.c */
 char *clean_str(char *s, int is_delim, int exit_status);
@@ -220,6 +221,7 @@ void free_str(char **s);
 
 /* fd_utils.c */
 void close_fd(int fd);
+void delete_file(t_cmd *cmd);
 
 
 #endif
