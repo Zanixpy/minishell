@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/19 11:17:39 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/05/29 11:08:17 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static int	apply_infile(t_cmd *cmd)
 	{
 		dup2(cmd->fdin, STDIN_FILENO);
 		close(cmd->fdin);
+		cmd->fdin = -1;
 	}
 	if (!cmd->infile)
 		return (0);
@@ -42,26 +43,32 @@ static int	apply_infile(t_cmd *cmd)
 
 /* apply_outfile:
 *	Applies the output redirection for a command.
-*	Uses fdout if it already exists, otherwise opens the outfile
-*	in truncate or append mode and redirects it to standard output.
+*	cmd->append and cmd->fdout hold pre-opened fds from the parser
+*	(append = fd for >>, fdout = fd for >). Both are checked with
+*	>= 0 so that the -2 sentinel never triggers a dup2/close.
 *	Returns 0 on success and 1 on error.
 */
 static int	apply_outfile(t_cmd *cmd)
 {
-	int	flags;
 	int	fd;
 
+	if (cmd->append >= 0)
+	{
+		dup2(cmd->append, STDOUT_FILENO);
+		close(cmd->append);
+		cmd->append = -1;
+		return (0);
+	}
 	if (cmd->fdout >= 0)
 	{
 		dup2(cmd->fdout, STDOUT_FILENO);
 		close(cmd->fdout);
+		cmd->fdout = -1;
+		return (0);
 	}
 	if (!cmd->outfile)
 		return (0);
-	flags = O_WRONLY | O_CREAT | O_TRUNC;
-	if (cmd->append)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	fd = open(cmd->outfile, flags, 0644);
+	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror(cmd->outfile);
@@ -92,12 +99,19 @@ void	reset_redirections(int stdin_backup, int stdout_backup)
 
 /* execute_single_command:
 *	Executes a single command without creating a pipeline.
-*	Sets up heredoc and file redirections before execution.
+*	Applies file redirections before execution (heredoc is set up
+*	by the caller via setup_all_heredocs before this is called).
 *	Executes builtins in the main process and external commands
 *	in a child process.
 *	Restores the original standard input and output afterward.
 *	Returns the command exit status.
 */
+static int	has_redirection(t_cmd *cmd)
+{
+	return (cmd->fdin >= 0 || cmd->infile
+		|| cmd->fdout >= 0 || cmd->append >= 0 || cmd->outfile);
+}
+
 int	execute_single_command(t_cmd *cmd, t_shell *shell)
 {
 	int	stdin_backup;
@@ -106,16 +120,27 @@ int	execute_single_command(t_cmd *cmd, t_shell *shell)
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
-	stdin_backup = dup(STDIN_FILENO);
-	stdout_backup = dup(STDOUT_FILENO);
-	if (setup_heredoc(cmd, shell))
-		return (reset_redirections(stdin_backup, stdout_backup), 1);
+	stdin_backup = -1;
+	stdout_backup = -1;
+	if (has_redirection(cmd))
+	{
+		stdin_backup = dup(STDIN_FILENO);
+		stdout_backup = dup(STDOUT_FILENO);
+	}
 	if (apply_infile(cmd) || apply_outfile(cmd))
 		return (reset_redirections(stdin_backup, stdout_backup), 1);
 	if (is_builtin(cmd->args[0]))
+	{
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+		{
+			reset_redirections(stdin_backup, stdout_backup);
+			stdin_backup = -1;
+			stdout_backup = -1;
+		}
 		status = execute_builtin(cmd, shell);
+	}
 	else
-		status = execute_external(cmd, shell);
+		status = execute_external(cmd, shell, stdin_backup, stdout_backup);
 	reset_redirections(stdin_backup, stdout_backup);
 	return (status);
 }

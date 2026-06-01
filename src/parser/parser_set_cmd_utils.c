@@ -32,11 +32,12 @@ char	*search_path_cmd(char **path, char *cmd)
 		if (access(final, F_OK) == 0)
 			break ;
 		free(final);
-		final = ft_strdup(cmd);
-		if (!final)
-			return (free(tmp), NULL);			
+		final = NULL;
 	}
-	return (free(tmp), final);
+	free(tmp);
+	if (!final)
+		final = ft_strdup(cmd);
+	return (final);
 }
 
 char **get_path_split(void)

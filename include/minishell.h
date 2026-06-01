@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 10:48:07 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/01 13:42:56 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -126,7 +127,7 @@ int		execute_builtin(t_cmd *cmd, t_shell *shell);
 
 /* execute_external.c */
 char	*find_executable(char *cmd, char **envp);
-int		execute_external(t_cmd *cmd, t_shell *shell);
+int		execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk);
 int		pipe_wait(pid_t last_pid, int n);
 
 /* execute_pipe.c */

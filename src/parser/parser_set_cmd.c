@@ -41,13 +41,17 @@ int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
     free_char_tab(&cmd->args);
 	cmd->cmd = clean_str(token, 0, shell->exit_status);
     if (!cmd->cmd)
-		return (ERRMALLOC);
+		return (free_char_tab(&path_env), ERRMALLOC);
     if (is_bic(token))
 		cmd->path = ft_strdup(cmd->cmd);
     else if (*cmd->cmd == '\0')
         cmd->path = ft_calloc(1, sizeof(char));
+    else if (cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
+			&& (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.' && cmd->cmd[2] == '/'))))
+        cmd->path = ft_strdup(cmd->cmd);
     else
 		cmd->path = search_path_cmd(path_env, cmd->cmd);
+    free_char_tab(&path_env);
     if (!cmd->path)
         return (free(cmd->cmd), ERRMALLOC);
     cmd->args = create_tab(cmd->path);
