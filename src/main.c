@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 14:22:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/28 16:30:59 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     ret = parser(tmp, cmd, shell);
     if (ret)
         return (free(tmp), ret);
-    // print_cmd(cmd);
+    print_cmd(cmd);
     shell->exit_status = execute_commands(cmd, shell);
     return (free(tmp), 0);
 }

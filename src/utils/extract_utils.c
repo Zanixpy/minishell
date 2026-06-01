@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 14:18:12 by omawele          ###   ########.fr       */
+/*   Updated: 2026/05/29 09:18:21 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ static void rebuild_str(char **s, int start_quote, int end_quote)
     j = 0;
     while (i < length) 
     {
-        if (j == start_quote || j == end_quote)
+        if (j == start_quote)
+            j++;
+        if (j == end_quote)
             j++;
         tmp[i] = (*s)[j];
         i++;
@@ -35,13 +37,25 @@ static void rebuild_str(char **s, int start_quote, int end_quote)
     }
     free(*s);
     *s = tmp;
+    
+}
+
+static int is_valid_quote(char *s, char quote, int pos)
+{
+    int i;
+
+    i = pos + 1;
+    while (s[i] && s[i] != quote)
+        i++;
+    if (s[i] == quote && pos != i)
+        return (i);
+    return (0);
 }
 
 static char *strremove_quotes(char *s)
 {
-    char quote;
     int i;
-    int j;
+    int ret;
 
     s = ft_strdup(s);
     if (!s)
@@ -51,15 +65,16 @@ static char *strremove_quotes(char *s)
     {
         if ((s[i] == QUOTE || s[i] == DQUOTE))
         {
-            quote = s[i];
-            j = i + 1;
-            while (s[j] && s[j++] != quote);
-            if (s[--j] == quote && i != j)
+            ret = is_valid_quote(s, s[i], i);
+            if (ret)
             {
-                rebuild_str(&s, i, j);
+                rebuild_str(&s, i, ret);
                 if (!s)
                     return (NULL);
-                i = j - 2;
+                if (ret < 2)
+                    i = -1;
+                else   
+                    i = ret - 3;
             }
         }
     }
