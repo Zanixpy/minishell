@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/01 13:40:37 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,11 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     {
         ft_putendl_fd("exit", STDERR_FILENO);
         ret = shell->exit_status;
+        cmd_destroy_data(cmd);
+        cmd_destroy_node(cmd);
+        free(cmd);
         shell_destroy_data(shell);
+        free(shell);
         exit(ret);
     }
     ret = is_skip(prompt, shell);
@@ -85,8 +89,11 @@ int get_prompt_line(t_cmd *cmd, t_shell *shell)
     ret = parser(tmp, cmd, shell);
     if (ret)
         return (free(tmp), ret);
+    shell->input = tmp;
     shell->exit_status = execute_commands(cmd, shell);
-    return (free(tmp), 0);
+    free(shell->input);
+    shell->input = NULL;
+    return (0);
 }
 
 int main(int ac, char **av, char**envp)

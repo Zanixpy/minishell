@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/01 13:40:28 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_shell
 	int		exit_status;
 	char	*pwd;
 	char	*oldpwd;
+	char	*input;
 }	t_shell;
 
 /* signals.c */

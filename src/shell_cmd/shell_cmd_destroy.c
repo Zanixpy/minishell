@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/22 10:50:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void shell_destroy_data(t_shell *shell)
         free(shell->pwd);
     if (shell->oldpwd)
         free(shell->oldpwd);
+    if (shell->input)
+        free(shell->input);
 }
 
 void cmd_destroy_node(t_cmd *cmd)
