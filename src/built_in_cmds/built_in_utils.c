@@ -68,6 +68,7 @@ int	set_env_var(char *key, char *value, t_shell *shell)
 	free(tmp);
 	if (!new_var)
 		return (1);
+	setenv(key, value, 1);
 	if (i >= 0)
 	{
 		free(shell->env[i]);

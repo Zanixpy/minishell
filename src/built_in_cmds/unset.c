@@ -37,6 +37,7 @@ static void	unset_one(t_shell *shell, char *var)
 			|| shell->env[i][len] == '\0'))
 		{
 			remove_env_entry(shell->env, i);
+			unsetenv(var);
 			return ;
 		}
 		i++;

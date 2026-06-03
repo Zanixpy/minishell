@@ -12,37 +12,12 @@
 
 #include "../../include/minishell.h"
 
-static int	env_add(t_shell *shell, char *entry)
-{
-	char	**new_env;
-	int		len;
-	int		i;
-
-	len = 0;
-	while (shell->env[len])
-		len++;
-	new_env = malloc(sizeof(char *) * (len + 2));
-	if (!new_env)
-		return (free(entry), 1);
-	i = 0;
-	while (i < len)
-	{
-		new_env[i] = shell->env[i];
-		i++;
-	}
-	new_env[len] = entry;
-	new_env[len + 1] = NULL;
-	free(shell->env);
-	shell->env = new_env;
-	return (0);
-}
-
 static int	export_set(t_shell *shell, char *arg)
 {
-	char	*entry;
 	char	*name;
+	char	*value;
 	int		len;
-	int		i;
+	int		ret;
 
 	len = 0;
 	while (arg[len] && arg[len] != '=')
@@ -57,21 +32,15 @@ static int	export_set(t_shell *shell, char *arg)
 		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 		return (free(name), 1);
 	}
-	free(name);
 	if (!arg[len])
-		return (0);
-	entry = ft_strdup(arg);
-	if (!entry)
-		return (1);
-	i = 0;
-	while (shell->env[i])
-	{
-		if (ft_strncmp(shell->env[i], arg, len) == 0
-			&& shell->env[i][len] == '=')
-			return (free(shell->env[i]), shell->env[i] = entry, 0);
-		i++;
-	}
-	return (env_add(shell, entry));
+		return (free(name), 0);
+	value = ft_strdup(arg + len + 1);
+	if (!value)
+		return (free(name), 1);
+	ret = set_env_var(name, value, shell);
+	free(name);
+	free(value);
+	return (ret);
 }
 
 static void	sort_env_entries(char **sorted, int len)

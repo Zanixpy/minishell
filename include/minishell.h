@@ -96,9 +96,15 @@ void shell_destroy(t_shell **shell);
  BUILT IN CMD FOLDER 
 =====================================*/
 
+/* built_in_utils.c */
+int	set_env_var(char *key, char *value, t_shell *shell);
+int	is_valid_var_name(char *name);
+int	is_overflow(const char *str);
+long long	ft_atoll(const char *str);
+
 /* cd.c */
 int	builtin_cd(t_cmd *cmd, t_shell *shell);
-int	set_env_var(char *key, char *value, t_shell *shell);
+
 /* echo.c */
 int	builtin_echo(t_cmd *cmd, t_shell *shell);
 
