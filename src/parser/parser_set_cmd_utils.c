@@ -91,6 +91,8 @@ int set_cmd_heredoc(t_cmd *cmd, t_shell *shell, char *delim)
 
     if (is_metachar(delim))
         return (perror_redir_meta(delim,  shell));
+    cmd->heredoc_quoted = (ft_strchr(delim, QUOTE) != NULL
+        || ft_strchr(delim, DQUOTE) != NULL);
     clean_delim = clean_str(delim, 1, 0);
     if (!clean_delim)
         return (ERRMALLOC);

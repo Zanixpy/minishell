@@ -27,6 +27,7 @@ t_cmd *cmd_init(void)
     cmd->infile = NULL;
     cmd->outfile = NULL;
     cmd->heredoc_delim = NULL;
+    cmd->heredoc_quoted = 0;
     cmd->append = -2;
     cmd->fdin = -2;
     cmd->fdout = -2;
@@ -70,6 +71,7 @@ void cmd_reset(t_cmd *cmd)
     cmd->infile = NULL;
     cmd->outfile = NULL;
     cmd->heredoc_delim = NULL;
+    cmd->heredoc_quoted = 0;
     cmd->append = -2;
     cmd->fdin = -2;
     cmd->fdout = -2;

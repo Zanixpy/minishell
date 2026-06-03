@@ -51,6 +51,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	char			**heredoc_delim;
+	int				heredoc_quoted;
 	int				append;
 	int				fdin;
 	int				fdout;
