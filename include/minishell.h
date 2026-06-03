@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 # include <limits.h>
 # include "../external/libft/libft.h"
 
@@ -63,6 +64,12 @@ typedef struct s_shell
 	char	*pwd;
 	char	*oldpwd;
 }	t_shell;
+
+/* signals.c */
+extern volatile sig_atomic_t	g_signal;
+void	setup_signals(void);
+void	reset_signals_for_child(void);
+void	ignore_signals_in_parent(void);
 
 /* main.c */
 

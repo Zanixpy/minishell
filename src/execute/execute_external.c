@@ -102,6 +102,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 		return (free(path), 1);
 	if (pid == 0)
 	{
+		reset_signals_for_child();
 		if (stdin_bk != -1)
 			close(stdin_bk);
 		if (stdout_bk != -1)

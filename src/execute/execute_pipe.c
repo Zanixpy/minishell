@@ -95,6 +95,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 {
 	char	*path;
 
+	reset_signals_for_child();
 	child_fds(cmd, infd, outfd);
 	if (!cmd->args || !cmd->args[0])
 		exit(0);
@@ -185,5 +186,8 @@ int	execute_pipe(t_cmd *cmds, t_shell *shell)
 	}
 	if (prev_fd >= 0)
 		close(prev_fd);
-	return (pipe_wait(last_pid, count));
+	ignore_signals_in_parent();
+	count = pipe_wait(last_pid, count);
+	setup_signals();
+	return (count);
 }

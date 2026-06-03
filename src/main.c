@@ -98,6 +98,7 @@ int main(int ac, char **av, char**envp)
 
     (void)ac;
     (void)av;
+    setup_signals();
     cmd = cmd_init();
     if (!cmd)
         return (1);
