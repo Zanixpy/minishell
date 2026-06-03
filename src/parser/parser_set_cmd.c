@@ -34,8 +34,6 @@ int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
     char **path_env;
 
     path_env = get_path_split();
-    if (!path_env)
-        return (ERRMALLOC);
     free_str(&cmd->cmd);
     free_str(&cmd->path);
     free_char_tab(&cmd->args);
@@ -49,8 +47,10 @@ int set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
     else if (cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
 			&& (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.' && cmd->cmd[2] == '/'))))
         cmd->path = ft_strdup(cmd->cmd);
-    else
+    else if (path_env)
 		cmd->path = search_path_cmd(path_env, cmd->cmd);
+    else
+        cmd->path = ft_strdup(cmd->cmd);
     free_char_tab(&path_env);
     if (!cmd->path)
         return (free(cmd->cmd), ERRMALLOC);

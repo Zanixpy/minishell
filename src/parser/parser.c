@@ -57,20 +57,15 @@ static int tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 
 int parser(char *prompt, t_cmd *cmd, t_shell *shell)
 {
-    char **tokens;
-    char **envp;
-	int ret;
-    
-    tokens = lexer(prompt);
-    if (!tokens)
-        return (ERRMALLOC);
-    envp = get_path_split();
-    if (!envp)
-		return (free_char_tab(&tokens), ERRMALLOC);
+	char	**tokens;
+	int		ret;
+
+	tokens = lexer(prompt);
+	if (!tokens)
+		return (ERRMALLOC);
 	ret = tokens_analysis(cmd, shell, tokens);
 	free_char_tab(&tokens);
-	free_char_tab(&envp);
-    return (ret);
+	return (ret);
 }
 
 
