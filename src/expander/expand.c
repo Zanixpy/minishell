@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 09:42:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/04 16:44:37 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,32 +109,32 @@ static void format_string(char **s, int *i, int exit_status)
         return (free_str(s));
     free(*s);
     *s = tmp;
+    (*i)--;
 }
 
 char *expand_str(char *s, int exit_status)
 {
     int i;
+    int is_dquote;
 
-    s = strdup(s);
+    s = ft_strdup(s);
     if (!s)
         return (NULL);
     i = 0;
+    is_dquote = 1;
     while (s[i]) 
     {
-        if (s[i] == QUOTE)
-        {
-            i++;
-            if (ft_strchr((s + i), QUOTE))
-                while (s[i] && s[i++] != QUOTE);
-        }
+        if (s[i] == DQUOTE)
+            is_dquote = -is_dquote;
+        else if (s[i] == QUOTE && is_dquote == 1)
+            while (s[++i] && s[i] != QUOTE);
         else if (s[i] == DOLLAR && s[i + 1] && !is_unexpand_char(s[i + 1]))
-        {      
+        {
             format_string(&s, &i, exit_status);
             if (!s)
                 return (NULL);
         }
-        else
-            i++;
+        i++;
     }
     return (s);
 }

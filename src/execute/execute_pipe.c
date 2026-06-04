@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/29 11:08:12 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/01 13:50:28 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 	{
+		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
 		close(STDIN_FILENO);
