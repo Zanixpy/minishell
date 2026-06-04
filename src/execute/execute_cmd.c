@@ -56,32 +56,66 @@ char	*get_env_value(char *var, char **env)
 
 /* handle_heredoc:
 *	Reads user input until the delimiter is matched or EOF.
-*	Each non-delimiter line is written to the pipe write end.
+*	Expands variables in each line unless the delimiter was quoted.
+*	Prints a warning on EOF and aborts on SIGINT.
 *	The pipe read end is returned and becomes the command's stdin.
-*	Returns -1 on pipe failure or if the delimiter is NULL/empty.
+*	Returns -1 on error or interrupt.
 */
+static void	heredoc_write_line(char *line, int fd, t_shell *shell, int quoted)
+{
+	char	*expanded;
+
+	if (!quoted)
+	{
+		expanded = expand_str(line, shell->exit_status);
+		if (expanded)
+		{
+			ft_putstr_fd(expanded, fd);
+			write(fd, "\n", 1);
+			free(expanded);
+		}
+	}
+	else
+	{
+		ft_putstr_fd(line, fd);
+		write(fd, "\n", 1);
+	}
+}
+
 int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 {
 	int		fds[2];
 	char	*line;
 
-	(void)shell;
-	(void)quoted;
 	if (!delim || !*delim || !**delim)
 		return (-1);
 	if (pipe(fds) == -1)
 		return (-1);
+	g_signal = 0;
 	while (1)
 	{
 		line = readline("> ");
+		if (g_signal == SIGINT)
+		{
+			free(line);
+			close(fds[1]);
+			close(fds[0]);
+			return (-1);
+		}
 		if (!line)
+		{
+			ft_putstr_fd("mcsh: warning: here-document delimited by \
+end-of-file (wanted `", STDERR_FILENO);
+			ft_putstr_fd(*delim, STDERR_FILENO);
+			ft_putendl_fd("')", STDERR_FILENO);
 			break ;
+		}
 		if (ft_strcmp(line, *delim) == 0)
 		{
 			free(line);
 			break ;
 		}
-		ft_putendl_fd(line, fds[1]);
+		heredoc_write_line(line, fds[1], shell, quoted);
 		free(line);
 	}
 	close(fds[1]);
@@ -104,7 +138,7 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 	i = 0;
 	while (cmd->heredoc_delim[i])
 	{
-		fd = handle_heredoc(&cmd->heredoc_delim[i], shell, 0);
+		fd = handle_heredoc(&cmd->heredoc_delim[i], shell, cmd->heredoc_quoted);
 		if (fd == -1)
 			return (1);
 		if (cmd->fdin >= 0)

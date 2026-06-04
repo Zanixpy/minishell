@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:31 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:56:11 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/03 22:13:33 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	unset_one(t_shell *shell, char *var)
 			|| shell->env[i][len] == '\0'))
 		{
 			remove_env_entry(shell->env, i);
+			unsetenv(var);
 			return ;
 		}
 		i++;
@@ -52,7 +53,8 @@ int	builtin_unset(t_cmd *cmd, t_shell *shell)
 	i = 1;
 	while (cmd->args[i])
 	{
-		unset_one(shell, cmd->args[i]);
+		if (is_valid_var_name(cmd->args[i]))
+			unset_one(shell, cmd->args[i]);
 		i++;
 	}
 	return (0);

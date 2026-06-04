@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/01 13:42:56 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/04 22:52:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 # include <limits.h>
 # include "../external/libft/libft.h"
 
@@ -50,6 +51,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	char			**heredoc_delim;
+	int				heredoc_quoted;
 	int				append;
 	int				fdin;
 	int				fdout;
@@ -62,7 +64,14 @@ typedef struct s_shell
 	int		exit_status;
 	char	*pwd;
 	char	*oldpwd;
+	char	*input;
 }	t_shell;
+
+/* signals.c */
+extern volatile sig_atomic_t	g_signal;
+void	setup_signals(void);
+void	reset_signals_for_child(void);
+void	ignore_signals_in_parent(void);
 
 /* main.c */
 
@@ -88,9 +97,15 @@ void shell_destroy(t_shell **shell);
  BUILT IN CMD FOLDER 
 =====================================*/
 
+/* built_in_utils.c */
+int	set_env_var(char *key, char *value, t_shell *shell);
+int	is_valid_var_name(char *name);
+int	is_overflow(const char *str);
+long long	ft_atoll(const char *str);
+
 /* cd.c */
 int	builtin_cd(t_cmd *cmd, t_shell *shell);
-int	set_env_var(char *key, char *value, t_shell *shell);
+
 /* echo.c */
 int	builtin_echo(t_cmd *cmd, t_shell *shell);
 

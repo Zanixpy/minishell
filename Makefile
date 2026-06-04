@@ -22,6 +22,7 @@ SRCS =  src/main.c \
 		src/execute/execute_pipe.c \
 		src/execute/execute_external.c \
 		src/execute/execute_cmd.c \
+		src/execute/signals.c \
 		src/built_in_cmds/cd.c \
 		src/built_in_cmds/echo.c \
 		src/built_in_cmds/env.c \

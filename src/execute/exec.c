@@ -46,7 +46,11 @@ int	execute_commands(t_cmd *cmd, t_shell *shell)
 	if (!cmd)
 		return (1);
 	if (setup_all_heredocs(cmd, shell))
+	{
+		if (g_signal == SIGINT)
+			return (130);
 		return (1);
+	}
 	cur = cmd;
 	count = 0;
 	while (cur)

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/01 13:50:28 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/04 22:52:21 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,37 +85,49 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
 		set_outfile_fd(cmd);
 }
 
+static void	child_cleanup_exit(t_cmd *head, t_shell *shell, int status)
+{
+	shell_destroy_data(shell);
+	free(shell);
+	cmd_destroy_data(head);
+	cmd_destroy_node(head);
+	free(head);
+	exit(status);
+}
+
 /* child_run:
 *	Executes a command inside a child process.
 *	Sets up file descriptors, executes builtin commands directly,
 *	or runs external commands using execve.
-*	Exits with the appropriate status code on failure.
+*	Calls child_cleanup_exit before every exit so valgrind sees no leaks.
 */
-static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
+static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
+		t_cmd *head)
 {
 	char	*path;
+	int		status;
 
+	reset_signals_for_child();
 	child_fds(cmd, infd, outfd);
 	if (!cmd->args || !cmd->args[0])
-		exit(0);
+		child_cleanup_exit(head, shell, 0);
 	if (is_builtin(cmd->args[0]))
-		exit(execute_builtin(cmd, shell));
+	{
+		status = execute_builtin(cmd, shell);
+		child_cleanup_exit(head, shell, status);
+	}
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 	{
 		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		exit(127);
+		child_cleanup_exit(head, shell, 127);
 	}
 	execve(path, cmd->args, shell->env);
 	perror(path);
 	free(path);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	exit(126);
+	child_cleanup_exit(head, shell, 126);
 }
 
 /* pipe_iter:
@@ -124,7 +136,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell)
 *	Updates the previous pipe read end for the next command.
 *	Returns the child process pid or -1 on error.
 */
-static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell)
+static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell, t_cmd *head)
 {
 	int		pfd[2];
 	pid_t	pid;
@@ -147,7 +159,7 @@ static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell)
 	{
 		if (pfd[0] >= 0)
 			close(pfd[0]);
-		child_run(cmd, *prev_fd, pfd[1], shell);
+		child_run(cmd, *prev_fd, pfd[1], shell, head);
 	}
 	if (pfd[1] >= 0)
 		close(pfd[1]);
@@ -178,7 +190,7 @@ int	execute_pipe(t_cmd *cmds, t_shell *shell)
 	last_pid = 0;
 	while (cur)
 	{
-		last_pid = pipe_iter(cur, &prev_fd, shell);
+		last_pid = pipe_iter(cur, &prev_fd, shell, cmds);
 		if (last_pid == -1)
 			break ;
 		count++;
@@ -186,5 +198,8 @@ int	execute_pipe(t_cmd *cmds, t_shell *shell)
 	}
 	if (prev_fd >= 0)
 		close(prev_fd);
-	return (pipe_wait(last_pid, count));
+	ignore_signals_in_parent();
+	count = pipe_wait(last_pid, count);
+	setup_signals();
+	return (count);
 }

@@ -6,17 +6,17 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:38 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/04 16:57:35 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/04 22:52:18 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_numeric(char *str)
+static int	is_valid_exit_arg(char *str)
 {
 	int	i;
 
-	if (!str || !str[0])
+	if (is_overflow(str))
 		return (0);
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
@@ -34,27 +34,43 @@ static int	is_numeric(char *str)
 
 int	builtin_exit(t_cmd *cmd, t_shell *shell)
 {
-	int	status;
+	long long	code;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!cmd->args[1])
 	{
-		status = shell->exit_status;
+		code = shell->exit_status;
+		cmd_destroy_data(cmd);
+		cmd_destroy_node(cmd);
+		free(cmd);
 		shell_destroy_data(shell);
-		exit(status);
+		free(shell);
+		exit((int)code);
 	}
-	if (!is_numeric(cmd->args[1]))
+	if (!is_valid_exit_arg(cmd->args[1]))
 	{
-		ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
+		ft_putstr_fd("mcsh: exit: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		cmd_destroy_data(cmd);
+		cmd_destroy_node(cmd);
+		free(cmd);
 		shell_destroy_data(shell);
-		exit(255);
+		free(shell);
+		exit(2);
 	}
 	if (cmd->args[2])
 	{
-		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+		ft_putendl_fd("mcsh: exit: too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	status = ft_atoi(cmd->args[1]) % 256;
+	code = ft_atoll(cmd->args[1]);
+	code = ((code % 256) + 256) % 256;
+	cmd_destroy_data(cmd);
+	cmd_destroy_node(cmd);
+	free(cmd);
 	shell_destroy_data(shell);
-	exit(status);
+	free(shell);
+	exit((int)code);
 }

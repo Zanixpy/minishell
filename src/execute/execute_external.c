@@ -21,11 +21,19 @@ static int	wait_for_child(pid_t pid)
 {
 	int	status;
 
+	ignore_signals_in_parent();
 	waitpid(pid, &status, 0);
+	setup_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+		else if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 		return (128 + WTERMSIG(status));
+	}
 	return (1);
 }
 
@@ -102,6 +110,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 		return (free(path), 1);
 	if (pid == 0)
 	{
+		reset_signals_for_child();
 		if (stdin_bk != -1)
 			close(stdin_bk);
 		if (stdout_bk != -1)
