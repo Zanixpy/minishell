@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/29 11:08:08 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/01 14:03:31 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 		execve(path, cmd->args, shell->env);
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd("mcsh: ", STDERR_FILENO);
 			ft_putstr_fd(path, STDERR_FILENO);
 			ft_putendl_fd(": Is a directory", STDERR_FILENO);
 		}
