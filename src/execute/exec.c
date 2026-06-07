@@ -13,12 +13,12 @@
 #include "../../include/minishell.h"
 
 /* setup_all_heredocs:
-*	Calls setup_heredoc for every command in the list before any
-*	forking begins.  This ensures heredoc fds are ready for both
-*	single commands and pipelines, and that the interactive prompts
-*	are shown to the user before execution starts.
-*	Returns 0 on success and 1 on error.
-*/
+ *	Calls setup_heredoc for every command in the list before any
+ *	forking begins.  This ensures heredoc fds are ready for both
+ *	single commands and pipelines, and that the interactive prompts
+ *	are shown to the user before execution starts.
+ *	Returns 0 on success and 1 on error.
+ */
 static int	setup_all_heredocs(t_cmd *cmd, t_shell *shell)
 {
 	t_cmd	*cur;
@@ -34,10 +34,10 @@ static int	setup_all_heredocs(t_cmd *cmd, t_shell *shell)
 }
 
 /* execute_commands:
-*	Sets up heredocs for all commands, then executes them.
-*	Dispatches to a single command or a pipeline based on count.
-*	Returns the exit status of the executed command(s).
-*/
+ *	Sets up heredocs for all commands, then executes them.
+ *	Dispatches to a single command or a pipeline based on count.
+ *	Returns the exit status of the executed command(s).
+ */
 int	execute_commands(t_cmd *cmd, t_shell *shell)
 {
 	t_cmd	*cur;

@@ -20,9 +20,11 @@ SRCS =  src/main.c \
 		src/execute/execution_utils.c \
 		src/execute/exec.c \
 		src/execute/execute_pipe.c \
+		src/execute/execute_utils_2.c \
 		src/execute/execute_external.c \
 		src/execute/execute_cmd.c \
 		src/execute/signals.c \
+		src/execute/execute_error.c \
 		src/built_in_cmds/cd.c \
 		src/built_in_cmds/echo.c \
 		src/built_in_cmds/env.c \
@@ -31,6 +33,7 @@ SRCS =  src/main.c \
 		src/built_in_cmds/pwd.c \
 		src/built_in_cmds/unset.c \
 		src/built_in_cmds/built_in_utils.c \
+		src/built_in_cmds/built_in_error.c \
 		
 LIBFT_DIR = external/libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -45,7 +48,7 @@ NAME = minishell
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline  $(LIBFT)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)

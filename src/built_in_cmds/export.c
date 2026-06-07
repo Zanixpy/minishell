@@ -38,9 +38,7 @@ static int	export_set(t_shell *shell, char *arg)
 	if (!value)
 		return (free(name), 1);
 	ret = set_env_var(name, value, shell);
-	free(name);
-	free(value);
-	return (ret);
+	return (free(name), free(value), ret);
 }
 
 static void	sort_env_entries(char **sorted, int len)

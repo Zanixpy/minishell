@@ -1,46 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fd_utils.c                                         :+:      :+:    :+:   */
+/*   execute_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/27 22:26:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:56:22 by omawele          ###   ########.fr       */
+/*   Created: 2026/06/07 21:31:49 by omawele           #+#    #+#             */
+/*   Updated: 2026/06/07 21:57:40 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	close_fd(int fd)
+void	child_cleanup_exit(t_cmd *head, t_shell *shell, int status)
 {
-	if (fd >= 0)
-		close(fd);
+	shell_destroy(&shell);
+	cmd_destroy(&head);
+	exit(status);
 }
 
-void	close_pipe(int fd1, int fd2)
+int	handle_heredoc_cond(char **line, char *delim)
 {
-	if (fd1 >= 0)
-		close(fd1);
-	if (fd2 >= 0)
-		close(fd2);
-}
-
-void	delete_file(t_cmd *cmd)
-{
-	if (cmd->outfile && (cmd->fdout || cmd->append))
+	if (!(*line))
 	{
-		close_fd(cmd->fdout);
-		close_fd(cmd->append);
-		unlink(cmd->outfile);
+		err_heredoc(delim);
+		return (1);
 	}
-}
-
-void	dup_fd(int newfd, int oldfd)
-{
-	if (newfd >= 0)
+	if (ft_strcmp(*line, delim) == 0)
 	{
-		dup2(newfd, oldfd);
-		close(newfd);
+		free_str(line);
+		return (1);
 	}
+	return (0);
 }

@@ -13,12 +13,12 @@
 #include "../../include/minishell.h"
 
 /* set_outfile_fd:
-*	Applies the output redirection for a child process.
-*	Prefers the pre-opened fd from the parser (cmd->append for >>,
-*	cmd->fdout for >). Falls back to opening cmd->outfile only when
-*	neither pre-opened fd is valid. Uses >= 0 so the -2 sentinel
-*	never triggers a dup2/close.
-*/
+ *	Applies the output redirection for a child process.
+ *	Prefers the pre-opened fd from the parser (cmd->append for >>,
+ *	cmd->fdout for >). Falls back to opening cmd->outfile only when
+ *	neither pre-opened fd is valid. Uses >= 0 so the -2 sentinel
+ *	never triggers a dup2/close.
+ */
 static void	set_outfile_fd(t_cmd *cmd)
 {
 	int	fd;
@@ -46,28 +46,19 @@ static void	set_outfile_fd(t_cmd *cmd)
 }
 
 /* child_fds:
-*	Sets up input and output file descriptors for a child process.
-*	Applies pipe connections, heredoc input, and file redirections
-*	before command execution.
-*/
+ *	Sets up input and output file descriptors for a child process.
+ *	Applies pipe connections, heredoc input, and file redirections
+ *	before command execution.
+ */
 static void	child_fds(t_cmd *cmd, int infd, int outfd)
 {
 	int	fd;
 
-	if (infd >= 0)
-	{
-		dup2(infd, STDIN_FILENO);
-		close(infd);
-	}
-	if (outfd >= 0)
-	{
-		dup2(outfd, STDOUT_FILENO);
-		close(outfd);
-	}
+	dup_fd(infd, STDIN_FILENO);
+	dup_fd(outfd, STDOUT_FILENO);
 	if (cmd->fdin >= 0)
 	{
-		dup2(cmd->fdin, STDIN_FILENO);
-		close(cmd->fdin);
+		dup_fd(cmd->fdin, STDIN_FILENO);
 		cmd->fdin = -1;
 	}
 	if (cmd->infile)
@@ -78,29 +69,18 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
 			perror(cmd->infile);
 			exit(1);
 		}
-		dup2(fd, STDIN_FILENO);
-		close(fd);
+		dup_fd(fd, STDIN_FILENO);
 	}
 	if (cmd->outfile)
 		set_outfile_fd(cmd);
 }
 
-static void	child_cleanup_exit(t_cmd *head, t_shell *shell, int status)
-{
-	shell_destroy_data(shell);
-	free(shell);
-	cmd_destroy_data(head);
-	cmd_destroy_node(head);
-	free(head);
-	exit(status);
-}
-
 /* child_run:
-*	Executes a command inside a child process.
-*	Sets up file descriptors, executes builtin commands directly,
-*	or runs external commands using execve.
-*	Calls child_cleanup_exit before every exit so valgrind sees no leaks.
-*/
+ *	Executes a command inside a child process.
+ *	Sets up file descriptors, executes builtin commands directly,
+ *	or runs external commands using execve.
+ *	Calls child_cleanup_exit before every exit so valgrind sees no leaks.
+ */
 static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
 		t_cmd *head)
 {
@@ -111,7 +91,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
 	child_fds(cmd, infd, outfd);
 	if (!cmd->args || !cmd->args[0])
 		child_cleanup_exit(head, shell, 0);
-	if (is_builtin(cmd->args[0]))
+	if (is_bic(cmd->args[0]))
 	{
 		status = execute_builtin(cmd, shell);
 		child_cleanup_exit(head, shell, status);
@@ -119,9 +99,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 	{
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
+		err_cmd_not_found(cmd->args[0]);
 		child_cleanup_exit(head, shell, 127);
 	}
 	execve(path, cmd->args, shell->env);
@@ -131,11 +109,11 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
 }
 
 /* pipe_iter:
-*	Creates a pipe and forks a child process for one command
-*	in the pipeline.
-*	Updates the previous pipe read end for the next command.
-*	Returns the child process pid or -1 on error.
-*/
+ *	Creates a pipe and forks a child process for one command
+ *	in the pipeline.
+ *	Updates the previous pipe read end for the next command.
+ *	Returns the child process pid or -1 on error.
+ */
 static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell, t_cmd *head)
 {
 	int		pfd[2];
@@ -149,32 +127,26 @@ static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell, t_cmd *head)
 	if (pid == -1)
 	{
 		if (pfd[0] >= 0)
-		{
-			close(pfd[0]);
-			close(pfd[1]);
-		}
+			close_pipe(pfd[0], pfd[1]);
 		return (-1);
 	}
 	if (pid == 0)
 	{
-		if (pfd[0] >= 0)
-			close(pfd[0]);
+		close_fd(pfd[0]);
 		child_run(cmd, *prev_fd, pfd[1], shell, head);
 	}
-	if (pfd[1] >= 0)
-		close(pfd[1]);
-	if (*prev_fd >= 0)
-		close(*prev_fd);
+	close_fd(pfd[1]);
+	close_fd(*prev_fd);
 	*prev_fd = pfd[0];
 	return (pid);
 }
 
 /* execute_pipe:
-*	Executes multiple commands connected by pipes.
-*	Creates child processes for each command and waits for all
-*	processes to finish execution.
-*	Returns the exit status of the last command in the pipeline.
-*/
+ *	Executes multiple commands connected by pipes.
+ *	Creates child processes for each command and waits for all
+ *	processes to finish execution.
+ *	Returns the exit status of the last command in the pipeline.
+ */
 int	execute_pipe(t_cmd *cmds, t_shell *shell)
 {
 	t_cmd	*cur;

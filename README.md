@@ -1,43 +1,23 @@
-*This project has been created as part of the 42 curriculum by <omawele>*
+*This project has been created as part of the 42 curriculum by omawele, cakibris.* 
 
-### MINISHELL
+# Minishell
 
 ## Description
 
-This project is about reproducing the concept of a shell with less features than the true shell does.
+This project is about creating a simple shell. Yes, your very own little Bash. Through the development of this project, you will gain extensive knowledge about processes and file descriptors. The shell displays a prompt, features a working history, and can search and launch executables. It accurately handles pipes, various redirections (`<`, `>`, `<<`, `>>`), and environment variables. Additionally, it implements several built-in commands including `echo`, `cd`, `pwd`, `export`, `unset`, `env`, and `exit`.
 
 ## Instructions
 
-## Ressources
+* **Compilation:** Run `make` at the root of the repository. This will compile the source files using `cc` with the mandatory `-Wall`, `-Wextra`, and `-Werror` flags.
 
-## Workflow
 
-# Input/Output :
+* **Execution:** Once compiled, launch the program by executing `./minishell`.
 
-'''
-Input : None
 
-Output : 
-- Type : int
-- Description : We exit the int and according to the command executed, we can display strings.
-'''
+* **Cleanup:** The Makefile includes standard rules to manage files: use `make clean` to remove objects, `make fclean` to remove objects and the executable, and `make re` to recompile.
 
-# Break down into sub-problems :
-'''
-Main issue : Reproduces shell behavior
-├── Sub-problem 1 : Display a prompt
-│       └── display_prompt
-├── Sub-problem 2 : Parsing the prompt 
-│   ├── check_prompt
-│   ├── initialize_struct
-│   └── 
-├── Sub-problem 3 : Execute the command
-│   ├── 
-│   ├── 
-│   └──  
-├── Sub-problem 4 : Start the battle
-│   ├── 
-└── END
-'''  
+## Resources
 
-What does "> >> < <<"
+* **Technical References:** Bash Reference Manual, GNU C Library documentation (specifically for processes, file descriptors, and signals).
+
+* **AI Usage:** AI was used to help design the parser logic, after which the logic was reviewed and rewritten with peers to ensure full understanding and clean code. AI was also utilized to brainstorm approaches, always followed by systematic checking, questioning, and testing.
