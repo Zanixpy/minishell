@@ -3,39 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/29 11:08:04 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/07 21:50:28 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/* is_builtin:
-*	Checks if a command is a minishell builtin command.
-*	Returns 1 if the command is builtin, otherwise 0.
-*/
-int	is_builtin(char *name)
-{
-	if (!name || !*name)
-		return (0);
-	if (ft_strcmp(name, "echo") == 0 || ft_strcmp(name, "cd") == 0)
-		return (1);
-	if (ft_strcmp(name, "pwd") == 0 || ft_strcmp(name, "export") == 0)
-		return (1);
-	if (ft_strcmp(name, "unset") == 0 || ft_strcmp(name, "env") == 0)
-		return (1);
-	if (ft_strcmp(name, "exit") == 0)
-		return (1);
-	return (0);
-}
-
 /* get_env_value:
-*	Searches for an environment variable in the env array.
-*	Returns a duplicated copy of the variable value if found,
-*	otherwise returns NULL.
-*/
+ *	Searches for an environment variable in the env array.
+ *	Returns a duplicated copy of the variable value if found,
+ *	otherwise returns NULL.
+ */
 char	*get_env_value(char *var, char **env)
 {
 	int	i;
@@ -55,12 +36,12 @@ char	*get_env_value(char *var, char **env)
 }
 
 /* handle_heredoc:
-*	Reads user input until the delimiter is matched or EOF.
-*	Expands variables in each line unless the delimiter was quoted.
-*	Prints a warning on EOF and aborts on SIGINT.
-*	The pipe read end is returned and becomes the command's stdin.
-*	Returns -1 on error or interrupt.
-*/
+ *	Reads user input until the delimiter is matched or EOF.
+ *	Expands variables in each line unless the delimiter was quoted.
+ *	Prints a warning on EOF and aborts on SIGINT.
+ *	The pipe read end is returned and becomes the command's stdin.
+ *	Returns -1 on error or interrupt.
+ */
 static void	heredoc_write_line(char *line, int fd, t_shell *shell, int quoted)
 {
 	char	*expanded;
@@ -97,24 +78,11 @@ int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 		line = readline("> ");
 		if (g_signal == SIGINT)
 		{
-			free(line);
-			close(fds[1]);
-			close(fds[0]);
-			return (-1);
+			close_pipe(fds[1], fds[0]);
+			return (free(line), -1);
 		}
-		if (!line)
-		{
-			ft_putstr_fd("mcsh: warning: here-document delimited by \
-end-of-file (wanted `", STDERR_FILENO);
-			ft_putstr_fd(*delim, STDERR_FILENO);
-			ft_putendl_fd("')", STDERR_FILENO);
+		if (handle_heredoc_cond(&line, *delim))
 			break ;
-		}
-		if (ft_strcmp(line, *delim) == 0)
-		{
-			free(line);
-			break ;
-		}
 		heredoc_write_line(line, fds[1], shell, quoted);
 		free(line);
 	}
@@ -123,11 +91,11 @@ end-of-file (wanted `", STDERR_FILENO);
 }
 
 /* setup_heredoc:
-*	Reads ALL heredoc delimiters in order (left to right), as bash does.
-*	Each heredoc is fully consumed; only the last one's fd becomes stdin.
-*	Earlier fds are closed after reading so memory is not leaked.
-*	Returns 0 on success and 1 on error.
-*/
+ *	Reads ALL heredoc delimiters in order (left to right), as bash does.
+ *	Each heredoc is fully consumed; only the last one's fd becomes stdin.
+ *	Earlier fds are closed after reading so memory is not leaked.
+ *	Returns 0 on success and 1 on error.
+ */
 int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
@@ -150,9 +118,9 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 }
 
 /* execute_builtin:
-*	Executes the corresponding builtin command function.
-*	Returns the exit status of the executed builtin command.
-*/
+ *	Executes the corresponding builtin command function.
+ *	Returns the exit status of the executed builtin command.
+ */
 int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)

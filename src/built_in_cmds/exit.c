@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:38 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/04 22:52:18 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/07 21:12:53 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,36 +41,22 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args[1])
 	{
 		code = shell->exit_status;
-		cmd_destroy_data(cmd);
-		cmd_destroy_node(cmd);
-		free(cmd);
-		shell_destroy_data(shell);
-		free(shell);
+		cmd_destroy(&cmd);
+		shell_destroy(&shell);
 		exit((int)code);
 	}
 	if (!is_valid_exit_arg(cmd->args[1]))
 	{
-		ft_putstr_fd("mcsh: exit: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
-		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		cmd_destroy_data(cmd);
-		cmd_destroy_node(cmd);
-		free(cmd);
-		shell_destroy_data(shell);
-		free(shell);
+		err_exit(1, cmd->args[1]);
+		cmd_destroy(&cmd);
+		shell_destroy(&shell);
 		exit(2);
 	}
 	if (cmd->args[2])
-	{
-		ft_putendl_fd("mcsh: exit: too many arguments", STDERR_FILENO);
-		return (1);
-	}
+		return (err_exit(2, NULL), 1);
 	code = ft_atoll(cmd->args[1]);
 	code = ((code % 256) + 256) % 256;
-	cmd_destroy_data(cmd);
-	cmd_destroy_node(cmd);
-	free(cmd);
-	shell_destroy_data(shell);
-	free(shell);
+	cmd_destroy(&cmd);
+	shell_destroy(&shell);
 	exit((int)code);
 }

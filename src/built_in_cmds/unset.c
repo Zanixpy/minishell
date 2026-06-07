@@ -33,8 +33,7 @@ static void	unset_one(t_shell *shell, char *var)
 	while (shell->env[i])
 	{
 		if (ft_strncmp(shell->env[i], var, len) == 0
-			&& (shell->env[i][len] == '='
-			|| shell->env[i][len] == '\0'))
+			&& (shell->env[i][len] == '=' || shell->env[i][len] == '\0'))
 		{
 			remove_env_entry(shell->env, i);
 			unsetenv(var);

@@ -14,15 +14,14 @@
 
 static int	find_env_var(char **env, char *key)
 {
-	int		i;
-	int		len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = ft_strlen(key);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0
-			&& env[i][len] == '=')
+		if (ft_strncmp(env[i], key, len) == 0 && env[i][len] == '=')
 			return (i);
 		i++;
 	}
@@ -146,4 +145,3 @@ long long	ft_atoll(const char *str)
 	}
 	return ((long long)(sign * (long long)nb));
 }
-

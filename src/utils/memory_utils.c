@@ -15,7 +15,7 @@
 void	free_char_tab_n(char ***tab, int n)
 {
 	if (!(*tab))
-		return;
+		return ;
 	while (n >= 0)
 	{
 		free((*tab)[n]);
@@ -26,10 +26,10 @@ void	free_char_tab_n(char ***tab, int n)
 
 void	free_char_tab(char ***tab)
 {
-	int n;
+	int	n;
 
 	if (!(*tab))
-		return;
+		return ;
 	n = 0;
 	while ((*tab)[n])
 	{
@@ -39,7 +39,7 @@ void	free_char_tab(char ***tab)
 	free(*tab);
 }
 
-void free_str(char **s)
+void	free_str(char **s)
 {
 	if (*s)
 	{
@@ -48,9 +48,9 @@ void free_str(char **s)
 	}
 }
 
-char **create_tab(char *str)
+char	**create_tab(char *str)
 {
-	char **tab;
+	char	**tab;
 
 	tab = ft_calloc(2, sizeof(char *));
 	if (!tab)
@@ -61,18 +61,18 @@ char **create_tab(char *str)
 	return (tab);
 }
 
-char **add_element_in_array(char **tab, char *str)
+char	**add_element_in_array(char **tab, char *str)
 {
-	char **tmp;
-	int length;
-	int i;
+	char	**tmp;
+	int		length;
+	int		i;
 
 	length = array_size(tab);
 	tmp = ft_calloc(length + 2, sizeof(char *));
 	if (!tmp)
 		return (NULL);
 	i = 0;
-	while (i < length) 
+	while (i < length)
 	{
 		tmp[i] = ft_strdup(tab[i]);
 		if (!(tmp[i]))
@@ -84,6 +84,3 @@ char **add_element_in_array(char **tab, char *str)
 		return (free_char_tab_n(&tmp, i), NULL);
 	return (tmp);
 }
-
-
-

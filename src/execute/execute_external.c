@@ -6,17 +6,17 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/01 14:03:31 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/07 21:50:37 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* wait_for_child:
-*	Waits for a child process to finish execution.
-*	Returns the child's exit status or the signal-based exit code
-*	if the process was terminated by a signal.
-*/
+ *	Waits for a child process to finish execution.
+ *	Returns the child's exit status or the signal-based exit code
+ *	if the process was terminated by a signal.
+ */
 static int	wait_for_child(pid_t pid)
 {
 	int	status;
@@ -38,9 +38,9 @@ static int	wait_for_child(pid_t pid)
 }
 
 /* search_in_paths:
-*	Searches for an executable command in the given PATH directories.
-*	Returns the full executable path if found, otherwise NULL.
-*/
+ *	Searches for an executable command in the given PATH directories.
+ *	Returns the full executable path if found, otherwise NULL.
+ */
 static char	*search_in_paths(char *cmd, char **paths)
 {
 	char	*full_path;
@@ -58,11 +58,11 @@ static char	*search_in_paths(char *cmd, char **paths)
 }
 
 /* find_executable:
-*	Finds the full path of a command executable.
-*	Handles direct paths and searches through PATH environment
-*	directories when needed.
-*	Returns the executable path or NULL if not found.
-*/
+ *	Finds the full path of a command executable.
+ *	Handles direct paths and searches through PATH environment
+ *	directories when needed.
+ *	Returns the executable path or NULL if not found.
+ */
 char	*find_executable(char *cmd, char **envp)
 {
 	char	*path_env;
@@ -87,10 +87,10 @@ char	*find_executable(char *cmd, char **envp)
 }
 
 /* execute_external:
-*	Executes an external command using fork and execve.
-*	Searches for the executable path before execution.
-*	Returns the command exit status or an error code if execution fails.
-*/
+ *	Executes an external command using fork and execve.
+ *	Searches for the executable path before execution.
+ *	Returns the command exit status or an error code if execution fails.
+ */
 int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 {
 	pid_t		pid;
@@ -99,29 +99,18 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
-	{
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
-		return (127);
-	}
+		return (err_cmd_not_found(cmd->args[0]));
 	pid = fork();
 	if (pid == -1)
 		return (free(path), 1);
 	if (pid == 0)
 	{
 		reset_signals_for_child();
-		if (stdin_bk != -1)
-			close(stdin_bk);
-		if (stdout_bk != -1)
-			close(stdout_bk);
+		close_fd(stdin_bk);  // deleted the if condition
+		close_fd(stdout_bk); // deleted the if condition
 		execve(path, cmd->args, shell->env);
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
-		{
-			ft_putstr_fd("mcsh: ", STDERR_FILENO);
-			ft_putstr_fd(path, STDERR_FILENO);
-			ft_putendl_fd(": Is a directory", STDERR_FILENO);
-		}
+			err_is_dir(path);
 		else
 			perror(path);
 		free(path);
@@ -132,9 +121,9 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 }
 
 /* pipe_wait:
-*	Waits for all child processes created in a pipeline.
-*	Returns the exit status of the last command in the pipeline.
-*/
+ *	Waits for all child processes created in a pipeline.
+ *	Returns the exit status of the last command in the pipeline.
+ */
 int	pipe_wait(pid_t last_pid, int n)
 {
 	int		status;
