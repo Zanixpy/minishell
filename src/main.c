@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/10 16:38:41 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 		cmd_destroy(&cmd);
 		shell_destroy(&shell);
 		exit(ret);
+	}
+	if (g_signal == SIGINT)
+	{
+		shell->exit_status = 130;
+		g_signal = 0;
 	}
 	ret = is_skip(prompt, shell);
 	if (ret)
