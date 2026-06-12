@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:14 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:56:06 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:14:39 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	builtin_pwd(t_cmd *cmd, t_shell *shell)
+int	builtin_pwd(void)
 {
 	char	*cwd;
 
-	(void)cmd;
-	(void)shell;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{

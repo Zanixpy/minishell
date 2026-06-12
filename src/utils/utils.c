@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 11:20:15 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:49:17 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-size_t	array_size(char **tab)
+int	array_size(char **tab)
 {
 	int	count;
 
@@ -51,7 +51,8 @@ int	is_skip(char *prompt, t_shell *shell)
 	tmp = ft_strtrim(prompt, " ");
 	if (!tmp)
 		return (ERRMALLOC);
-	else if (!ft_strcmp(tmp, "!") || !ft_strcmp(tmp, ":"))
+	else if (!ft_strcmp(tmp, "!") || !ft_strcmp(tmp, ":") || !ft_strcmp(tmp,
+			"#"))
 	{
 		if (!ft_strcmp(tmp, "!"))
 			shell->exit_status = 1;

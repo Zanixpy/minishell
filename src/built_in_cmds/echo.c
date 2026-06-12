@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:54:49 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/10 17:55:46 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:12:05 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ static int	is_n_flag(char *arg)
 	return (arg[i] == '\0');
 }
 
-int	builtin_echo(t_cmd *cmd, t_shell *shell)
+int	builtin_echo(t_cmd *cmd)
 {
 	int	i;
 	int	newline;
 
-	(void)shell;
 	if (!cmd || !cmd->args)
 		return (1);
 	i = 1;

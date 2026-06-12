@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/07 21:50:28 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 11:29:12 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,7 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 		fd = handle_heredoc(&cmd->heredoc_delim[i], shell, cmd->heredoc_quoted);
 		if (fd == -1)
 			return (1);
-		if (cmd->fdin >= 0)
-			close(cmd->fdin);
+		close_fd(cmd->fdin);
 		cmd->fdin = fd;
 		i++;
 	}
@@ -124,9 +123,9 @@ int	setup_heredoc(t_cmd *cmd, t_shell *shell)
 int	execute_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (builtin_echo(cmd, shell));
+		return (builtin_echo(cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (builtin_pwd(cmd, shell));
+		return (builtin_pwd());
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (builtin_env(shell));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)

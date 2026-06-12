@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:07 by cakibris          #+#    #+#             */
-/*   Updated: 2026/05/29 11:08:21 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 12:19:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,6 @@ char	*check_path(char *path, char *cmd)
 	return (NULL);
 }
 
-/* cleanup_paths:
- *	Frees a NULL-terminated array of strings.
- */
-void	cleanup_paths(char **paths)
-{
-	int	i;
-
-	if (!paths)
-		return ;
-	i = 0;
-	while (paths[i])
-	{
-		free(paths[i]);
-		i++;
-	}
-	free(paths);
-}
-
 /* dup_env:
  *	Creates a duplicated copy of the environment array.
  *	Returns the copied environment or NULL on allocation failure.
@@ -110,7 +92,7 @@ char	**dup_env(char **envp)
 		if (!copy[i])
 		{
 			copy[i] = NULL;
-			cleanup_paths(copy);
+			free_char_tab(&copy);
 			return (NULL);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:49:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:49:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,12 @@ extern volatile sig_atomic_t	g_signal;
 void							setup_signals(void);
 void							reset_signals_for_child(void);
 void							ignore_signals_in_parent(void);
+void							sigint_signal(t_shell *shell);
 
 /* main.c */
 
-void							print_cmd(t_cmd *cmd);
+// void							print_cmd(t_cmd *cmd);
+// void	print_tab(char **tab, char *which);
 
 /*====================================
  SHELL_CMD FOLDER
@@ -112,7 +114,7 @@ long long						ft_atoll(const char *str);
 int								builtin_cd(t_cmd *cmd, t_shell *shell);
 
 /* echo.c */
-int								builtin_echo(t_cmd *cmd, t_shell *shell);
+int								builtin_echo(t_cmd *cmd);
 
 /* env.c */
 int								builtin_env(t_shell *shell);
@@ -121,7 +123,7 @@ int								builtin_env(t_shell *shell);
 int								builtin_export(t_cmd *cmd, t_shell *shell);
 
 /* pwd.c */
-int								builtin_pwd(t_cmd *cmd, t_shell *shell);
+int								builtin_pwd(void);
 
 /* unset.c */
 int								builtin_unset(t_cmd *cmd, t_shell *shell);
@@ -155,8 +157,7 @@ int								pipe_wait(pid_t last_pid, int n);
 /* execute_utils_2.c */
 void							child_cleanup_exit(t_cmd *head, t_shell *shell,
 									int status);
-int handle_heredoc_cond(char **line, char *delim);
-				
+int								handle_heredoc_cond(char **line, char *delim);
 
 /* execute_pipe.c */
 int								execute_pipe(t_cmd *cmds, t_shell *shell);
@@ -165,7 +166,6 @@ int								execute_pipe(t_cmd *cmds, t_shell *shell);
 char							*handle_direct_path(char *cmd);
 char							*join_path_cmd(char *path, char *cmd);
 char							*check_path(char *path, char *cmd);
-void							cleanup_paths(char **paths);
 char							**dup_env(char **envp);
 
 /* exec.c */
@@ -244,7 +244,7 @@ int								is_unclosed_quote(char *s);
 
 /* utils.c */
 int								ft_strcmp(const char *s1, const char *s2);
-size_t							array_size(char **tab);
+int							array_size(char **tab);
 int								is_skip(char *prompt, t_shell *shell);
 int								is_space(char *str);
 int								is_unexpand_char(char c);

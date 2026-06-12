@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/01 15:09:44 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 11:57:18 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 		cmd->path = ft_calloc(1, sizeof(char));
 	else if (path_env)
 		cmd->path = search_path_cmd(path_env, cmd->cmd);
-	else
-		cmd->path = ft_strdup(cmd->cmd);
 	free_char_tab(&path_env);
 	if (!cmd->path)
 		return (free(cmd->cmd), ERRMALLOC);

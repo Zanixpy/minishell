@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/07 21:50:37 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 12:19:41 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*find_executable(char *cmd, char **envp)
 	if (!paths)
 		return (NULL);
 	full_path = search_in_paths(cmd, paths);
-	cleanup_paths(paths);
+	free_char_tab(&paths);
 	return (full_path);
 }
 
@@ -106,8 +106,8 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 	if (pid == 0)
 	{
 		reset_signals_for_child();
-		close_fd(stdin_bk);  // deleted the if condition
-		close_fd(stdout_bk); // deleted the if condition
+		close_fd(stdin_bk);  
+		close_fd(stdout_bk);
 		execve(path, cmd->args, shell->env);
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 			err_is_dir(path);

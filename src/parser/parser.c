@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:57:49 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 12:33:13 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,17 @@ static int	tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 int	parser(char *prompt, t_cmd *cmd, t_shell *shell)
 {
 	char	**tokens;
+	char 	*cprompt;
 	int		ret;
 
-	tokens = lexer(prompt);
-	if (!tokens)
+	cprompt = clean_prompt(prompt);
+	if (!cprompt)
 		return (ERRMALLOC);
+	tokens = lexer(cprompt);
+	if (!tokens)
+		return (free(cprompt), ERRMALLOC);
 	ret = tokens_analysis(cmd, shell, tokens);
+	free(cprompt);
 	free_char_tab(&tokens);
-	shell->input = prompt;
 	return (ret);
 }

@@ -3,64 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/10 16:38:41 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 12:19:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// void	print_tab(char **tab, char *which)
-// {
-// 	int	i;
+void	print_tab(char **tab, char *which)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (tab[i])
-// 	{
-// 		printf("%s[%d] : %s\n", which, i, tab[i]);
-// 		i++;
-// 	}
-// 	if (!tab[i])
-// 		printf("%s[%d] : NULL\n", which, i);
-// }
+	i = 0;
+	while (tab[i])
+	{
+		printf("%s[%d] : %s\n", which, i, tab[i]);
+		i++;
+	}
+	if (!tab[i])
+		printf("%s[%d] : NULL\n", which, i);
+}
 
-// void	print_cmd(t_cmd *cmd)
-// {
-// 	int	i;
+void	print_cmd(t_cmd *cmd)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("============= NODE %d ==================\n", i);
-// 		if (cmd->cmd)
-// 			printf("cmd : %s\n", cmd->cmd);
-// 		if (cmd->args)
-// 			print_tab(cmd->args, "args");
-// 		if (cmd->path)
-// 			printf("cmd path : %s\n", cmd->path);
-// 		if (cmd->current_dir)
-// 			printf("current_dir : %s\n", cmd->current_dir);
-// 		if (cmd->outfile)
-// 			printf("outfile : %s\n", cmd->outfile);
-// 		if (cmd->infile)
-// 			printf("infile : %s\n", cmd->infile);
-// 		if (cmd->heredoc_delim)
-// 			print_tab(cmd->heredoc_delim, "delim"), printf("append : %d\n",
-// 				cmd->append);
-// 		printf("fdin : %d\n", cmd->fdin);
-// 		printf("fdout : %d\n", cmd->fdout);
-// 		printf("========================================\n");
-// 		cmd = cmd->next;
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (cmd)
+	{
+		printf("============= NODE %d ==================\n", i);
+		if (cmd->cmd)
+			printf("cmd : %s\n", cmd->cmd);
+		if (cmd->args)
+			print_tab(cmd->args, "args");
+		if (cmd->path)
+			printf("cmd path : %s\n", cmd->path);
+		if (cmd->current_dir)
+			printf("current_dir : %s\n", cmd->current_dir);
+		if (cmd->outfile)
+			printf("outfile : %s\n", cmd->outfile);
+		if (cmd->infile)
+			printf("infile : %s\n", cmd->infile);
+		if (cmd->heredoc_delim)
+			print_tab(cmd->heredoc_delim, "delim"), printf("append : %d\n",
+				cmd->append);
+		printf("fdin : %d\n", cmd->fdin);
+		printf("fdout : %d\n", cmd->fdout);
+		printf("========================================\n");
+		cmd = cmd->next;
+		i++;
+	}
+}
 
 int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 {
 	char	*prompt;
-	char	*tmp;
 	int		ret;
 
 	prompt = readline("mcsh-1.0# ");
@@ -72,23 +71,18 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 		shell_destroy(&shell);
 		exit(ret);
 	}
-	if (g_signal == SIGINT)
-	{
-		shell->exit_status = 130;
-		g_signal = 0;
-	}
+	sigint_signal(shell);
 	ret = is_skip(prompt, shell);
 	if (ret)
 		return (free_str(&prompt), ret);
-	tmp = clean_prompt(prompt);
-	free(prompt);
-	if (!tmp)
-		return (ERRMALLOC);
-	ret = parser(tmp, cmd, shell);
+	ret = parser(prompt, cmd, shell);
 	if (ret)
-		return (free(tmp), ret);
+		return (free(prompt), ret);
+	// print_cmd(cmd);
+	shell->input = prompt;
 	shell->exit_status = execute_commands(cmd, shell);
-	return (free(tmp), 0);
+	shell->input = NULL;
+	return (free(prompt), 0);
 }
 
 int	main(int ac, char **av, char **envp)

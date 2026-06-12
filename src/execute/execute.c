@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/07 21:29:15 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 11:47:38 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ static int	apply_infile(t_cmd *cmd)
 	{
 		dup2(cmd->fdin, STDIN_FILENO);
 		close(cmd->fdin);
-		cmd->fdin = -1;
+		cmd->fdin = -2;
 	}
 	if (!cmd->infile)
 		return (0);
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd == -1)
 	{
+		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		perror(cmd->infile);
 		return (1);
 	}
@@ -55,13 +56,13 @@ static int	apply_outfile(t_cmd *cmd)
 	if (cmd->append >= 0)
 	{
 		dup_fd(cmd->append, STDOUT_FILENO);
-		cmd->append = -1;
+		cmd->append = -2;
 		return (0);
 	}
 	if (cmd->fdout >= 0)
 	{
 		dup_fd(cmd->fdout, STDOUT_FILENO);
-		cmd->fdout = -1;
+		cmd->fdout = -2;
 		return (0);
 	}
 	if (!cmd->outfile)
@@ -69,6 +70,7 @@ static int	apply_outfile(t_cmd *cmd)
 	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
+		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		perror(cmd->outfile);
 		return (1);
 	}
@@ -107,8 +109,10 @@ void	reset_redirections(int *stdin_backup, int *stdout_backup)
  */
 static int	has_redirection(t_cmd *cmd)
 {
-	return (cmd->fdin >= 0 || cmd->infile || cmd->fdout >= 0 || cmd->append >= 0
-		|| cmd->outfile);
+	if (cmd->fdin >= 0 || cmd->infile || cmd->fdout >= 0 || cmd->append >= 0
+		|| cmd->outfile)
+			return (1);
+	return (0);
 }
 
 int	execute_single_command(t_cmd *cmd, t_shell *shell)
@@ -117,7 +121,7 @@ int	execute_single_command(t_cmd *cmd, t_shell *shell)
 	int	stdout_backup;
 	int	status;
 
-	if (!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd)
 		return (0);
 	stdin_backup = -1;
 	stdout_backup = -1;
