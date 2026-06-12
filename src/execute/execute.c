@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 11:47:38 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:02:02 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ static int	has_redirection(t_cmd *cmd)
 {
 	if (cmd->fdin >= 0 || cmd->infile || cmd->fdout >= 0 || cmd->append >= 0
 		|| cmd->outfile)
-			return (1);
+		return (1);
 	return (0);
 }
 

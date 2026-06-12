@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 14:48:17 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:48 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,11 @@ int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-		{
-			close_pipe(fds[1], fds[0]);
-			return (free(line), -1);
-		}
+			return (close_pipe(fds[1], fds[0]), free(line), -1);
 		if (handle_heredoc_cond(&line, *delim))
 			break ;
 		if (heredoc_write_line(line, fds[1], shell, quoted))
-		{
-			free(line);
-			close_pipe(fds[1], fds[0]);
-			return (-1);
-		}
+			return (free(line), close_pipe(fds[1], fds[0]), -1);
 		free(line);
 	}
 	close(fds[1]);

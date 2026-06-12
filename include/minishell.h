@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:49:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:10:34 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ void							reset_signals_for_child(void);
 void							ignore_signals_in_parent(void);
 void							sigint_signal(t_shell *shell);
 
-/* main.c */
-
-// void							print_cmd(t_cmd *cmd);
-// void	print_tab(char **tab, char *which);
+/* main.c (debug) */
+/*
+void							print_tab(char **tab, char *which);
+void							print_cmd_node(t_cmd *cmd);
+void							print_cmd(t_cmd *cmd);
+*/
 
 /*====================================
  SHELL_CMD FOLDER
@@ -183,7 +185,7 @@ void							err_heredoc(char *delim);
 
 /* expand.c */
 char							*expand_str(char *s, int exit_status,
-										char **envp);
+									char **envp);
 
 /*====================================
  LEXER FOLDER
@@ -245,14 +247,14 @@ int								is_unclosed_quote(char *s);
 
 /* utils.c */
 int								ft_strcmp(const char *s1, const char *s2);
-int							array_size(char **tab);
+int								array_size(char **tab);
 int								is_skip(char *prompt, t_shell *shell);
 int								is_space(char *str);
 int								is_unexpand_char(char c);
 
 /* extract_utils.c */
 char							*clean_str(char *s, int is_delim,
-										int exit_status, char **envp);
+									int exit_status, char **envp);
 void							fill_var_in_str(char **tmp, int *i, char *var);
 
 /* memory_utils.c */

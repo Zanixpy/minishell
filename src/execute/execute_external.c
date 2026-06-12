@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 12:19:41 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:55 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 	if (pid == 0)
 	{
 		reset_signals_for_child();
-		close_fd(stdin_bk);  
+		close_fd(stdin_bk);
 		close_fd(stdout_bk);
 		execve(path, cmd->args, shell->env);
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))

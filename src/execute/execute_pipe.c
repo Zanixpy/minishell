@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 11:42:31 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:59 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,13 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
  *	or runs external commands using execve.
  *	Calls child_cleanup_exit before every exit so valgrind sees no leaks.
  */
-static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
-		t_cmd *head)
+static void	child_run(t_cmd *cmd, int *io, t_shell *shell, t_cmd *head)
 {
 	char	*path;
 	int		status;
 
 	reset_signals_for_child();
-	child_fds(cmd, infd, outfd);
+	child_fds(cmd, io[0], io[1]);
 	if (!cmd->args || !cmd->args[0])
 		child_cleanup_exit(head, shell, 0);
 	if (is_bic(cmd->args[0]))
@@ -118,6 +117,7 @@ static void	child_run(t_cmd *cmd, int infd, int outfd, t_shell *shell,
 static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell, t_cmd *head)
 {
 	int		pfd[2];
+	int		io[2];
 	pid_t	pid;
 
 	pfd[0] = -1;
@@ -125,16 +125,16 @@ static pid_t	pipe_iter(t_cmd *cmd, int *prev_fd, t_shell *shell, t_cmd *head)
 	if (cmd->next && pipe(pfd) == -1)
 		return (-1);
 	pid = fork();
+	if (pid == -1 && pfd[0] >= 0)
+		return (close_pipe(pfd[0], pfd[1]), -1);
 	if (pid == -1)
-	{
-		if (pfd[0] >= 0)
-			close_pipe(pfd[0], pfd[1]);
 		return (-1);
-	}
 	if (pid == 0)
 	{
 		close_fd(pfd[0]);
-		child_run(cmd, *prev_fd, pfd[1], shell, head);
+		io[0] = *prev_fd;
+		io[1] = pfd[1];
+		child_run(cmd, io, shell, head);
 	}
 	close_fd(pfd[1]);
 	close_fd(*prev_fd);
