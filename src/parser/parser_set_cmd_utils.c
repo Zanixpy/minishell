@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_set_cmd_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/28 14:20:30 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:48:27 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result)
 	free_str(&cmd->outfile);
 	if (is_metachar(file))
 		return (perror_redir_meta(file, shell));
-	cmd->outfile = clean_str(file, 0, shell->exit_status);
+	cmd->outfile = clean_str(file, 0, shell->exit_status, shell->env);
 	if (!cmd->outfile)
 		return (ERRMALLOC);
 	if (result == GREAT)
@@ -75,7 +75,7 @@ int	set_cmd_input(t_cmd *cmd, t_shell *shell, char *file)
 	free_str(&cmd->infile);
 	if (is_metachar(file))
 		return (perror_redir_meta(file, shell));
-	cmd->infile = clean_str(file, 0, shell->exit_status);
+	cmd->infile = clean_str(file, 0, shell->exit_status, shell->env);
 	if (!cmd->infile)
 		return (ERRMALLOC);
 	close_fd(cmd->fdin);
@@ -92,7 +92,7 @@ int	set_cmd_heredoc(t_cmd *cmd, t_shell *shell, char *delim)
 		return (perror_redir_meta(delim, shell));
 	cmd->heredoc_quoted = (ft_strchr(delim, QUOTE) != NULL || ft_strchr(delim,
 				DQUOTE) != NULL);
-	clean_delim = clean_str(delim, 1, 0);
+	clean_delim = clean_str(delim, 1, 0, NULL);
 	if (!clean_delim)
 		return (ERRMALLOC);
 	if (!cmd->heredoc_delim)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:49:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:45:31 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,8 @@ void							err_heredoc(char *delim);
 =====================================*/
 
 /* expand.c */
-char							*expand_str(char *s, int exit_status);
+char							*expand_str(char *s, int exit_status,
+										char **envp);
 
 /*====================================
  LEXER FOLDER
@@ -251,7 +252,7 @@ int								is_unexpand_char(char c);
 
 /* extract_utils.c */
 char							*clean_str(char *s, int is_delim,
-									int exit_status);
+										int exit_status, char **envp);
 void							fill_var_in_str(char **tmp, int *i, char *var);
 
 /* memory_utils.c */

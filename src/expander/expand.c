@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/04 16:44:37 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:48:21 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static char	*build_var(char *s, int *pos)
 	return (tmp);
 }
 
-static char	*convert_var(char *s, int *pos, int exit_status)
+static char	*convert_var(char *s, int *pos, int exit_status, char **envp)
 {
-	char	*env;
+	char	*val;
 	char	*tmp;
 
 	tmp = build_var(s, pos);
@@ -51,12 +51,12 @@ static char	*convert_var(char *s, int *pos, int exit_status)
 			return (NULL);
 		return (tmp);
 	}
-	env = getenv(tmp);
+	val = get_env_value(tmp, envp);
 	free(tmp);
-	if (!env)
+	if (!val)
 		tmp = ft_calloc(1, sizeof(char));
 	else
-		tmp = ft_strdup(env);
+		tmp = val;
 	if (!tmp)
 		return (NULL);
 	return (tmp);
@@ -91,14 +91,14 @@ static char	*rebuild_str(char **s, int start_var, int end_var, char *var)
 	return (tmp);
 }
 
-static void	format_string(char **s, int *i, int exit_status)
+static void	format_string(char **s, int *i, int exit_status, char **envp)
 {
 	char	*var;
 	char	*tmp;
 	int		end_var;
 
 	end_var = *i + 1;
-	var = convert_var(*s, &end_var, exit_status);
+	var = convert_var(*s, &end_var, exit_status, envp);
 	if (!var)
 		return (free_str(s));
 	tmp = rebuild_str(s, *i, end_var, var);
@@ -110,7 +110,7 @@ static void	format_string(char **s, int *i, int exit_status)
 	(*i)--;
 }
 
-char	*expand_str(char *s, int exit_status)
+char	*expand_str(char *s, int exit_status, char **envp)
 {
 	int	i;
 	int	is_dquote;
@@ -129,7 +129,7 @@ char	*expand_str(char *s, int exit_status)
 				;
 		else if (s[i] == DOLLAR && s[i + 1] && !is_unexpand_char(s[i + 1]))
 		{
-			format_string(&s, &i, exit_status);
+			format_string(&s, &i, exit_status, envp);
 			if (!s)
 				return (NULL);
 		}

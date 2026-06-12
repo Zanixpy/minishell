@@ -139,7 +139,13 @@ int	pipe_wait(pid_t last_pid, int n)
 			if (WIFEXITED(status))
 				ret = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					write(STDOUT_FILENO, "\n", 1);
+				else if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 				ret = 128 + WTERMSIG(status);
+			}
 		}
 	}
 	return (ret);

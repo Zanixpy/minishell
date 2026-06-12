@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 09:18:21 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:48:53 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	fill_var_in_str(char **tmp, int *i, char *var)
 	}
 }
 
-char	*clean_str(char *s, int is_delim, int exit_status)
+char	*clean_str(char *s, int is_delim, int exit_status, char **envp)
 {
 	char	*tmp;
 	char	*temp_str;
@@ -100,7 +100,7 @@ char	*clean_str(char *s, int is_delim, int exit_status)
 	if (is_delim)
 		temp_str = ft_strdup(s);
 	else
-		temp_str = expand_str(s, exit_status);
+		temp_str = expand_str(s, exit_status, envp);
 	if (!temp_str)
 		return (NULL);
 	if (*temp_str == '\0')

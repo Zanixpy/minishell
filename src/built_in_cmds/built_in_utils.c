@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/10 17:39:55 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/03 22:13:50 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 14:48:12 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	set_env_var(char *key, char *value, t_shell *shell)
 	free(tmp);
 	if (!new_var)
 		return (1);
-	setenv(key, value, 1);
 	if (i >= 0)
 	{
 		free(shell->env[i]);
