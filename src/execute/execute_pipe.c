@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/07 21:50:39 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 11:42:31 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	set_outfile_fd(t_cmd *cmd)
 	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
+		ft_putstr_fd("mcsh: ", STDERR_FILENO);
 		perror(cmd->outfile);
 		exit(1);
 	}

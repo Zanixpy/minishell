@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:51:37 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:57:34 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,27 @@ static size_t	count_words(char *str)
 {
 	size_t	count;
 	size_t	i;
-	char	is_quoted;
+	size_t  is_word;
+	int	quote;
 
 	count = 0;
-	i = 0;
-	while (str[i])
+	i = -1;
+	is_word = 0;
+	while (str[++i])
 	{
 		if (str[i] != SPACE)
 		{
-			count += 1;
+			if (is_word == 0)
+				count += 1;		
+			is_word = 1;
 			if (str[i] == QUOTE || str[i] == DQUOTE)
 			{
-				is_quoted = str[i++];
-				while (str[i] && str[i++] != is_quoted)
-					;
-			}
-			while (str[i] && str[i++] != SPACE)
-				;
-		}
-		else
-			i++;
+				quote = str[i];
+				while (str[++i] && str[i] != quote);
+			}			
+		} 
+		if (str[i] == SPACE)
+			is_word = 0;
 	}
 	return (count);
 }
@@ -47,13 +48,15 @@ static int	malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
 	int		is_quoted;
 
 	length = 0;
-	if (prompt[*j] == QUOTE || prompt[*j] == DQUOTE)
+	while (prompt[*j + length] && prompt[*j + length] != SPACE)
 	{
-		is_quoted = prompt[(*j)];
-		while (prompt[*j + 1 + length] && prompt[*j + 1
-			+ length++] != is_quoted);
+		if (prompt[*j + length] == QUOTE || prompt[*j + length] == DQUOTE)
+		{
+			is_quoted = prompt[*j];
+			while (prompt[*j + 1 + length] && prompt[*j + 1 + length++] != is_quoted);
+		}
+		length++;
 	}
-	while (prompt[*j + length] && prompt[*j + length++] != SPACE);
 	(*tokens)[*i] = ft_calloc(length + 1, sizeof(char));
 	if (!(*tokens)[*i])
 		return (1);

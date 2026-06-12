@@ -46,8 +46,6 @@ int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 		cmd->path = ft_calloc(1, sizeof(char));
 	else if (path_env)
 		cmd->path = search_path_cmd(path_env, cmd->cmd);
-	else
-		cmd->path = ft_strdup(cmd->cmd);
 	free_char_tab(&path_env);
 	if (!cmd->path)
 		return (free(cmd->cmd), ERRMALLOC);
