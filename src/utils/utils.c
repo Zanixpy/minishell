@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:18:48 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:49:17 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/14 19:17:20 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,16 @@ int	is_skip(char *prompt, t_shell *shell)
 
 int	is_space(char *str)
 {
-	while (*str)
+	int i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i])
 	{
-		if (*str != SPACE && (*str < 9 || *str > 13))
+		if (str[i] != SPACE && (str[i] < 9 || str[i] > 13))
 			return (0);
-		str++;
+		i++;
 	}
 	return (1);
 }

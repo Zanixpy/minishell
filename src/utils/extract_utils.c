@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 11:05:10 by omawele           #+#    #+#             */
-/*   Updated: 2026/05/29 09:18:21 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 16:26:06 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*strremove_quotes(char *s)
 				if (ret < 2)
 					i = -1;
 				else
-					i = ret - 3;
+					i = ret - 2;
 			}
 		}
 	}

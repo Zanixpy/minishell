@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:49:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/14 19:20:02 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void							sigint_signal(t_shell *shell);
 
 /* main.c */
 
-// void							print_cmd(t_cmd *cmd);
-// void	print_tab(char **tab, char *which);
+void							print_cmd(t_cmd *cmd);
+void	print_tab(char **tab, char *which);
 
 /*====================================
  SHELL_CMD FOLDER
