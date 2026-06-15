@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_cmd_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 16:44:40 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/15 15:43:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,11 @@ void	cmd_reset(t_cmd *cmd)
 	cmd->append = -2;
 	cmd->fdin = -2;
 	cmd->fdout = -2;
+}
+
+void clean_all(t_cmd **cmd, t_shell **shell)
+{
+	rl_clear_history();
+	cmd_destroy(cmd);
+	shell_destroy(shell);
 }

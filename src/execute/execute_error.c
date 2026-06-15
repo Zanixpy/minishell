@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 18:55:47 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 18:55:48 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:37:57 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,10 @@ void	err_heredoc(char *delim)
 		STDERR_FILENO);
 	ft_putstr_fd(delim, STDERR_FILENO);
 	ft_putendl_fd("')", STDERR_FILENO);
+}
+
+void err_default(char *msg)
+{
+	ft_putstr_fd("mcsh: ", STDERR_FILENO);
+	perror(msg);
 }

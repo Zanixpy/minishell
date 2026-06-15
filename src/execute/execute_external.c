@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 12:19:41 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:38:24 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,12 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 			err_is_dir(path);
 		else
-			perror(path);
+			err_default(path);
 		free(path);
+		clean_all(&cmd, &shell);
 		exit(126);
 	}
-	free(path);
-	return (wait_for_child(pid));
+	return (free(path), wait_for_child(pid));
 }
 
 /* pipe_wait:

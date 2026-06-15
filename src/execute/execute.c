@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 11:47:38 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:58:25 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ static int	apply_infile(t_cmd *cmd)
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		perror(cmd->infile);
+		err_default(cmd->infile);
 		return (1);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -70,8 +69,7 @@ static int	apply_outfile(t_cmd *cmd)
 	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		perror(cmd->outfile);
+		err_default(cmd->outfile);
 		return (1);
 	}
 	dup_fd(fd, STDOUT_FILENO);
@@ -121,7 +119,7 @@ int	execute_single_command(t_cmd *cmd, t_shell *shell)
 	int	stdout_backup;
 	int	status;
 
-	if (!cmd)
+	if (!cmd || !cmd->args)
 		return (0);
 	stdin_backup = -1;
 	stdout_backup = -1;

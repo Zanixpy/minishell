@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/14 19:26:06 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:36:25 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	{
 		ft_putendl_fd("exit", STDERR_FILENO);
 		ret = shell->exit_status;
-		cmd_destroy(&cmd);
-		shell_destroy(&shell);
+		clean_all(&cmd, &shell);
 		exit(ret);
 	}
 	sigint_signal(shell);
@@ -78,7 +77,6 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	ret = parser(prompt, cmd, shell);
 	if (ret)
 		return (free(prompt), ret);
-	// print_cmd(cmd);
 	shell->input = prompt;
 	shell->exit_status = execute_commands(cmd, shell);
 	shell->input = NULL;
@@ -104,10 +102,9 @@ int	main(int ac, char **av, char **envp)
 	{
 		ret = get_prompt_line(cmd, shell);
 		if (ret == ERRMALLOC)
-			return (cmd_destroy(&cmd), shell_destroy(&shell), 1);
+			return (clean_all(&cmd, &shell), 1);
 		cmd_reset(cmd);
 	}
-	cmd_destroy(&cmd);
-	shell_destroy(&shell);
+	clean_all(&cmd, &shell);
 	return (0);
 }

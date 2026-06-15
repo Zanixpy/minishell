@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/14 19:20:02 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:43:11 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void							sigint_signal(t_shell *shell);
 /* main.c */
 
 void							print_cmd(t_cmd *cmd);
-void	print_tab(char **tab, char *which);
+void							print_tab(char **tab, char *which);
 
 /*====================================
  SHELL_CMD FOLDER
@@ -87,6 +87,7 @@ void	print_tab(char **tab, char *which);
 t_cmd							*cmd_init(void);
 void							cmd_reset(t_cmd *cmd);
 t_shell							*shell_init(char **envp);
+void							clean_all(t_cmd **cmd, t_shell **shell);
 
 /* shell_cmd_destroy.c */
 void							cmd_destroy_data(t_cmd *cmd);
@@ -176,6 +177,7 @@ int								execute_commands(t_cmd *commands,
 int								err_cmd_not_found(char *cmd);
 void							err_is_dir(char *path);
 void							err_heredoc(char *delim);
+void							err_default(char *msg);
 
 /*====================================
  EXPANDER FOLDER
@@ -244,7 +246,7 @@ int								is_unclosed_quote(char *s);
 
 /* utils.c */
 int								ft_strcmp(const char *s1, const char *s2);
-int							array_size(char **tab);
+int								array_size(char **tab);
 int								is_skip(char *prompt, t_shell *shell);
 int								is_space(char *str);
 int								is_unexpand_char(char c);
