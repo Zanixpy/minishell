@@ -38,8 +38,7 @@ static void	set_outfile_fd(t_cmd *cmd)
 	fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		perror(cmd->outfile);
+		err_default(cmd->outfile);
 		exit(1);
 	}
 	dup2(fd, STDOUT_FILENO);
@@ -67,7 +66,7 @@ static void	child_fds(t_cmd *cmd, int infd, int outfd)
 		fd = open(cmd->infile, O_RDONLY);
 		if (fd == -1)
 		{
-			perror(cmd->infile);
+			err_default(cmd->infile);
 			exit(1);
 		}
 		dup_fd(fd, STDIN_FILENO);
@@ -103,7 +102,7 @@ static void	child_run(t_cmd *cmd, int *io, t_shell *shell, t_cmd *head)
 		child_cleanup_exit(head, shell, 127);
 	}
 	execve(path, cmd->args, shell->env);
-	perror(path);
+	err_default(path);
 	free(path);
 	child_cleanup_exit(head, shell, 126);
 }
@@ -155,7 +154,7 @@ int	execute_pipe(t_cmd *cmds, t_shell *shell)
 	pid_t	last_pid;
 	int		count;
 
-	if (!cmds)
+	if (!cmds | !cmds->args)
 		return (0);
 	prev_fd = -1;
 	count = 0;

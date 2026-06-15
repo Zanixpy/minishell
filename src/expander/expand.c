@@ -97,6 +97,11 @@ static void	format_string(char **s, int *i, int exit_status, char **envp)
 	char	*tmp;
 	int		end_var;
 
+	if (*i >= 1)
+	{
+		if ((*s)[*i - 1] && (*s)[*i - 1] == DQUOTE && (*s)[*i + 1] && (*s)[*i + 1] == DQUOTE)
+			return ;
+	}
 	end_var = *i + 1;
 	var = convert_var(*s, &end_var, exit_status, envp);
 	if (!var)
@@ -125,8 +130,7 @@ char	*expand_str(char *s, int exit_status, char **envp)
 		if (s[i] == DQUOTE)
 			is_dquote = -is_dquote;
 		else if (s[i] == QUOTE && is_dquote == 1)
-			while (s[++i] && s[i] != QUOTE)
-				;
+			while (s[++i] && s[i] != QUOTE);
 		else if (s[i] == DOLLAR && s[i + 1] && !is_unexpand_char(s[i + 1]))
 		{
 			format_string(&s, &i, exit_status, envp);

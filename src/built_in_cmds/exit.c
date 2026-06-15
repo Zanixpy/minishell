@@ -66,22 +66,19 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args[1])
 	{
 		code = shell->exit_status;
-		cmd_destroy(&cmd);
-		shell_destroy(&shell);
+		clean_all(&cmd, &shell);
 		exit((int)code);
 	}
 	if (!is_valid_exit_arg(cmd->args[1]))
 	{
 		err_exit(1, cmd->args[1]);
-		cmd_destroy(&cmd);
-		shell_destroy(&shell);
+		clean_all(&cmd, &shell);
 		exit(2);
 	}
 	if (cmd->args[2])
 		return (err_exit(2, NULL), 1);
 	code = ft_atoll(cmd->args[1]);
 	code = ((code % 256) + 256) % 256;
-	cmd_destroy(&cmd);
-	shell_destroy(&shell);
+	clean_all(&cmd, &shell);
 	exit((int)code);
 }

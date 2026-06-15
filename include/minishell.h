@@ -89,6 +89,7 @@ void							print_cmd(t_cmd *cmd);
 t_cmd							*cmd_init(void);
 void							cmd_reset(t_cmd *cmd);
 t_shell							*shell_init(char **envp);
+void							clean_all(t_cmd **cmd, t_shell **shell);
 
 /* shell_cmd_destroy.c */
 void							cmd_destroy_data(t_cmd *cmd);
@@ -178,6 +179,7 @@ int								execute_commands(t_cmd *commands,
 int								err_cmd_not_found(char *cmd);
 void							err_is_dir(char *path);
 void							err_heredoc(char *delim);
+void							err_default(char *msg);
 
 /*====================================
  EXPANDER FOLDER

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 21:31:49 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:57:40 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 15:36:34 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 void	child_cleanup_exit(t_cmd *head, t_shell *shell, int status)
 {
-	shell_destroy(&shell);
-	cmd_destroy(&head);
+	clean_all(&head, &shell);
 	exit(status);
 }
 

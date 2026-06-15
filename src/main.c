@@ -76,8 +76,7 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	{
 		ft_putendl_fd("exit", STDERR_FILENO);
 		ret = shell->exit_status;
-		cmd_destroy(&cmd);
-		shell_destroy(&shell);
+		clean_all(&cmd, &shell);
 		exit(ret);
 	}
 	sigint_signal(shell);
@@ -112,10 +111,9 @@ int	main(int ac, char **av, char **envp)
 	{
 		ret = get_prompt_line(cmd, shell);
 		if (ret == ERRMALLOC)
-			return (cmd_destroy(&cmd), shell_destroy(&shell), 1);
+			return (clean_all(&cmd, &shell), 1);
 		cmd_reset(cmd);
 	}
-	cmd_destroy(&cmd);
-	shell_destroy(&shell);
+	clean_all(&cmd, &shell);
 	return (0);
 }

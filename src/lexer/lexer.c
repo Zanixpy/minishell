@@ -6,72 +6,71 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:57:34 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/14 20:34:05 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static size_t	count_words(char *str)
+static int	count_words(char *str, int i)
 {
-	size_t	count;
-	size_t	i;
-	size_t  is_word;
-	int	quote;
+	char *quote;
+	int	count;
 
 	count = 0;
-	i = -1;
-	is_word = 0;
-	while (str[++i])
+	while (str[i])
 	{
 		if (str[i] != SPACE)
 		{
-			if (is_word == 0)
-				count += 1;		
-			is_word = 1;
-			if (str[i] == QUOTE || str[i] == DQUOTE)
+			count++;
+			while (str[i] && str[i] != SPACE)
 			{
-				quote = str[i];
-				while (str[++i] && str[i] != quote);
-			}			
-		} 
-		if (str[i] == SPACE)
-			is_word = 0;
+				if (str[i] == QUOTE || str[i] == DQUOTE)
+				{
+					quote = ft_strchr(str + i + 1, str[i]);
+					if (quote)
+						i += (intptr_t)quote - (intptr_t)(str + i);
+				}
+				i++;
+			}		
+		}
+		else
+			i++;
 	}
 	return (count);
 }
 
-static int	malloc_token(char ***tokens, char *prompt, size_t *i, size_t *j)
+static int	malloc_token(char ***tokens, char *s, int i, int *j)
 {
-	size_t	length;
-	size_t	o;
-	int		is_quoted;
+	int	len;
+	int	o;
+	char *		quote;
 
-	length = 0;
-	while (prompt[*j + length] && prompt[*j + length] != SPACE)
+	len = 0;
+	while (s[*j + len] && s[*j + len] != SPACE)
 	{
-		if (prompt[*j + length] == QUOTE || prompt[*j + length] == DQUOTE)
+		if (s[*j + len] == QUOTE || s[*j + len] == DQUOTE)
 		{
-			is_quoted = prompt[*j];
-			while (prompt[*j + 1 + length] && prompt[*j + 1 + length++] != is_quoted);
+			quote = ft_strchr(s + *j + len + 1, s[*j + len]);
+			if (quote)
+				len += (intptr_t)quote - (intptr_t)(s + *j + len);
 		}
-		length++;
+		len++;
 	}
-	(*tokens)[*i] = ft_calloc(length + 1, sizeof(char));
-	if (!(*tokens)[*i])
+	(*tokens)[i] = ft_calloc(len + 1, sizeof(char));
+	if (!(*tokens)[i])
 		return (1);
 	o = -1;
-	while (++o < length)
-		(*tokens)[*i][o] = prompt[*j + o];
-	(*i)++;
-	*j += length;
+	while (++o < len)
+		(*tokens)[i][o] = s[*j + o];
+	*j += len;
 	return (0);
 }
 
-static int	tokenization(char ***tokens, char *prompt, size_t nb_words)
+static int	tokenization(char ***tokens, char *prompt, int nb_words)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -79,8 +78,9 @@ static int	tokenization(char ***tokens, char *prompt, size_t nb_words)
 	{
 		if (prompt[j] != SPACE)
 		{
-			if (malloc_token(tokens, prompt, &i, &j))
+			if (malloc_token(tokens, prompt, i, &j))
 				return (free_char_tab_n(tokens, i - 1), 1);
+			i++;
 		}
 		else
 			j++;
@@ -113,9 +113,9 @@ char	**lexer(char *prompt)
 {
 	char	**temp;
 	char	**tokens;
-	size_t	nb_words;
+	int	nb_words;
 
-	nb_words = count_words(prompt);
+	nb_words = count_words(prompt, 0);
 	temp = ft_calloc(nb_words + 1, sizeof(char *));
 	if (!temp)
 		return (NULL);

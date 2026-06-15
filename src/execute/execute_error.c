@@ -34,3 +34,9 @@ void	err_heredoc(char *delim)
 	ft_putstr_fd(delim, STDERR_FILENO);
 	ft_putendl_fd("')", STDERR_FILENO);
 }
+
+void err_default(char *msg)
+{
+	ft_putstr_fd("mcsh: ", STDERR_FILENO);
+	perror(msg);
+}

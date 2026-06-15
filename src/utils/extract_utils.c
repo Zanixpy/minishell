@@ -73,7 +73,7 @@ static char	*strremove_quotes(char *s)
 				if (ret < 2)
 					i = -1;
 				else
-					i = ret - 3;
+					i = ret - 2;
 			}
 		}
 	}
