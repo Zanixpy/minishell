@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_set_cmd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/15 16:00:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 14:48:30 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ int	set_cmd_args(t_cmd *cmd, t_shell *shell, char *token)
 	char	**tmp;
 	char	*clean_token;
 
-	if (!cmd->args)
-		return (1);
-	clean_token = clean_str(token, 0, shell->exit_status);
+	clean_token = clean_str(token, 0, shell->exit_status, shell->env);
 	if (!clean_token)
 		return (ERRMALLOC);
 	tmp = add_element_in_array(cmd->args, clean_token);
@@ -38,7 +36,7 @@ int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 	path_env = get_path_split();
 	if (!path_env)
 		return (ERRMALLOC);
-	cmd->cmd = clean_str(token, 0, shell->exit_status);
+	cmd->cmd = clean_str(token, 0, shell->exit_status, shell->env);
 	if (!cmd->cmd)
 		return (free_char_tab(&path_env), ERRMALLOC);
 	if (is_bic(token) || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.' && 

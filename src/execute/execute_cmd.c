@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 11:29:12 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:48 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,25 @@ char	*get_env_value(char *var, char **env)
  *	The pipe read end is returned and becomes the command's stdin.
  *	Returns -1 on error or interrupt.
  */
-static void	heredoc_write_line(char *line, int fd, t_shell *shell, int quoted)
+static int	heredoc_write_line(char *line, int fd, t_shell *shell, int quoted)
 {
 	char	*expanded;
 
 	if (!quoted)
 	{
-		expanded = expand_str(line, shell->exit_status);
-		if (expanded)
-		{
-			ft_putstr_fd(expanded, fd);
-			write(fd, "\n", 1);
-			free(expanded);
-		}
+		expanded = expand_str(line, shell->exit_status, shell->env);
+		if (!expanded)
+			return (1);
+		ft_putstr_fd(expanded, fd);
+		write(fd, "\n", 1);
+		free(expanded);
 	}
 	else
 	{
 		ft_putstr_fd(line, fd);
 		write(fd, "\n", 1);
 	}
+	return (0);
 }
 
 int	handle_heredoc(char **delim, t_shell *shell, int quoted)
@@ -77,13 +77,11 @@ int	handle_heredoc(char **delim, t_shell *shell, int quoted)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-		{
-			close_pipe(fds[1], fds[0]);
-			return (free(line), -1);
-		}
+			return (close_pipe(fds[1], fds[0]), free(line), -1);
 		if (handle_heredoc_cond(&line, *delim))
 			break ;
-		heredoc_write_line(line, fds[1], shell, quoted);
+		if (heredoc_write_line(line, fds[1], shell, quoted))
+			return (free(line), close_pipe(fds[1], fds[0]), -1);
 		free(line);
 	}
 	close(fds[1]);

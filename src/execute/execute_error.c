@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 18:55:47 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/15 15:37:57 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:52 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	err_is_dir(char *path)
 
 void	err_heredoc(char *delim)
 {
-	ft_putstr_fd("mcsh: warning: here-document delimited by \end-of-file (wanted `",
-		STDERR_FILENO);
+	ft_putstr_fd("mcsh: warning: here-document delimited by "
+		"\end-of-file (wanted `", STDERR_FILENO);
 	ft_putstr_fd(delim, STDERR_FILENO);
 	ft_putendl_fd("')", STDERR_FILENO);
 }

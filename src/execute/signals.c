@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 11:01:19 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:02:07 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ void	ignore_signals_in_parent(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void sigint_signal(t_shell *shell)
+void	sigint_signal(t_shell *shell)
 {
 	if (g_signal == SIGINT)
 	{
 		shell->exit_status = 130;
 		g_signal = 0;
-	}	
+	}
 }

@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 17:55:38 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/15 15:33:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:43 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+long long	ft_atoll(const char *str)
+{
+	int					i;
+	unsigned long long	nb;
+	int					sign;
+
+	i = 0;
+	nb = 0;
+	sign = 1;
+	while ((str[i] > 8 && str[i] < 14) || str[i] == 32)
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		nb = nb * 10 + (str[i] - '0');
+		i++;
+	}
+	return ((long long)(sign * (long long)nb));
+}
 
 static int	is_valid_exit_arg(char *str)
 {

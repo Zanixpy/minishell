@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/10 17:39:55 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/03 22:13:50 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/12 18:01:37 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	set_env_var(char *key, char *value, t_shell *shell)
 	free(tmp);
 	if (!new_var)
 		return (1);
-	setenv(key, value, 1);
 	if (i >= 0)
 	{
 		free(shell->env[i]);
@@ -119,29 +118,4 @@ int	is_overflow(const char *str)
 		i++;
 	}
 	return (0);
-}
-
-long long	ft_atoll(const char *str)
-{
-	int					i;
-	unsigned long long	nb;
-	int					sign;
-
-	i = 0;
-	nb = 0;
-	sign = 1;
-	while ((str[i] > 8 && str[i] < 14) || str[i] == 32)
-		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-	{
-		nb = nb * 10 + (str[i] - '0');
-		i++;
-	}
-	return ((long long)(sign * (long long)nb));
 }
