@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:48:21 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:27:37 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ static void	format_string(char **s, int *i, int exit_status, char **envp)
 
 	if (*i >= 1)
 	{
-		if ((*s)[*i - 1] && (*s)[*i - 1] == DQUOTE && (*s)[*i + 1] && (*s)[*i + 1] == DQUOTE)
+		if ((*s)[*i - 1] && (*s)[*i - 1] == DQUOTE && (*s)[*i + 1] && (*s)[*i
+			+ 1] == DQUOTE)
 			return ;
 	}
 	end_var = *i + 1;
@@ -130,7 +131,8 @@ char	*expand_str(char *s, int exit_status, char **envp)
 		if (s[i] == DQUOTE)
 			is_dquote = -is_dquote;
 		else if (s[i] == QUOTE && is_dquote == 1)
-			while (s[++i] && s[i] != QUOTE);
+			while (s[++i] && s[i] != QUOTE)
+				;
 		else if (s[i] == DOLLAR && s[i + 1] && !is_unexpand_char(s[i + 1]))
 		{
 			format_string(&s, &i, exit_status, envp);

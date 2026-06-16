@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_set_cmd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:48:30 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:22:17 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 	cmd->cmd = clean_str(token, 0, shell->exit_status, shell->env);
 	if (!cmd->cmd)
 		return (free_char_tab(&path_env), ERRMALLOC);
-	if (is_bic(token) || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.' && 
-		(cmd->cmd[1] == '/' || (cmd->cmd[1] == '.'&& cmd->cmd[2] == '/'))))
+	if (is_bic(token) || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
+			&& (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.'
+					&& cmd->cmd[2] == '/'))))
 		cmd->path = ft_strdup(cmd->cmd);
 	else if (*cmd->cmd == '\0')
 		cmd->path = ft_calloc(1, sizeof(char));

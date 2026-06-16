@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 18:55:47 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 18:01:52 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/15 16:28:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	err_heredoc(char *delim)
 	ft_putendl_fd("')", STDERR_FILENO);
 }
 
-void err_default(char *msg)
+void	err_default(char *msg)
 {
 	ft_putstr_fd("mcsh: ", STDERR_FILENO);
 	perror(msg);

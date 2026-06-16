@@ -6,11 +6,25 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 01:09:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 12:33:13 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/16 00:37:06 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static int	is_valid_cond(char **tokens, int pos)
+{
+	if (is_metachar(tokens[pos]))
+		return (0);
+	if (pos >= 2)
+	{
+		if (is_redirection(tokens[pos - 2]) && tokens[pos - 1])
+			return (1);
+	}
+	if (pos == 0 || (pos != 0 && !ft_strcmp(tokens[pos - 1], "|")))
+		return (1);
+	return (0);
+}
 
 static int	convert_token_in_cmd_var(t_cmd **cmd, t_shell *shell, char **tokens,
 		int *pos)
@@ -18,9 +32,7 @@ static int	convert_token_in_cmd_var(t_cmd **cmd, t_shell *shell, char **tokens,
 	int	ret;
 
 	ret = 0;
-	if (!is_metachar(tokens[*pos]) && ((*pos == 0) || (*pos != 0
-		&& !ft_strcmp(tokens[*pos - 1], "|")) || ((*cmd)->cmd
-		&& (*cmd)->cmd[0] == '\0')))
+	if (is_valid_cond(tokens, *pos) || ((*cmd)->cmd && (*cmd)->cmd[0] == '\0'))
 	{
 		free_str(&(*cmd)->cmd);
 		free_str(&(*cmd)->path);
@@ -64,10 +76,10 @@ static int	tokens_analysis(t_cmd *cmd, t_shell *shell, char **tokens)
 int	parser(char *prompt, t_cmd *cmd, t_shell *shell)
 {
 	char	**tokens;
-	char 	*cprompt;
+	char	*cprompt;
 	int		ret;
 
-	cprompt = clean_prompt(prompt);
+	cprompt = clean_prompt(prompt, 0);
 	if (!cprompt)
 		return (ERRMALLOC);
 	tokens = lexer(cprompt);

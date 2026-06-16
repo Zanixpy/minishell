@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 18:10:34 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/16 00:35:51 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ char							*expand_str(char *s, int exit_status,
 char							**lexer(char *prompt);
 
 /* lexer_utils.c */
-char							*clean_prompt(char *prompt);
+char							*clean_prompt(char *prompt, int i);
 
 /*====================================
  ERROR FOLDER

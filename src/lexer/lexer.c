@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 20:22:15 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/14 20:34:05 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 16:26:29 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	count_words(char *str, int i)
 {
-	char *quote;
-	int	count;
+	char	*quote;
+	int		count;
 
 	count = 0;
 	while (str[i])
@@ -32,7 +32,7 @@ static int	count_words(char *str, int i)
 						i += (intptr_t)quote - (intptr_t)(str + i);
 				}
 				i++;
-			}		
+			}
 		}
 		else
 			i++;
@@ -42,9 +42,9 @@ static int	count_words(char *str, int i)
 
 static int	malloc_token(char ***tokens, char *s, int i, int *j)
 {
-	int	len;
-	int	o;
-	char *		quote;
+	int		len;
+	int		o;
+	char	*quote;
 
 	len = 0;
 	while (s[*j + len] && s[*j + len] != SPACE)
@@ -113,7 +113,7 @@ char	**lexer(char *prompt)
 {
 	char	**temp;
 	char	**tokens;
-	int	nb_words;
+	int		nb_words;
 
 	nb_words = count_words(prompt, 0);
 	temp = ft_calloc(nb_words + 1, sizeof(char *));
