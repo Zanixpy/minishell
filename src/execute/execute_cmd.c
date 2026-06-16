@@ -6,7 +6,7 @@
 /*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 18:01:48 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/16 20:33:13 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,85 +33,6 @@ char	*get_env_value(char *var, char **env)
 		i++;
 	}
 	return (NULL);
-}
-
-/* handle_heredoc:
- *	Reads user input until the delimiter is matched or EOF.
- *	Expands variables in each line unless the delimiter was quoted.
- *	Prints a warning on EOF and aborts on SIGINT.
- *	The pipe read end is returned and becomes the command's stdin.
- *	Returns -1 on error or interrupt.
- */
-static int	heredoc_write_line(char *line, int fd, t_shell *shell, int quoted)
-{
-	char	*expanded;
-
-	if (!quoted)
-	{
-		expanded = expand_str(line, shell->exit_status, shell->env);
-		if (!expanded)
-			return (1);
-		ft_putstr_fd(expanded, fd);
-		write(fd, "\n", 1);
-		free(expanded);
-	}
-	else
-	{
-		ft_putstr_fd(line, fd);
-		write(fd, "\n", 1);
-	}
-	return (0);
-}
-
-int	handle_heredoc(char **delim, t_shell *shell, int quoted)
-{
-	int		fds[2];
-	char	*line;
-
-	if (!delim || !*delim || !**delim)
-		return (-1);
-	if (pipe(fds) == -1)
-		return (-1);
-	g_signal = 0;
-	while (1)
-	{
-		line = readline("> ");
-		if (g_signal == SIGINT)
-			return (close_pipe(fds[1], fds[0]), free(line), -1);
-		if (handle_heredoc_cond(&line, *delim))
-			break ;
-		if (heredoc_write_line(line, fds[1], shell, quoted))
-			return (free(line), close_pipe(fds[1], fds[0]), -1);
-		free(line);
-	}
-	close(fds[1]);
-	return (fds[0]);
-}
-
-/* setup_heredoc:
- *	Reads ALL heredoc delimiters in order (left to right), as bash does.
- *	Each heredoc is fully consumed; only the last one's fd becomes stdin.
- *	Earlier fds are closed after reading so memory is not leaked.
- *	Returns 0 on success and 1 on error.
- */
-int	setup_heredoc(t_cmd *cmd, t_shell *shell)
-{
-	int	fd;
-	int	i;
-
-	if (!cmd->heredoc_delim || !cmd->heredoc_delim[0])
-		return (0);
-	i = 0;
-	while (cmd->heredoc_delim[i])
-	{
-		fd = handle_heredoc(&cmd->heredoc_delim[i], shell, cmd->heredoc_quoted);
-		if (fd == -1)
-			return (1);
-		close_fd(cmd->fdin);
-		cmd->fdin = fd;
-		i++;
-	}
-	return (0);
 }
 
 /* execute_builtin:

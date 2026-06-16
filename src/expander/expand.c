@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 11:48:52 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/15 16:27:37 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/16 20:32:26 by cakibris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static void	format_string(char **s, int *i, int exit_status, char **envp)
 	char	*var;
 	char	*tmp;
 	int		end_var;
+	int		var_len;
 
 	if (*i >= 1)
 	{
@@ -107,13 +108,14 @@ static void	format_string(char **s, int *i, int exit_status, char **envp)
 	var = convert_var(*s, &end_var, exit_status, envp);
 	if (!var)
 		return (free_str(s));
+	var_len = ft_strlen(var);
 	tmp = rebuild_str(s, *i, end_var, var);
 	free(var);
 	if (!tmp)
 		return (free_str(s));
 	free(*s);
 	*s = tmp;
-	(*i)--;
+	*i += var_len - 1;
 }
 
 char	*expand_str(char *s, int exit_status, char **envp)
