@@ -23,6 +23,7 @@ SRCS =  src/main.c \
 		src/execute/execute_utils_2.c \
 		src/execute/execute_external.c \
 		src/execute/execute_cmd.c \
+		src/execute/heredoc.c \
 		src/execute/signals.c \
 		src/execute/execute_error.c \
 		src/built_in_cmds/cd.c \
