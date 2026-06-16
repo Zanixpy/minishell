@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 16:44:40 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/15 15:43:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/15 16:27:53 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	cmd_reset(t_cmd *cmd)
 	cmd->fdout = -2;
 }
 
-void clean_all(t_cmd **cmd, t_shell **shell)
+void	clean_all(t_cmd **cmd, t_shell **shell)
 {
 	rl_clear_history();
 	cmd_destroy(cmd);

@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:23:21 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/07 21:51:13 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/16 00:35:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,8 @@ static void	rebuild_prompt(char **prompt, int *pos)
 	*pos += ret;
 }
 
-char	*clean_prompt(char *prompt)
+char	*clean_prompt(char *prompt, int i)
 {
-	int		i;
 	char	quote;
 
 	prompt = ft_strdup(prompt);
@@ -120,7 +119,8 @@ char	*clean_prompt(char *prompt)
 		{
 			quote = prompt[i];
 			if (ft_strchr(prompt + ++i, quote))
-				while (prompt[i] && prompt[i++] != quote);
+				while (prompt[i] && prompt[i++] != quote)
+					;
 		}
 		else if (is_paste_word(prompt + i))
 		{
