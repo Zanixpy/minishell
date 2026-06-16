@@ -72,6 +72,7 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	int		ret;
 
 	prompt = readline("mcsh-1.0# ");
+	sigint_signal(shell);
 	if (!prompt)
 	{
 		ft_putendl_fd("exit", STDERR_FILENO);
@@ -79,7 +80,6 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 		clean_all(&cmd, &shell);
 		exit(ret);
 	}
-	sigint_signal(shell);
 	ret = is_skip(prompt, shell);
 	if (ret)
 		return (free_str(&prompt), ret);
