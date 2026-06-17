@@ -6,15 +6,15 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 18:55:47 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/17 13:25:31 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 15:22:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int is_path_exist(t_shell *shell)
+static int	is_path_exist(t_shell *shell)
 {
-	int i;
+	int	i;
 
 	if (!shell->env)
 		return (0);
@@ -30,17 +30,15 @@ static int is_path_exist(t_shell *shell)
 
 int	err_cmd_not_found(char *cmd, t_shell *shell)
 {
-	int is_path;
+	int	is_path;
 
-	is_path = is_path_exist(shell);	
-	if (is_path)
-		err_default(cmd);
+	ft_putstr_fd("mcsh: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	is_path = is_path_exist(shell);
+	if (!is_path)
+		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
 	else
-	{		
-		ft_putstr_fd("mcsh: ", STDERR_FILENO);
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);		
-	}
+		ft_putendl_fd(": command not found", STDERR_FILENO);
 	return (127);
 }
 

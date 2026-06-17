@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/17 13:26:00 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 15:21:51 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*search_in_paths(char *cmd, char **paths)
 			return (full_path);
 		i++;
 	}
-	return (NULL);
+	return (ft_strdup("NONE"));
 }
 
 /* find_executable:
@@ -102,7 +102,7 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
 		return (ERRMALLOC);
-	else if (!ft_strcmp(path, "NONE"))
+	if (!ft_strcmp(path, "NONE"))
 		return (free(path), err_cmd_not_found(cmd->args[0], shell));
 	pid = fork();
 	if (pid == -1)

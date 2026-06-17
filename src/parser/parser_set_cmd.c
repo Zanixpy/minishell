@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/17 13:02:29 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 15:26:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 	cmd->cmd = clean_str(token, 0, shell->exit_status, shell->env);
 	if (!cmd->cmd)
 		return (free(path_env), ERRMALLOC);
-	if (is_bic(token) || !ft_strcmp(path_env, "NONE") || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
-			&& (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.'
+	if (is_bic(token) || !ft_strcmp(path_env, "NONE") || cmd->cmd[0] == '/'
+		|| (cmd->cmd[0] == '.' && (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.'
 					&& cmd->cmd[2] == '/'))))
 		cmd->path = ft_strdup(cmd->cmd);
 	else if (*cmd->cmd == '\0')

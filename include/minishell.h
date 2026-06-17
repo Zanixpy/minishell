@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/17 13:26:42 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 15:34:06 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,9 @@ void							ignore_signals_in_parent(void);
 void							sigint_signal(t_shell *shell);
 
 /* main.c (debug) */
-/*
-void							print_tab(char **tab, char *which);
-void							print_cmd_node(t_cmd *cmd);
-void							print_cmd(t_cmd *cmd);
-*/
+// void							print_tab(char **tab, char *which);
+// void							print_cmd_node(t_cmd *cmd);
+// void							print_cmd(t_cmd *cmd);
 
 /*====================================
  SHELL_CMD FOLDER

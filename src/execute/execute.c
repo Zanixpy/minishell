@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:10 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/17 12:12:22 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 15:21:45 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	reset_redirections(int *stdin_backup, int *stdout_backup)
 	}
 }
 
-
 static int	has_redirection(t_cmd *cmd)
 {
 	if (cmd->fdin >= 0 || cmd->infile || cmd->fdout >= 0 || cmd->append >= 0
@@ -104,7 +103,6 @@ static int	has_redirection(t_cmd *cmd)
 		return (1);
 	return (0);
 }
-
 
 /* execute_single_command:
  *	Executes a single command without creating a pipeline.
