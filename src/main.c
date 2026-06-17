@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:06:56 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 18:20:09 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/17 13:04:10 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	int		ret;
 
 	prompt = readline("mcsh-1.0# ");
+	sigint_signal(shell);
 	if (!prompt)
 	{
 		ft_putendl_fd("exit", STDERR_FILENO);
@@ -79,7 +80,6 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 		clean_all(&cmd, &shell);
 		exit(ret);
 	}
-	sigint_signal(shell);
 	ret = is_skip(prompt, shell);
 	if (ret)
 		return (free_str(&prompt), ret);
@@ -89,7 +89,7 @@ int	get_prompt_line(t_cmd *cmd, t_shell *shell)
 	shell->input = prompt;
 	shell->exit_status = execute_commands(cmd, shell);
 	shell->input = NULL;
-	return (free(prompt), 0);
+	return (free(prompt), shell->exit_status);
 }
 
 int	main(int ac, char **av, char **envp)

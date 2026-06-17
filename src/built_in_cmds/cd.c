@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 18:19:20 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/07 21:08:44 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/16 22:29:32 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ static int	get_cd_path(t_cmd *cmd, t_shell *shell, char **path, char *old_pwd)
 	if (!cmd->args[1])
 	{
 		*path = get_env_value("HOME", shell->env);
-		if (!*path || !(*path)[0])
-			return (err_cd(3, NULL), free(*path), free(old_pwd), 1);
+		if (!*path || !(*path)[0] || !ft_strcmp(*path, "NONE"))
+			return (err_cd(3, NULL), free_str(path), free(old_pwd), 1);
 	}
 	else if (ft_strcmp(cmd->args[1], "-") == 0)
 	{
 		*path = get_env_value("OLDPWD", shell->env);
-		if (!*path || !(*path)[0])
-			return (err_cd(4, NULL), free(*path), free(old_pwd), 1);
+		if (!*path || !(*path)[0] || !ft_strcmp(*path, "NONE"))
+			return (err_cd(4, NULL), free_str(path), free(old_pwd), 1);
 		ft_putendl_fd(*path, STDOUT_FILENO);
 	}
 	else

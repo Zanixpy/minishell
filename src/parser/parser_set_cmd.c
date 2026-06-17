@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 21:04:02 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/15 16:22:17 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 13:02:29 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,23 @@ int	set_cmd_args(t_cmd *cmd, t_shell *shell, char *token)
 
 int	set_cmd_and_path(t_cmd *cmd, t_shell *shell, char *token)
 {
-	char	**path_env;
+	char	*path_env;
 
-	path_env = get_path_split();
+	path_env = get_env_value("PATH", shell->env);
 	if (!path_env)
 		return (ERRMALLOC);
 	cmd->cmd = clean_str(token, 0, shell->exit_status, shell->env);
 	if (!cmd->cmd)
-		return (free_char_tab(&path_env), ERRMALLOC);
-	if (is_bic(token) || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
+		return (free(path_env), ERRMALLOC);
+	if (is_bic(token) || !ft_strcmp(path_env, "NONE") || cmd->cmd[0] == '/' || (cmd->cmd[0] == '.'
 			&& (cmd->cmd[1] == '/' || (cmd->cmd[1] == '.'
 					&& cmd->cmd[2] == '/'))))
 		cmd->path = ft_strdup(cmd->cmd);
 	else if (*cmd->cmd == '\0')
 		cmd->path = ft_calloc(1, sizeof(char));
 	else if (path_env)
-		cmd->path = search_path_cmd(path_env, cmd->cmd);
-	free_char_tab(&path_env);
+		cmd->path = get_full_path(path_env, cmd->cmd);
+	free(path_env);
 	if (!cmd->path)
 		return (free(cmd->cmd), ERRMALLOC);
 	cmd->args = create_tab(cmd->path);

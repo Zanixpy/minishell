@@ -3,50 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parser_set_cmd_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 20:34:39 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/12 14:48:27 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/17 12:59:03 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*search_path_cmd(char **path, char *cmd)
+char	*get_full_path(char *path_env, char *cmd)
 {
+	char	**paths;
+	char	*full_path;
 	int		i;
-	char	*final;
-	char	*tmp;
 
-	tmp = ft_strjoin("/", cmd);
-	if (!tmp)
+	paths = ft_split(path_env, ':');
+	if (!paths)
 		return (NULL);
-	final = NULL;
-	i = -1;
-	while (path[++i])
+	i = 0;
+	while (paths[i])
 	{
-		final = ft_strjoin(path[i], tmp);
-		if (!final)
-			return (free(tmp), NULL);
-		if (access(final, F_OK) == 0)
-			break ;
-		free(final);
-		final = NULL;
+		full_path = check_path(paths[i], cmd);
+		if (full_path)
+			return (free_char_tab(&paths), full_path);
+		i++;
 	}
-	free(tmp);
-	if (!final)
-		final = ft_strdup(cmd);
-	return (final);
-}
-
-char	**get_path_split(void)
-{
-	char	*path_env;
-
-	path_env = getenv("PATH");
-	if (!path_env)
-		return (NULL);
-	return (ft_split(path_env, ':'));
+	free_char_tab(&paths);
+	if (!full_path)
+		full_path = ft_strdup(cmd);
+	return (full_path);
 }
 
 int	set_cmd_output(t_cmd *cmd, t_shell *shell, char *file, int result)

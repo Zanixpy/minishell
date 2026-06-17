@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 03:10:57 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/16 00:35:51 by omawele          ###   ########.fr       */
+/*   Updated: 2026/06/17 13:26:42 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ char							*find_executable(char *cmd, char **envp);
 int								execute_external(t_cmd *cmd, t_shell *shell,
 									int stdin_bk, int stdout_bk);
 int								pipe_wait(pid_t last_pid, int n);
+char							*search_in_paths(char *cmd, char **paths);
 
 /* execute_utils_2.c */
 void							child_cleanup_exit(t_cmd *head, t_shell *shell,
@@ -176,7 +177,7 @@ int								execute_commands(t_cmd *commands,
 									t_shell *shell);
 
 /* execute_error.c */
-int								err_cmd_not_found(char *cmd);
+int								err_cmd_not_found(char *cmd, t_shell *shell);
 void							err_is_dir(char *path);
 void							err_heredoc(char *delim);
 void							err_default(char *msg);
@@ -198,15 +199,6 @@ char							**lexer(char *prompt);
 
 /* lexer_utils.c */
 char							*clean_prompt(char *prompt, int i);
-
-/*====================================
- ERROR FOLDER
-=====================================*/
-
-/* parser_error.c */
-int								perror_syntax(int code, t_cmd *cmd,
-									t_shell *shell);
-int								perror_redir_meta(char *token, t_shell *shell);
 
 /*====================================
  PARSER FOLDER
@@ -233,8 +225,12 @@ int								set_cmd_heredoc(t_cmd *cmd, t_shell *shell,
 									char *delim);
 int								set_cmd_input(t_cmd *cmd, t_shell *shell,
 									char *file);
-char							*search_path_cmd(char **path, char *cmd);
-char							**get_path_split(void);
+char							*get_full_path(char *path_env, char *cmd);
+
+/* parser_error.c */
+int								perror_syntax(int code, t_cmd *cmd,
+									t_shell *shell);
+int								perror_redir_meta(char *token, t_shell *shell);
 
 /*====================================
  UTILS FOLDER

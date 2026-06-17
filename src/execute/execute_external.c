@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_external.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:13 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 18:01:55 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/17 13:26:00 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	wait_for_child(pid_t pid)
  *	Searches for an executable command in the given PATH directories.
  *	Returns the full executable path if found, otherwise NULL.
  */
-static char	*search_in_paths(char *cmd, char **paths)
+char	*search_in_paths(char *cmd, char **paths)
 {
 	char	*full_path;
 	int		i;
@@ -77,6 +77,8 @@ char	*find_executable(char *cmd, char **envp)
 	path_env = get_env_value("PATH", envp);
 	if (!path_env)
 		return (NULL);
+	else if (!ft_strcmp(path_env, "NONE"))
+		return (path_env);
 	paths = ft_split(path_env, ':');
 	free(path_env);
 	if (!paths)
@@ -99,23 +101,23 @@ int	execute_external(t_cmd *cmd, t_shell *shell, int stdin_bk, int stdout_bk)
 
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
-		return (err_cmd_not_found(cmd->args[0]));
+		return (ERRMALLOC);
+	else if (!ft_strcmp(path, "NONE"))
+		return (free(path), err_cmd_not_found(cmd->args[0], shell));
 	pid = fork();
 	if (pid == -1)
 		return (free(path), 1);
 	if (pid == 0)
 	{
 		reset_signals_for_child();
-		close_fd(stdin_bk);
-		close_fd(stdout_bk);
+		close_pipe(stdin_bk, stdout_bk);
 		execve(path, cmd->args, shell->env);
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 			err_is_dir(path);
 		else
 			err_default(path);
 		free(path);
-		clean_all(&cmd, &shell);
-		exit(126);
+		child_cleanup_exit(cmd, shell, 126);
 	}
 	return (free(path), wait_for_child(pid));
 }

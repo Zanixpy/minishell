@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 00:51:16 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/16 20:33:13 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/16 22:13:49 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_env_value(char *var, char **env)
 			return (ft_strdup(env[i] + len + 1));
 		i++;
 	}
-	return (NULL);
+	return (ft_strdup("NONE"));
 }
 
 /* execute_builtin:

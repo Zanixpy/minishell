@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cakibris <cakibris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 00:00:00 by cakibris          #+#    #+#             */
-/*   Updated: 2026/06/12 18:01:59 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/17 13:26:58 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,11 @@ static void	child_run(t_cmd *cmd, int *io, t_shell *shell, t_cmd *head)
 	}
 	path = find_executable(cmd->args[0], shell->env);
 	if (!path)
+		child_cleanup_exit(head, shell, ERRMALLOC);
+	else if (!ft_strcmp(path, "NONE"))
 	{
-		err_cmd_not_found(cmd->args[0]);
+		free(path);
+		err_cmd_not_found(cmd->args[0], shell);
 		child_cleanup_exit(head, shell, 127);
 	}
 	execve(path, cmd->args, shell->env);

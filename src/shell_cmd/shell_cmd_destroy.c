@@ -6,7 +6,7 @@
 /*   By: omawele <omawele@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/30 18:05:12 by omawele           #+#    #+#             */
-/*   Updated: 2026/06/03 23:35:23 by cakibris         ###   ########.fr       */
+/*   Updated: 2026/06/17 12:36:36 by omawele          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	cmd_destroy(t_cmd **cmd)
 {
+	if (!(*cmd))
+		return ;
 	cmd_destroy_data(*cmd);
 	cmd_destroy_node(*cmd);
 	free(*cmd);
@@ -35,6 +37,8 @@ void	cmd_destroy_data(t_cmd *cmd)
 
 void	shell_destroy(t_shell **shell)
 {
+	if (!(*shell))
+		return ;
 	shell_destroy_data(*shell);
 	free(*shell);
 }
